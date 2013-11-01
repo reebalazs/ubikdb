@@ -1,0 +1,7 @@
+{
+  "name": "sdi_ubikdb_demo",
+  "version": "0.1.0",
+  "dependencies": {
+    "angular": "~1.2.0"
+  }
+}

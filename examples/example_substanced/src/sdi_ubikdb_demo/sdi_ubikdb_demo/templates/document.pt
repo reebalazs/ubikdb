@@ -1,11 +1,28 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
       metal:use-macro="master">
 <head>
  <title metal:fill-slot="head-title">${title}</title>
 </head>
 <body>
  <h1 metal:fill-slot="body-title">${title}</h1>
- <div metal:fill-slot="body-content"
-      tal:content="structure body">BODY</div>
+ <div metal:fill-slot="body-content">
+    <div style="border: 1px solid black" 
+        ng-app="ubikdb_demo" ng-controller="DocumentDemo">
+        <div>
+            <span><b>agent:</b> {{agent}}</span>
+        </div>
+        <div>
+            <span><b>boss:</b> {{boss}}</span>
+        </div>
+    </div> 
+    <div tal:content="structure body">BODY</div>
+    <script src="${request.static_url('ubikdb:static/dist/bower_components/socket.io-client/dist/socket.io.js')}"></script>
+    <script src="${request.static_url('ubikdb:static/ubikdb.js')}"></script>
+    <script src="${request.static_url('sdi_ubikdb_demo:static/page_master.js')}"></script>
+    <script src="${request.static_url('sdi_ubikdb_demo:static/dist/bower_components/angular/angular.js')}"></script>
+    <script src="${request.static_url('sdi_ubikdb_demo:static/ubikdb_demo.js')}"></script>
+ </div>
 </body>
 </html>
