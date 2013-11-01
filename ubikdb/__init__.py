@@ -96,7 +96,7 @@ class UbikDBNamespace(BaseNamespace, BroadcastMixin, ContextMixin):
     def traverse(self, context):
         return self.traverse_path(context)[-1]
 
-    def on_value(self, context):
+    def on_get(self, context):
         value = self.traverse(context)
         return [value]
 

@@ -37,13 +37,13 @@
 
     // --
 
-    socket.emit('value', '/my/interest', function(data) {
+    socket.emit('get', '/my/interest', function(data) {
         console.log('value /my/interest', data);
     });
-    socket.emit('value', '/boss', function(data) {
+    socket.emit('get', '/boss', function(data) {
         console.log('value /boss', data);
     });
-    socket.emit('value', '/agent', function(data) {
+    socket.emit('get', '/agent', function(data) {
         console.log('value /agent', data);
     });
 
