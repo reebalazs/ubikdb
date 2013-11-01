@@ -25,3 +25,9 @@ Experimenting with a concept.
 - [ ] Implement data binding events for collections
 - [ ] Persistency in ZODB
 - [ ] Substance-D demo
+
+## Running it ##
+
+XXX
+
+Do not use --reload with paster.
