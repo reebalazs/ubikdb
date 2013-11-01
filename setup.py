@@ -8,7 +8,7 @@ def read(*rnames):
 
 version = '0.1.0'
 
-setup(name='ubik',
+setup(name='title_ubik',
       version=version,
       description="",
       long_description=read('README.md'),
@@ -23,7 +23,6 @@ setup(name='ubik',
       url='',
       license='',
       packages=find_packages(exclude=['ez_setup']),
-      namespace_packages=[],
       include_package_data=True,
       zip_safe=False,
       extras_require=dict(

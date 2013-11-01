@@ -1,4 +1,8 @@
 
 Issues:
 
-- newest gevent-socketio gives an exception (AttributeError: "socket" not found)
++ newest gevent-socketio gives an exception (AttributeError: "socket" not found)
+
+  0.3.6rc2 does not work, needs master from github repo
+
+  - update at a later release

@@ -14,7 +14,7 @@ requires = [
     'pyramid_tm',
     'deformdemo',
     'pyramid_multiauth',
-    'ubik',
+    'title_ubik',
     ]
 
 setup(name='sdidemo',

@@ -9,7 +9,7 @@ module.exports = function(grunt) {
     copy: {
       'default': {
         files: {
-          'ubik/static/dist/': [
+          'title_ubik/static/dist/': [
             collect.bower('socket.io-client').path('dist/socket.io.js'),
             collect.bower('socket.io-client').path('dist/WebSocketMainInsecure.swf'),
             collect.bower('socket.io-client').path('dist/WebSocketMain.swf')
