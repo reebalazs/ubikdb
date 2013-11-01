@@ -43,6 +43,7 @@ def main(global_config, **settings):
     config.add_route('ubikdbsocket', 'socket.io/*remaining')
     config.add_static_view('static_demo', 'deformdemo:static')
     config.add_static_view('static_ubikdb', 'ubikdb:static')
+    config.add_static_view('static_sdidemo', 'sdidemo:static')
     config.add_translation_dirs(
         'colander:locale',
         'deform:locale',

@@ -16,17 +16,11 @@ class ContextMixin(object):
             self.session['contexts'] = set()  # a set of simple strings
 
     def on_watch_context(self, context, recurse=False):
-        self.watch_context(context=context, recurse=recurse)
-
-    def on_unwatch_context(self, context, recurse=False):
-        self.unwatch_context(context=context, recurse=recurse)
-
-    def watch_context(self, context, recurse=False):
         """Lets a user join a room on a specific Namespace."""
         key = 'contexts_recurse' if recurse else 'contexts'
         self.session[key].add(self._get_context_id(context))
 
-    def unwatch_context(self, context, recurse=False):
+    def on_unwatch_context(self, context, recurse=False):
         """Lets a user leave a room on a specific Namespace."""
         key = 'contexts_recurse' if recurse else 'contexts'
         self.session[key].remove(self._get_context_id(context))
@@ -70,19 +64,16 @@ class UbikDBNamespace(BaseNamespace, BroadcastMixin, ContextMixin):
 
     def on_message(self, context, msg):
         self.emit_with_context('message', context, msg, recurse=True)
-        print "ON_MESSAGE", msg
 
     def on_norecurse(self, context, msg):
         self.emit_with_context('norecurse', context, msg)
-        print "ON_NORECURSE", msg
+
+    def on_value(self, context, msg):
+        value = {'result': 'OK'}
+        return value
 
     def recv_connect(self):
-        #self.broadcast_event('user_connect')
-        #print "RECV_CONNECT"
         pass
 
     def recv_disconnect(self):
-        #self.broadcast_event('user_disconnect')
-        #self.disconnect(silent=True)
-        #print "RECV_DISCONNECT"
-        pass
+        self.disconnect(silent=True)
