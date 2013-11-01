@@ -1,6 +1,7 @@
 {
     "name": "ubikdb",
     "version": "0.1.0",
+    "repository": "https://github.com/reebalazs/ubikdb",
     "devDependencies": {
         "yo": "*",
         "grunt-cli": "*",
