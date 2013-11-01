@@ -16,7 +16,8 @@ with the same name.
 - [x] Make a clone of sdidemo with a working gevent-socketio included
 - [x] Implement prefix-based (context-based) event filtering
 - [ ] Implement basic data binding events
-- [ ] Simple working prototype with memory storage on the server, no persistency
+- [ ] Simple working demo with memory storage on the server, no persistency
 - [ ] Tests
 - [ ] Implement data binding events for collections
 - [ ] Persistency in ZODB
+- [ ] Substance-D demo
