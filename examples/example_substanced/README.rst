@@ -1,5 +1,5 @@
-Title "Ubik"
-============
+UbikDB example with Substance-D
+===============================
 
 .. image:: http://tinyurl.com/mso7x2h
 

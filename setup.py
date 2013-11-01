@@ -8,7 +8,7 @@ def read(*rnames):
 
 version = '0.1.0'
 
-setup(name='title_ubik',
+setup(name='ubikdb',
       version=version,
       description="",
       long_description=read('README.md'),

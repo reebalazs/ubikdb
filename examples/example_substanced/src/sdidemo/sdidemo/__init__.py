@@ -8,8 +8,8 @@ from substanced import root_factory
 from substanced.sdi.views.login import login
 from substanced.principal import groupfinder
 
-import ubik
-ubik = ubik
+import ubikdb
+ubikdb = ubikdb
 
 from substanced.workflow import Workflow
 
@@ -40,9 +40,9 @@ def main(global_config, **settings):
     # paster serve entry point
     settings['debug_templates'] = 'true'
     config.add_route('deformdemo', '/deformdemo*traverse')
-    config.add_route('ubiksocket', 'socket.io/*remaining')
+    config.add_route('ubikdbsocket', 'socket.io/*remaining')
     config.add_static_view('static_demo', 'deformdemo:static')
-    config.add_static_view('static_ubik', 'ubik:static')
+    config.add_static_view('static_ubikdb', 'ubikdb:static')
     config.add_translation_dirs(
         'colander:locale',
         'deform:locale',

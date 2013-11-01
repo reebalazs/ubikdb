@@ -61,8 +61,7 @@ class ContextMixin(object):
                         socket.send_packet(pkt)
 
 
-
-class UbikNamespace(BaseNamespace, BroadcastMixin, ContextMixin):
+class UbikDBNamespace(BaseNamespace, BroadcastMixin, ContextMixin):
 
     def __init__(self, *args, **kwargs):
         BaseNamespace.__init__(self, *args, **kwargs)

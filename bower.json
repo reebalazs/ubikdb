@@ -1,5 +1,5 @@
 {
-  "name": "ubik",
+  "name": "ubikdb",
   "version": "0.1.0",
   "dependencies": {
     "socket.io-client": "~0.9.16"

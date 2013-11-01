@@ -10,7 +10,7 @@
     window.WEB_SOCKET_DEBUG = true;
 
     // connect to the websocket
-    var socket = io.connect('/ubik');
+    var socket = io.connect('/ubikdb');
 
     window.beforeunload = function() {
         socket.disconnect();

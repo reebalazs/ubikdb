@@ -1,5 +1,5 @@
 {
-    "name": "ubik",
+    "name": "ubikdb",
     "version": "0.1.0",
     "devDependencies": {
         "yo": "*",
