@@ -1,7 +1,7 @@
 
 # UbikDB #
 
-![](https://www.evernote.com/shard/s46/sh/fc555274-b246-4bc0-96f7-5f10d10ac751/712884f5c9254402bb608401fdf24a0f/res/24243fc6-412e-4951-916b-3c5b2453f580/ubik-banner-1920.png?resizeSmall&width=832)
+![](https://www.evernote.com/shard/s46/sh/fc555274-b246-4bc0-96f7-5f10d10ac751/712884f5c9254402bb608401fdf24a0f/res/24243fc6-412e-4951-916b-3c5b2453f580/ubik-banner-1920.png)
 
 This is a working title.
 
