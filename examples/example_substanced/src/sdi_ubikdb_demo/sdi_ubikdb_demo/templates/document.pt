@@ -8,13 +8,20 @@
 <body>
  <h1 metal:fill-slot="body-title">${title}</h1>
  <div metal:fill-slot="body-content">
-    <div style="border: 1px solid black" 
-        ng-app="ubikdb_demo" ng-controller="DocumentDemo">
+     <style type="text/css">
+        .infobox {
+            border: 1px solid black;
+            background-color: #eeeeee;
+            margin: 20px 0;
+            padding: 8px;
+        }
+     </style>
+    <div class="infobox" ng-app="ubikdb_demo" ng-controller="DocumentDemo">
         <div>
-            <span><b>agent:</b> {{agent}}</span>
+            <span><b>agent:</b> <span ng-bind="agent"></span></span>
         </div>
         <div>
-            <span><b>boss:</b> {{boss}}</span>
+            <span><b>boss:</b> <span ng-bind="boss"></span></span>
         </div>
     </div> 
     <div tal:content="structure body">BODY</div>

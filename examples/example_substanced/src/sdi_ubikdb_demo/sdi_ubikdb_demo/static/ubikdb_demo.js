@@ -7,6 +7,24 @@
 angular.module('ubikdb_demo', []);
 
 
-angular.module('ubikdb_demo').controller('DocumentDemo', function() {
-    console.log('in controller');
+angular.module('ubikdb_demo').controller('DocumentDemo', function($scope, $window) {
+
+    // connect to the websocket
+    var socket = io.connect('/ubikdb');
+
+    $window.beforeunload = function() {
+        socket.disconnect();
+    };
+
+    socket.emit('get', '/boss', function(data) {
+        $scope.$apply(function() {
+            $scope.boss = data;
+        });
+    });
+    socket.emit('get', '/agent', function(data) {
+        $scope.$apply(function() {
+            $scope.agent = data;
+        });
+    });
+
 });
