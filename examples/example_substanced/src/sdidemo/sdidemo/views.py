@@ -265,5 +265,6 @@ def ctest(context, request):
 def socketio_service(request):
     socketio_manage(request.environ, {
         '/ubikdb': UbikDBNamespace,
+        '/ubiktest': UbikDBNamespace,
     }, request=request)
     return Response('')
