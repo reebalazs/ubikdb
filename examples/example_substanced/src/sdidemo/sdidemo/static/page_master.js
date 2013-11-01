@@ -35,8 +35,16 @@
     socket.emit('norecurse', '/my/interest/too', 'DO NOT GET THIS, no recursion');
     socket.emit('norecurse', '/my/other/interest', 'Unprefixed, for a second time.');
 
-    socket.emit('value', '/my/interest', 'Unprefixed, for a second time.', function(data) {
-        console.log('REPLY', data);
+    // --
+
+    socket.emit('value', '/my/interest', function(data) {
+        console.log('value /my/interest', data);
+    });
+    socket.emit('value', '/boss', function(data) {
+        console.log('value /boss', data);
+    });
+    socket.emit('value', '/agent', function(data) {
+        console.log('value /agent', data);
     });
 
 }();
