@@ -1,7 +1,7 @@
 
 # UbikDB #
 
-![](https://tinyurl.com/mso7x2h "")
+![](http://tinyurl.com/mso7x2h "")
 
 This is a working title.
 
