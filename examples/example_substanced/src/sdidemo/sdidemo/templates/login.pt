@@ -1,0 +1,8 @@
+<div metal:use-macro="request.sdiapi.get_macro(
+     'substanced.sdi.views:templates/login.pt', 'main')">
+
+  <div metal:fill-slot="login-form-title">
+    <h1>Log In (as admin/admin)</h1>
+  </div>
+
+</div>

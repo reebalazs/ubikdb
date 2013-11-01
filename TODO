@@ -1,0 +1,4 @@
+
+Issues:
+
+- newest gevent-socketio gives an exception (AttributeError: "socket" not found)
