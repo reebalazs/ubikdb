@@ -18,10 +18,10 @@
      </style>
     <div class="infobox" ng-app="ubikdb_demo" ng-controller="DocumentDemo">
         <div>
-            <span><b>agent:</b> <span ng-bind="agent"></span></span>
+            <span><b>Agent:</b> <span ng-bind="agent"></span></span>
         </div>
         <div>
-            <span><b>boss:</b> <span ng-bind="boss"></span></span>
+            <span><b>Boss:</b> <span ng-bind="boss"></span></span>
         </div>
     </div> 
     <div tal:content="structure body">BODY</div>
