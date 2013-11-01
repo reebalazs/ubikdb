@@ -17,9 +17,9 @@ requires = [
     'ubikdb',
     ]
 
-setup(name='sdidemo',
+setup(name='sdi_ubikdb_demo',
       version='0.0',
-      description='sdidemo',
+      description='sdi_ubikdb_demo',
       long_description=README + '\n\n' +  CHANGES,
       classifiers=[
         "Programming Language :: Python",
@@ -36,12 +36,12 @@ setup(name='sdidemo',
       zip_safe=False,
       install_requires=requires,
       tests_require=requires,
-      test_suite="sdidemo",
+      test_suite="sdi_ubikdb_demo",
       entry_points = """\
       [paste.app_factory]
-      main = sdidemo:main
+      main = sdi_ubikdb_demo:main
       [console_scripts]
-      qpwrapper = sdidemo.scripts.qpwrapper:main
+      qpwrapper = sdi_ubikdb_demo.scripts.qpwrapper:main
       """,
       )
 

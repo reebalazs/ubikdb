@@ -74,7 +74,7 @@ def add_sample_content(site, registry):
 @subscribe_created(Root)
 def root_created(event):
     catalogs = find_service(event.object, 'catalogs')
-    catalogs.add_catalog('sdidemo', update_indexes=True)
+    catalogs.add_catalog('sdi_ubikdb_demo', update_indexes=True)
     add_sample_content(event.object, event.registry)
 
 @subscribe_modified(IDemoContent)

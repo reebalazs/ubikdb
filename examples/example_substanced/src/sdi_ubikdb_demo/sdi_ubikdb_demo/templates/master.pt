@@ -10,6 +10,6 @@
     <metal:content metal:define-slot="body-content">CONTENT</metal:content>
     <script src="${request.static_url('ubikdb:static/dist/bower_components/socket.io-client/dist/socket.io.js')}"></script>
     <script src="${request.static_url('ubikdb:static/ubikdb.js')}"></script>
-    <script src="${request.static_url('sdidemo:static/page_master.js')}"></script>
+    <script src="${request.static_url('sdi_ubikdb_demo:static/page_master.js')}"></script>
 </body>
 </html>

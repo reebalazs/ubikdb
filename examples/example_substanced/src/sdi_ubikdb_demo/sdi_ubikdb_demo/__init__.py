@@ -43,7 +43,7 @@ def main(global_config, **settings):
     config.add_route('ubikdbsocket', 'socket.io/*remaining')
     config.add_static_view('static_demo', 'deformdemo:static')
     config.add_static_view('static_ubikdb', 'ubikdb:static')
-    config.add_static_view('static_sdidemo', 'sdidemo:static')
+    config.add_static_view('static_sdi_ubikdb_demo', 'sdi_ubikdb_demo:static')
     config.add_translation_dirs(
         'colander:locale',
         'deform:locale',
@@ -56,13 +56,13 @@ def main(global_config, **settings):
     config.add_mgmt_view(
         login,
         name='login',
-        renderer='sdidemo:templates/login.pt',
+        renderer='sdi_ubikdb_demo:templates/login.pt',
         tab_condition=False,
         permission=NO_PERMISSION_REQUIRED)
     config.add_mgmt_view(
         login,
         context=HTTPForbidden,
-        renderer='sdidemo:templates/login.pt',
+        renderer='sdi_ubikdb_demo:templates/login.pt',
         tab_condition=False,
         permission=NO_PERMISSION_REQUIRED
         )

@@ -121,7 +121,7 @@ def binder_columns(folder, subobject, request, default_columnspec):
 
     def make_sorter(index_name):
         def sorter(folder, resultset, limit=None, reverse=False):
-            index = find_index(folder, 'sdidemo', index_name)
+            index = find_index(folder, 'sdi_ubikdb_demo', index_name)
             if index is None:
                 return resultset
             return resultset.sort(index, limit=limit, reverse=reverse)

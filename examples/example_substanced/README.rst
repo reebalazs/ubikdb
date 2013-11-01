@@ -42,7 +42,7 @@ After you've succesfully done the above, invoke the buildout via::
    file, which is often trampled upon by other software in ways that
    are incompatible with our usage of buildout.
 
-When it's finished, an application named ``sdidemo`` and its dependencies
+When it's finished, an application named ``sdi_ubikdb_demo`` and its dependencies
 (which include Substance D) should have been downloaded and compiled.  All
 required Pyramid and Substance D software should also be installed within the
 buildout environment.

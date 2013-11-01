@@ -251,7 +251,7 @@ def btest(context, request):
 
 @view_config(name='ctest')
 def ctest(context, request):
-    demo_catalog = find_catalog(context, 'sdidemo')
+    demo_catalog = find_catalog(context, 'sdi_ubikdb_demo')
     system_catalog = find_catalog(context, 'system')
     q = ( demo_catalog['title'].eq('fred') &
           system_catalog['content_type'].eq('Document') )

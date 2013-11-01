@@ -1,6 +1,6 @@
 from substanced.catalog import Field, catalog_factory
 
-@catalog_factory('sdidemo')
+@catalog_factory('sdi_ubikdb_demo')
 class Indexes(object):
     title = Field()
     created = Field()
@@ -31,19 +31,19 @@ class IndexViews:
 def includeme(config):
     config.add_indexview(
         IndexViews,
-        catalog_name='sdidemo',
+        catalog_name='sdi_ubikdb_demo',
         index_name='title',
         attr='title'
         )
     config.add_indexview(
         IndexViews,
-        catalog_name='sdidemo',
+        catalog_name='sdi_ubikdb_demo',
         index_name='created',
         attr='created'
         )
     config.add_indexview(
         IndexViews,
-        catalog_name='sdidemo',
+        catalog_name='sdi_ubikdb_demo',
         index_name='modified',
         attr='modified'
         )
