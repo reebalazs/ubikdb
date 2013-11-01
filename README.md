@@ -11,6 +11,10 @@ of [Philip K. Dick](http://en.wikipedia.org/wiki/Philip_K._Dick).
 There is also an unrelated [python package](https://pypi.python.org/pypi/ubik)
 with the same name.
 
+## What ##
+
+Experimenting with a concept.
+
 ## Roadmap ##
 
 - [x] Make a clone of sdidemo with a working gevent-socketio included
