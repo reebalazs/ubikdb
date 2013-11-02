@@ -1,0 +1,16 @@
+
+.infobox {
+    border: 1px solid black;
+    background-color: #eeeeee;
+    margin: 20px 0;
+    padding: 8px;
+}
+.infobox > div {
+    float: left;
+    margin: 0 10px 0 20px;
+}
+.infobox:after {
+    content: '';
+    display: block;
+    clear: both;
+}

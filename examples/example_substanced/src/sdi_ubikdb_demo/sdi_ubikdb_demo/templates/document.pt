@@ -8,14 +8,7 @@
 <body>
  <h1 metal:fill-slot="body-title">${title}</h1>
  <div metal:fill-slot="body-content">
-     <style type="text/css">
-        .infobox {
-            border: 1px solid black;
-            background-color: #eeeeee;
-            margin: 20px 0;
-            padding: 8px;
-        }
-     </style>
+    <link rel="stylesheet" type="text/css" href="${request.static_url('sdi_ubikdb_demo:static/page_document.css')}" />
     <div class="infobox" ng-app="ubikdb_demo" ng-controller="DocumentDemo">
         <div>
             <span><b>Agent:</b> <span ng-bind="agent"></span></span>
