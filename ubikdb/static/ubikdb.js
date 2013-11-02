@@ -43,6 +43,11 @@
         return child;
     };
 
+    UbikDB.prototype.emit = function(/* type, ... */) {
+        // dispatch to respective method
+        return this._dispatch('emit', Array.prototype.slice.call(arguments));
+    };
+
     UbikDB.prototype.on = function(/* type, handler, ... */) {
         // dispatch to respective method
         return this._dispatch('on', Array.prototype.slice.call(arguments));
@@ -58,6 +63,7 @@
     };
 
     UbikDB.prototype.on_get = function(handler) {
+        var self = this;
         this.socket.emit('get', this.context, function(value) {
             // call handler with null as second parameter
             // this means this is the initial call
@@ -66,11 +72,10 @@
         });
         this.socket.emit('watch_context', this.context, true);
         this.socket.on('set', function(context, value) {
-            if (context.indexOf(this.context) === 0) {
+            if (context.indexOf(self.context) === 0) {
                 // the event is in the subtree of the current context
                 // call handler with the path as second parameter
-                var path = context.substring(this.context.length);
-                console.log('changed', value, this.context, path, context);
+                var path = context.substring(self.context.length);
                 handler(value, path);
             }
         });
@@ -78,6 +83,10 @@
 
     UbikDB.prototype.on_set = function(handler) {
         this.socket.on('set', handler);
+    };
+
+    UbikDB.prototype.emit_set = function(value) {
+        this.socket.emit('set', this.context, value);
     };
 
     // The same socket is used between all instances.

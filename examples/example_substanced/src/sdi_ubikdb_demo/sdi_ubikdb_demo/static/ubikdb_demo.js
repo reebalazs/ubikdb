@@ -15,6 +15,12 @@ angular.module('ubikdb_demo', []).controller('DocumentDemo', function($scope, $w
         });
 
     });
+    $scope.$watch('boss', function(value, oldValue) {
+        // ignore the initial trigger
+        if (oldValue !== undefined) {
+            db.child('boss').emit('set', value);
+        }
+    });
 
     db.child('agent').on('get', function(value, path) {
         $scope.$apply(function() {

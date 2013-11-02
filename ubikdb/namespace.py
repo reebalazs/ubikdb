@@ -4,6 +4,14 @@ from socketio.mixins import BroadcastMixin
 
 from .context import ContextMixin
 
+# Database is kept in memory (volatile)
+global db_root
+db_root = {}
+db_root['ubikdb'] = {
+    'boss': 'Glen Runciter',
+    'agent': 'Joe Chip'
+}
+
 
 class UbikDBNamespace(BaseNamespace, BroadcastMixin, ContextMixin):
 
@@ -11,11 +19,6 @@ class UbikDBNamespace(BaseNamespace, BroadcastMixin, ContextMixin):
         BaseNamespace.__init__(self, *args, **kwargs)
         BroadcastMixin.__init__(self)
         ContextMixin.__init__(self)
-
-        self._root = {
-            'boss': 'Glen Runciter',
-            'agent': 'Joe Chip'
-        }
 
     def on_message(self, context, msg):
         self.emit_with_context('message', context, msg, recurse=True)
@@ -27,7 +30,7 @@ class UbikDBNamespace(BaseNamespace, BroadcastMixin, ContextMixin):
 
     @property
     def root(self):
-        return self._root
+        return db_root['ubikdb']
 
     def traverse_path(self, context):
         traverse = [dict(data=self.root)]
@@ -56,10 +59,9 @@ class UbikDBNamespace(BaseNamespace, BroadcastMixin, ContextMixin):
         traverse = self.traverse_path(context)
         if len(traverse) == 1:
             print "on_set /", value
-            self.root = value
+            db_root['ubikdb'] = value
         else:
             last = traverse[-2]
-            print "on_set", context, last
             last['data'][last['segment']] = value
         # notify listeners
         self.emit_with_context('set', context, value, recurse=True)
