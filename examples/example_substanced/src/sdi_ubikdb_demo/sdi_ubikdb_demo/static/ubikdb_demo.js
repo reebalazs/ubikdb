@@ -12,15 +12,18 @@ angular.module('ubikdb_demo', []).controller('DocumentDemo', function($scope, $w
     // connect to the ubikDB
     var db = ubikDB();
 
+    var lastReceivedValue;
     db.child('boss').on('get', function(value, path) {
         $scope.$apply(function() {
-            $scope.boss = value;
+            $scope.boss = lastReceivedValue = value;
         });
 
     });
     $scope.$watch('boss', function(value, oldValue) {
         // ignore the initial trigger
-        if (oldValue !== undefined) {
+        // also, avoid circular triggering by
+        // never sending back the same value
+        if (oldValue !== undefined && value != lastReceivedValue) {
             db.child('boss').emit('set', value);
         }
     });
