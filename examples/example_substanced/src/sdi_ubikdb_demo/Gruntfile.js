@@ -9,7 +9,10 @@ module.exports = function(grunt) {
     copy: {
       'default': {
         files: {
-          'sdi_ubikdb_demo/static/dist/': collect.bower('angular').select('main.js')
+          'sdi_ubikdb_demo/static/dist/': Array.prototype.concat(
+            collect.bower('lodash').select('main.js'),
+            collect.bower('angular').select('main.js')
+          )
         }
       }
     },
@@ -18,7 +21,10 @@ module.exports = function(grunt) {
         debounceDelay: 250
       },
       'default': {
-        files:  collect.bower('angular').select('main.js'),
+        files:  Array.prototype.concat(
+          collect.bower('lodash').select('main.js'),
+          collect.bower('angular').select('main.js')
+        ),
         tasks: ['copy:default']
       }
     }

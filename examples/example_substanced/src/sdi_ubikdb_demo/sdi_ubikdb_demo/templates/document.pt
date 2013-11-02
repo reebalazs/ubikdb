@@ -9,22 +9,26 @@
  <h1 metal:fill-slot="body-title">${title}</h1>
  <div metal:fill-slot="body-content">
     <link rel="stylesheet" type="text/css" href="${request.static_url('sdi_ubikdb_demo:static/page_document.css')}" />
+
+    <!-- ubikDB demo widget -->
     <div class="infobox" ng-app="ubikdb_demo" ng-controller="DocumentDemo">
-        <div>
-            <b>Agent:</b>
-            <input ng-model="agent" />
-            <span class="agent-label" ng-bind="agent"></span>
+        <div ng-repeat="row in _.range(rows)">
+            <div class="col"><b>Agent:</b>
+                <input ng-model="$parent.agent" /><span class="agent-label" ng-bind="agent"></span>
+            </div>
+            <div class="col"><b>Boss:</b>
+                <input ng-model="$parent.boss" /><span class="agent-label" ng-bind="boss"></span>
+            </div>
         </div>
-        <div>
-            <b>Boss:</b>
-            <input ng-model="boss" />
-            <span class="agent-label" ng-bind="boss"></span>
-        </div>
-    </div> 
+        <button ng-click="rows = rows + 1">Add</button>
+    </div>
+
+
     <div tal:content="structure body">BODY</div>
     <script src="${request.static_url('ubikdb:static/dist/bower_components/socket.io-client/dist/socket.io.js')}"></script>
     <script src="${request.static_url('ubikdb:static/ubikdb.js')}"></script>
     <!--script src="${request.static_url('sdi_ubikdb_demo:static/page_master.js')}"></script-->
+    <script src="${request.static_url('sdi_ubikdb_demo:static/dist/bower_components/lodash/dist/lodash.compat.js')}"></script>
     <script src="${request.static_url('sdi_ubikdb_demo:static/dist/bower_components/angular/angular.js')}"></script>
     <script src="${request.static_url('sdi_ubikdb_demo:static/ubikdb_demo.js')}"></script>
  </div>

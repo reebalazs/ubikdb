@@ -1,10 +1,13 @@
 
-/* global window: true, io: true, angular: true, ubikDB: true */
+/* global window: true, io: true, angular: true, ubikDB: true, _: true */
 /* jshint globalstrict: true */
 
 'use strict';
 
 angular.module('ubikdb_demo', []).controller('DocumentDemo', function($scope, $window) {
+
+    $scope._ = _;           // enable lodash in the template
+    $scope.rows = 1;        // one row initially
 
     // connect to the ubikDB
     var db = ubikDB();
