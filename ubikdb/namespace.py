@@ -7,7 +7,8 @@ from .context import ContextMixin
 # Database is kept in memory (volatile)
 global db_root
 db_root = {}
-db_root['ubikdb'] = {
+db_root_key = 'ubikdb'
+db_root[db_root_key] = {
     'boss': 'Glen Runciter',
     'agent': 'Joe Chip'
 }
@@ -30,10 +31,19 @@ class UbikDBNamespace(BaseNamespace, BroadcastMixin, ContextMixin):
 
     @property
     def root(self):
-        return db_root['ubikdb']
+        return {
+            'data': db_root,
+            'segment': db_root_key,
+        }
 
     def traverse_path(self, context):
-        traverse = [dict(data=self.root)]
+        segment = self.root['segment']
+        data = self.root['data'][segment]
+        trunk = {
+            'data': data,
+            'segment': segment
+        }
+        traverse = [self.root, trunk]
         split_context = context.split('/')
         for segment in split_context:
             last = traverse[-1]
@@ -57,12 +67,8 @@ class UbikDBNamespace(BaseNamespace, BroadcastMixin, ContextMixin):
 
     def on_set(self, context, value):
         traverse = self.traverse_path(context)
-        if len(traverse) == 1:
-            print "on_set /", value
-            db_root['ubikdb'] = value
-        else:
-            last = traverse[-2]
-            last['data'][last['segment']] = value
+        last = traverse[-2]
+        last['data'][last['segment']] = value
         # notify listeners
         self.emit_with_context('set', context, value, recurse=True)
 
