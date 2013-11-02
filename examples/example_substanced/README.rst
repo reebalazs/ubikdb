@@ -1,7 +1,7 @@
 UbikDB example with Substance-D
 ===============================
 
-.. image:: http://tinyurl.com/mso7x2h
+.. image:: https://dl.dropboxusercontent.com/u/16162405/ubik-banner-1920.png
 
 
 Buildout for SDI Development
