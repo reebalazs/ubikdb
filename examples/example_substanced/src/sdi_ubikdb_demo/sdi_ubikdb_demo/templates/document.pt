@@ -11,10 +11,14 @@
     <link rel="stylesheet" type="text/css" href="${request.static_url('sdi_ubikdb_demo:static/page_document.css')}" />
     <div class="infobox" ng-app="ubikdb_demo" ng-controller="DocumentDemo">
         <div>
-            <span><b>Agent:</b> <span ng-bind="agent"></span></span>
+            <b>Agent:</b>
+            <input ng-model="agent">
+            <span class="agent-label" ng-bind="agent"></span>
         </div>
         <div>
-            <span><b>Boss:</b> <span ng-bind="boss"></span></span>
+            <b>Boss:</b>
+            <input ng-model="boss">
+            <span class="agent-label" ng-bind="boss"></span>
         </div>
     </div> 
     <div tal:content="structure body">BODY</div>
