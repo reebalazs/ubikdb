@@ -10,7 +10,7 @@ angular.module('ubikdb_demo', ['ubikDB']).controller('DocumentDemo', function($s
     $scope._ = _;
     $scope.rows = 1;
 
-    // connect to the ubikDB and sync variables
+    // connect to the ubikDB, and bind 2-way sync of variables
     var db = ubikDB();
     db.child('boss').bind($scope, 'boss');
     db.child('agent').bind($scope, 'agent');
