@@ -11,7 +11,9 @@
 
     function UbikDB() {}
 
-    UbikDB.prototype.init = function(path, socket) {
+    UbikDB.prototype.constructor = UbikDB;
+
+    UbikDB.prototype.init = function(context, socket) {
         var self = this;
         // connect to the websocket
         if (socket === undefined) {
@@ -24,7 +26,7 @@
             self.socket.disconnect();
         };
         this.eventMap = {};
-        this.context = this.canonicalPath(path || '/');
+        this.context = this.canonicalPath(context || '/');
     };
 
     UbikDB.prototype.canonicalPath = function(path) {
@@ -37,10 +39,14 @@
     };
 
     UbikDB.prototype.child = function(path) {
-        var child = new UbikDB();
+        var child = new this.constructor();
         var childContext = this.canonicalPath(this.context + '/' + path);
         child.init(childContext, this.socket);
         return child;
+    };
+
+    UbikDB.prototype.bind = function(scope, name, options) {
+        throw new Error('Not implemented. Perhaps you wanted to inject ubikDB into Angular?');
     };
 
     UbikDB.prototype.emit = function(/* type, ... */) {
@@ -92,9 +98,9 @@
     // The same socket is used between all instances.
     var ubikSocket;
 
-    window.ubikDB = function(path) {
+    window.ubikDB = function(context) {
         var root = new UbikDB();
-        root.init(path, ubikSocket);
+        root.init(context, ubikSocket);
         ubikSocket = root.socket;
         return root;
     };

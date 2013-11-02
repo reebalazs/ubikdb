@@ -1,38 +1,18 @@
 
-/* global window: true, io: true, angular: true, ubikDB: true, _: true */
+/* global angular: true, _: true */
 /* jshint globalstrict: true */
 
 'use strict';
 
-angular.module('ubikdb_demo', []).controller('DocumentDemo', function($scope, $window) {
+angular.module('ubikdb_demo', ['ubikDB']).controller('DocumentDemo', function($scope, ubikDB) {
 
-    $scope._ = _;           // enable lodash in the template
-    $scope.rows = 1;        // one row initially
+    // define globals for the template
+    $scope._ = _;
+    $scope.rows = 1;
 
-    // connect to the ubikDB
+    // connect to the ubikDB and sync variables
     var db = ubikDB();
-
-    var lastReceivedValue;
-    db.child('boss').on('get', function(value, path) {
-        $scope.$apply(function() {
-            $scope.boss = lastReceivedValue = value;
-        });
-
-    });
-    $scope.$watch('boss', function(value, oldValue) {
-        // ignore the initial trigger
-        // also, avoid circular triggering by
-        // never sending back the same value
-        if (oldValue !== undefined && value != lastReceivedValue) {
-            db.child('boss').emit('set', value);
-        }
-    });
-
-    db.child('agent').on('get', function(value, path) {
-        $scope.$apply(function() {
-            $scope.agent = value;
-        });
-    });
-
+    db.child('boss').bind($scope, 'boss');
+    db.child('agent').bind($scope, 'agent');
 
 });
