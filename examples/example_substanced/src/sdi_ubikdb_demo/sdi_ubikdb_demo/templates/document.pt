@@ -12,12 +12,12 @@
     <div class="infobox" ng-app="ubikdb_demo" ng-controller="DocumentDemo">
         <div>
             <b>Agent:</b>
-            <input ng-model="agent">
+            <input ng-model="agent" />
             <span class="agent-label" ng-bind="agent"></span>
         </div>
         <div>
             <b>Boss:</b>
-            <input ng-model="boss">
+            <input ng-model="boss" />
             <span class="agent-label" ng-bind="boss"></span>
         </div>
     </div> 
