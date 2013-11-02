@@ -1,30 +1,26 @@
 
-/* global window: true, io: true, angular: true */
+/* global window: true, io: true, angular: true, ubikDB: true */
 /* jshint globalstrict: true */
 
 'use strict';
 
-angular.module('ubikdb_demo', []);
+angular.module('ubikdb_demo', []).controller('DocumentDemo', function($scope, $window) {
 
+    // connect to the ubikDB
+    var db = ubikDB();
 
-angular.module('ubikdb_demo').controller('DocumentDemo', function($scope, $window) {
-
-    // connect to the websocket
-    var socket = io.connect('/ubikdb');
-
-    $window.beforeunload = function() {
-        socket.disconnect();
-    };
-
-    socket.emit('get', '/boss', function(data) {
+    db.child('boss').on('get', function(value, path) {
         $scope.$apply(function() {
-            $scope.boss = data;
+            $scope.boss = value;
+        });
+
+    });
+
+    db.child('agent').on('get', function(value, path) {
+        $scope.$apply(function() {
+            $scope.agent = value;
         });
     });
-    socket.emit('get', '/agent', function(data) {
-        $scope.$apply(function() {
-            $scope.agent = data;
-        });
-    });
+
 
 });

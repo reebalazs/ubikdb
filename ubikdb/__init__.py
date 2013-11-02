@@ -41,17 +41,17 @@ class ContextMixin(object):
         context_name = self._get_context_id(context)
         for sessid, socket in self.socket.server.sockets.iteritems():
             if self.socket != socket:
-                if context_name in socket.session['contexts']:
+                if context_name in self.session['contexts']:
                     socket.send_packet(pkt)
                 elif recurse:
-                    for context in socket.session['contexts_recurse']:
+                    for context in self.session['contexts_recurse']:
                         # Send this to the socket if it starts with the prefix
                         if context_name.startswith(context):
                             socket.send_packet(pkt)
                             break
                 else:
                     # scan the recursive contexts too, in a non-recursive way.
-                    if context_name in socket.session['contexts_recurse']:
+                    if context_name in self.session['contexts_recurse']:
                         socket.send_packet(pkt)
 
 

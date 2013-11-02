@@ -24,7 +24,7 @@
             self.socket.disconnect();
         };
         this.eventMap = {};
-        this.path = path;
+        this.context = this.canonicalPath(path || '/');
     };
 
     UbikDB.prototype.canonicalPath = function(path) {
@@ -38,33 +38,48 @@
 
     UbikDB.prototype.child = function(path) {
         var child = new UbikDB();
-        path = this.canonicalPath(this.path + '/' + path);
-        child.init(path, this.socket);
+        var childContext = this.canonicalPath(this.context + '/' + path);
+        child.init(childContext, this.socket);
         return child;
     };
 
-    UbikDB.prototype.trigger = function(type) {
-        var method = this['on_' + type];
-        return method.apply(this, Array.prototype.slice(arguments, 1));
+    UbikDB.prototype.on = function(/* type, handler, ... */) {
+        // dispatch to respective method
+        return this._dispatch('on', Array.prototype.slice.call(arguments));
     };
 
-    UbikDB.prototype.on = function(type, handler) {
-        var args = Array.prototype.slice(arguments, 1);
-        if (type == 'get') {
-            this.socket.emit('get', '/agent', handler);
-            this.socket.emit('watch_context', '/my/interest', true);
-
-
-        } else {
+    UbikDB.prototype._dispatch = function(prefix, args) {
+        var type = args[0];
+        var method = this[prefix + '_' + type];
+        if (method === undefined) {
             throw new Error('Unknown event type: ' + type);
         }
+        return method.apply(this, args.slice(1));
+    };
 
+    UbikDB.prototype.on_get = function(handler) {
+        this.socket.emit('get', this.context, function(value) {
+            // call handler with null as second parameter
+            // this means this is the initial call
+            // and it is always on the same context
+            handler(value, null);
+        });
+        this.socket.emit('watch_context', this.context, true);
+        this.socket.on('changed', function(value, context) {
+            if (context.indexOf(this.context) === 0) {
+                // the event is in the subtree of the current context
+                // call handler with the path as second parameter
+                var path = context.substring(this.context.length);
+                console.log('changed', value, this.context, path, context);
+                handler(value, path);
+            }
+        });
     };
 
     // The same socket is used between all instances.
     var ubikSocket;
 
-    window.UbikDB = function(path) {
+    window.ubikDB = function(path) {
         var root = new UbikDB();
         root.init(path, ubikSocket);
         ubikSocket = root.socket;
