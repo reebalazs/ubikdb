@@ -43,8 +43,6 @@
     socket.emit('get', '/boss', function(data) {
         console.log('value /boss', data);
     });
-    socket.emit('get', '/agent', function(data) {
-        console.log('value /agent', data);
-    });
+    socket.emit('set', '/agent', 'abcde');
 
 }();

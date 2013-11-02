@@ -30,25 +30,39 @@ class UbikDBNamespace(BaseNamespace, BroadcastMixin, ContextMixin):
         return self._root
 
     def traverse_path(self, context):
-        path = []
-        data = self.root
+        traverse = [dict(data=self.root)]
         split_context = context.split('/')
         for segment in split_context:
+            last = traverse[-1]
+            data = last['data']
             if segment:
+                last['segment'] = segment
                 if segment in data:
                     data = data[segment]
-                    path.append(data)
+                    traverse.append(dict(data=data))
                 else:
-                    path.append(None)
+                    traverse.append(dict(data=None))
                     break
-        return path
+        return traverse
 
     def traverse(self, context):
-        return self.traverse_path(context)[-1]
+        return self.traverse_path(context)[-1]['data']
 
     def on_get(self, context):
         value = self.traverse(context)
         return [value]
+
+    def on_set(self, context, value):
+        traverse = self.traverse_path(context)
+        if len(traverse) == 1:
+            print "on_set /", value
+            self.root = value
+        else:
+            last = traverse[-2]
+            print "on_set", context, last
+            last['data'][last['segment']] = value
+        # notify listeners
+        self.emit_with_context('set', context, value, recurse=True)
 
     def recv_connect(self):
         pass

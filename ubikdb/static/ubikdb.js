@@ -65,7 +65,7 @@
             handler(value, null);
         });
         this.socket.emit('watch_context', this.context, true);
-        this.socket.on('changed', function(value, context) {
+        this.socket.on('set', function(context, value) {
             if (context.indexOf(this.context) === 0) {
                 // the event is in the subtree of the current context
                 // call handler with the path as second parameter
@@ -74,6 +74,10 @@
                 handler(value, path);
             }
         });
+    };
+
+    UbikDB.prototype.on_set = function(handler) {
+        this.socket.on('set', handler);
     };
 
     // The same socket is used between all instances.
