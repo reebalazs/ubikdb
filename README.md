@@ -6,7 +6,10 @@
 This is a working title.
 
 [Ubik](http://www.amazon.com/Ubik-Philip-K-Dick/dp/0547572298) is a book
-of [Philip K. Dick](http://en.wikipedia.org/wiki/Philip_K._Dick).
+of [Philip K. Dick](http://en.wikipedia.org/wiki/Philip_K._Dick). Maybe
+they will also make a
+[movie](http://screenrant.com/michel-gondry-ubik-movie-philip-dick-sandy-101655/)
+out of it soon.
 
 The python package manager ["ubik"](https://pypi.python.org/pypi/ubik) is
 unrelated with ubikDB.
