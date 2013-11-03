@@ -36,7 +36,9 @@ This screencast was made after the first two days of development.
 It is intended to give a peek preview into how ubikDB will work, by showing
 the simplest possible use case that can operate with the current codebase.
 The  real-time synchronized form widget of the demo is
-written in only **11 lines** of HTML and **3 lines** of JavaScript code. 
+written in only **11 lines** of HTML and **3 lines** of JavaScript code is
+needed to do the data synchronization, adding up to a total of 7 lines of JS
+for the entire Angular controller.
 
 [![Play Video](https://dl.dropboxusercontent.com/u/16162405/ubikDB_0__starting_up.png)]( http://vimeo.com/reebalazs/ubikdb-0)
 
