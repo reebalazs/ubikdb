@@ -31,7 +31,7 @@ Experimenting with a concept.
 
 This screencast was made after the first two days of development. 
 It is intended to show the basics of how ubikDB will work. The 
-real-time data sharing shown in the demo is
+real-time synchronized form widget of the demo is
 written in only **11 lines** of HTML and **3 lines** of JavaScript code. 
 
 [![Play Video](https://dl.dropboxusercontent.com/u/16162405/ubikDB_0__starting_up.png)]( http://vimeo.com/reebalazs/ubikdb-0)
