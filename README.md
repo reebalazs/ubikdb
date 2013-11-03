@@ -34,7 +34,7 @@ It is intended to show the basics of how ubiqDB will work. The
 real-time data sharing shown in the demo is
 written in only **11 lines** of HTML and **3 lines** of JavaScript code. 
 
-[![Play Video](https://dl.dropboxusercontent.com/u/16162405/ubikDB_0__starting_up.png)](https://vimeo.com/78437917)
+[![Play Video](https://dl.dropboxusercontent.com/u/16162405/ubikDB_0__starting_up.png)]( http://vimeo.com/reebalazs/ubikdb-0)
 
 **This is work in progress and the early presentation of the plans and concepts.
 It is very far from being ready to production.**
