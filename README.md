@@ -1,5 +1,5 @@
 
-# UbikDB #
+# ubikDB #
 
 ![](https://dl.dropboxusercontent.com/u/16162405/ubik-banner-1920.png)
 
@@ -9,7 +9,7 @@ This is a working title.
 of [Philip K. Dick](http://en.wikipedia.org/wiki/Philip_K._Dick).
 
 The python package manager ["ubik"](https://pypi.python.org/pypi/ubik) is
-unrelated with UbikDB.
+unrelated with ubikDB.
 
 ## What ##
 
