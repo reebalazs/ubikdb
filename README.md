@@ -80,12 +80,15 @@ The current architecture that works with the demo:
 The backend is plain python with no framework dependencies other than the database
 (syncing with ZODB is in the plans). For networking, gevent-socketio is used.
 
-Currently, I only found the repository trunk of gevent-socketio working, and the buildout
+I only found the repository trunk of gevent-socketio working, and the buildout
 takes care that we use it from github.
 
 The demo frontend is AngularJS. For MVC-less applications, ubikDB provides an api with
 the single library dependency of the socket.io JavaScript client. On the top of this,
-an MVC can implement its own bind methods 
+an MVC can implement its own bind methods.
+
+Currently the database is volatile, this means it lives in the server's memory as long
+as the application is running. Once restarted, the application resets the data.
 
 ###Using the app###
 
