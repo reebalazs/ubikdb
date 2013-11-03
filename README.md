@@ -24,6 +24,7 @@ Experimenting with a concept.
 - [ ] Tests
 - [ ] Implement data binding events for collections
 - [ ] Persistency in ZODB
+- [ ] ACL
 - [ ] Substance-D demo
 
 ## Status ##
