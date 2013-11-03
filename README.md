@@ -30,7 +30,7 @@ Experimenting with a concept.
 ## Status ##
 
 This screencast was made after the first two days of development. 
-It is intended to show the basics of how ubiqDB will work. The 
+It is intended to show the basics of how ubikDB will work. The 
 real-time data sharing shown in the demo is
 written in only **11 lines** of HTML and **3 lines** of JavaScript code. 
 
