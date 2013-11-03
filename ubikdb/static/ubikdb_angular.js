@@ -28,6 +28,7 @@ angular.module('ubikDB', []).provider('ubikDB', function() {
                 // never sending back the same value
                 if (oldValue !== undefined && value != lastReceivedValue) {
                     self.emit('set', value);
+                    lastReceivedValue = null;
                 }
             });
         }
