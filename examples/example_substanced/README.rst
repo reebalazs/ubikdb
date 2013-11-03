@@ -14,12 +14,13 @@ sources used to compile CSS/JS assets for eventual inclusion into Substance D.
 Installing
 ----------
 
-Check this package out of GitHub (must be a member of the Pylons organization
-on the Substance D team)::
+Check this package out of GitHub::
 
-  $ git clone git@github.com:Pylons/sdidev.git
+  $ git clone git@github.com:reebalazs/ubikdb.git
 
-Cd into the ``sdidev`` directory.
+Cd into the ``ubikdb/examples/example_substanced`` directory. (where you find
+this README.rst file)
+
 
 Download virtualenv from http://pypi.python.org/pypi/virtualenv and install
 it into your system Python (2.7+).  Once you've installed it, create a
@@ -60,7 +61,9 @@ log in as ``admin`` with password ``admin`` to the management interface at
 http://127.0.0.1:6541/manage::
 
   [chrism@oops sdidev]$ bin/supervisord
-  [chrism@oops sdidev]$ bin/pserve etc/development.ini --reload
+  [chrism@oops sdidev]$ bin/pserve etc/development.ini
+
+**Do not use --reload as it seems to have problems with the gevent-based server setup.**
 
 Success looks like this::
 

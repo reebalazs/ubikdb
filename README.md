@@ -45,20 +45,55 @@ for the entire Angular controller.
 **This is work in progress and the early presentation of the plans and concepts.
 It is very far from being ready to production.**
 
-## Running it ##
+## Demos ##
 
-**examples/example_substanced:** standard buildout procedure (virtualenv, 
-bootstrap, buildout). A clone of the Substance-D Development Interface (SDI).
-There is a README file there with some more details.
+##examples/example_substanced: Substance-D based example##
+
+ Use the standard buildout procedure to build
+out the application.
+
+```sh
+$ $PYTHONHOME/bin/virtualenv --no-setuptools .
+$ bin/python bootstrap.py
+$ bin/buildout -U
+```
+
+Following this, run:
+
+```sh
+$ bin/supervisord
+$ bin/pserve etc/development.ini
+```
+
+Do **not** use --reload with paster, it does not seem to work with gevents!
+
+There is a README.rst file in the example buildout directory with a lot of
+more details about this procedure.
+
+###Architecture###
+
+The demo is the clone of the "sdidemo", "sdi" stands for the
+*Substance-D Development Interface*.
 
 The current architecture that works with the demo:
 
 The backend is plain python with no framework dependencies other than the database
 (syncing with ZODB is in the plans). For networking, gevent-socketio is used.
 
-The demo frontend is AngularJS. ubikDB provides an api with the single dependency
-to socket.io.
+Currently, I only found the repository trunk of gevent-socketio working, and the buildout
+takes care that we use it from github.
 
-XXX
+The demo frontend is AngularJS. For MVC-less applications, ubikDB provides an api with
+the single library dependency of the socket.io JavaScript client. On the top of this,
+an MVC can implement its own bind methods 
 
-Do not use --reload with paster.
+###Using the app###
+
+Visit any "Document" on the retail interface (remove /manage from the url path if needed).
+
+For example:
+
+    http://127.0.0.1:6541/binder_0/document_0/
+
+Open it from multiple browsers or tabs, and and you should see what I showed
+on the screencast.
