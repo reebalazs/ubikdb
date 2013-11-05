@@ -3,7 +3,7 @@ var shared = function(config) {
     basePath: '../',
     frameworks: ['mocha'],
     reporters: ['progress'],
-    browsers: ['Firefox', 'Chrome'],
+    browsers: ['Firefox'],
     autoWatch: true,
 
     // these are default values anyway
