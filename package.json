@@ -1,7 +1,10 @@
 {
     "name": "ubikdb",
     "version": "0.1.0",
-    "repository": "https://github.com/reebalazs/ubikdb",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/reebalazs/ubikdb"
+    },
     "devDependencies": {
         "yo": "*",
         "grunt-cli": "*",
@@ -13,6 +16,16 @@
         "grunt-contrib-concat": "*",
         "grunt-contrib-less": "*",
         "grunt-contrib-watch": "*",
-        "grunt-collection-helper": "*"
+        "grunt-contrib-connect": "*",
+        "grunt-collection-helper": "*",
+        "grunt-shell": "*",
+        "grunt-karma": "*",
+        "karma": "*",
+        "karma-mocha": "*",
+        "karma-chrome-launcher": "*",
+        "karma-safari-launcher": "*",
+        "karma-firefox-launcher": "*",
+        "karma-ng-scenario": "*",
+        "chai": "*"
     }
 }

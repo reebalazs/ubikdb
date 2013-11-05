@@ -2,6 +2,9 @@
   "name": "ubikdb",
   "version": "0.1.0",
   "dependencies": {
-    "socket.io-client": "~0.9.16"
+    "socket.io-client": "~0.9.16",
+    "angular": "*",
+    "angular-mocks": "*",
+    "ngMidwayTester" : "https://github.com/yearofmoo/ngMidwayTester.git"
   }
 }

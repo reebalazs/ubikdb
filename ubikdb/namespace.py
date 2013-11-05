@@ -21,11 +21,11 @@ class UbikDBNamespace(BaseNamespace, BroadcastMixin, ContextMixin):
         BroadcastMixin.__init__(self)
         ContextMixin.__init__(self)
 
-    def on_message(self, context, msg):
-        self.emit_with_context('message', context, msg, recurse=True)
+    #def on_message(self, context, msg):
+    #    self.emit_with_context('message', context, msg, recurse=True)
 
-    def on_norecurse(self, context, msg):
-        self.emit_with_context('norecurse', context, msg)
+    #def on_norecurse(self, context, msg):
+    #    self.emit_with_context('norecurse', context, msg)
 
     # --
 
