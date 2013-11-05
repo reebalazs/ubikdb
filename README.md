@@ -1,5 +1,5 @@
 
-+[![Build Status](https://travis-ci.org/reebalazs/ubikdb.png)](https://travis-ci.org/reebalazs/ubikdb)
+[![Build Status](https://travis-ci.org/reebalazs/ubikdb.png)](https://travis-ci.org/reebalazs/ubikdb)
 
 # ubikDB #
 
