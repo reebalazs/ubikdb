@@ -1,6 +1,6 @@
 var shared = function(config) {
   config.set({
-    basePath: '../',
+    basePath: '../', 
     frameworks: ['mocha'],
     reporters: ['progress'],
     browsers: ['Firefox'],
