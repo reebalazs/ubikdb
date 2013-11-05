@@ -11,9 +11,9 @@ install:
 #  - pip install -e '.[testing]' --use-mirrors
   - npm install .
   - mkdir bower_components
-  - grunt install
   - export PATH="$PWD/node_modules/.bin:$PATH"
   - export DISPLAY=:99.0
+  - grunt install
 before_script:
   - echo 'Starting xvfb for FF...'
   - sh -e /etc/init.d/xvfb start
