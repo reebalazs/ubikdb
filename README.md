@@ -1,4 +1,6 @@
 
++[![Build Status](https://travis-ci.org/reebalazs/ubikdb.png)](https://travis-ci.org/reebalazs/ubikdb)
+
 # ubikDB #
 
 ![](https://dl.dropboxusercontent.com/u/16162405/ubik-banner-1920.png)
