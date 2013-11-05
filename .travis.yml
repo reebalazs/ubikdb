@@ -9,6 +9,7 @@ notifications:
   irc: irc.freenode.org#greenfinity
 install:
 #  - pip install -e '.[testing]' --use-mirrors
+  - npm install .
   - mkdir bower_components
   - grunt install
   - export PATH="$PWD/node_modules/.bin:$PATH"
