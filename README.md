@@ -30,6 +30,7 @@ Experimenting with a concept.
 - [ ] Implement data binding events for collections
 - [ ] Persistency in ZODB
 - [ ] ACL
+- [ ] Reconnects
 - [ ] Substance-D demo
 
 ## Status ##
