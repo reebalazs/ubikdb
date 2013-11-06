@@ -110,3 +110,27 @@ an MVC can implement its own bind methods.
 Currently the database is volatile, this means it lives in the server's memory as long
 as the application is running. Once restarted, the application resets the data.
 
+##Discussion##
+
+I wanted to experiment with the creation of an open source library that synchronizes
+data between many clients and a database server.
+
+####Architecture####
+
+#####Clients#####
+
+First of all, I am interested in the creation of a JavaScript client that runs 
+in a browser. This means is the main area of my interest is supporting web 
+applications with this technology.
+
+I am also interested to see how this library can be used from AngularJS. The base
+layer of the library has no dependencies, and there is an Angular specific module
+that adds Angular support for that. It could be done similarly for other frameworks,
+or the base layer can be used directly.
+
+#####Server#####
+
+On the server side, I am interested to create a python server. My second interest would
+be NodeJS. Python is more interesting for me than NodeJS, because it makes it possible
+to use this database directly with other python based server solutions, such as
+Django, Pyramid, Bottle, or Plone.
