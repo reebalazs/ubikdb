@@ -4,7 +4,7 @@
   "dependencies": {
     "socket.io-client": "~0.9.16",
     "angular": "*",
-    "angular-mocks": "*",
+    "angular-mocks": "https://github.com/angular/bower-angular-mocks.git#master",
     "ngMidwayTester" : "https://github.com/yearofmoo/ngMidwayTester.git"
   }
 }

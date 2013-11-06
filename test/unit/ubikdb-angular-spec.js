@@ -3,14 +3,10 @@
 //
 describe("Unit: Testing ubikDB for Angular", function() {
 
-  //beforeEach(angular.mock.module('ubikDB'));
+  beforeEach(angular.mock.module('ubikDB'));
 
-  it('runs', function() { 
+  it('runs', inject(function() {
     expect(true).to.equal(true);
-  });
-
-  //it('runs', inject(function() {
-  //  expect(true).to.equal(true);
-  //}));
+  }));
 
 });

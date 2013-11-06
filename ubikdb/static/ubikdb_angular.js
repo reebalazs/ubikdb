@@ -8,8 +8,7 @@ angular.module('ubikDB', []).provider('ubikDB', function() {
 
     function UbikDBAngular() {}
 
-    UbikDBAngular.prototype = ubikDB();
-
+    UbikDBAngular.prototype = new ubikDB.prototype.constructor();
     UbikDBAngular.prototype.constructor = UbikDBAngular;
 
     UbikDBAngular.prototype.bind = function(scope, name, options) {

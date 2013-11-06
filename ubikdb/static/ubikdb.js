@@ -104,5 +104,7 @@
         ubikSocket = root.socket;
         return root;
     };
+    window.ubikDB.prototype.constructor = UbikDB;
+
 
 }();
