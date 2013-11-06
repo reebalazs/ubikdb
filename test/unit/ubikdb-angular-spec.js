@@ -1,12 +1,20 @@
 //
 // test/unit/ubikdb-angular-spec.js
 //
-describe("Unit: Testing ubikDB for Angular", function() {
+describe("Unit: ubikDB for Angular", function() {
 
-  beforeEach(angular.mock.module('ubikDB'));
+    var ubikDBProvider;
+    beforeEach(module('ubikDB', function(ubikDBProvider) {
+        ubikDBProvider = ubikDBProvider;
+    }));
 
-  it('runs', inject(function() {
-    expect(true).to.equal(true);
-  }));
+    it('loads the provider', inject(function(ubikDB) {
+        var db = ubikDB.prototype.constructor();
+    }));
+
+    it('has bind method defined', inject(function(ubikDB) {
+        var db = ubikDB.prototype.constructor();
+        expect(db.bind).to.be.a('function');
+    }));
 
 });
