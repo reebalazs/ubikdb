@@ -30,7 +30,7 @@ Experimenting with a concept.
 - [ ] Implement data binding events for collections
 - [ ] Persistency in ZODB
 - [ ] ACL
-- [ ] Reconnects
+<!-- - [ ] Reconnects/ -->
 - [ ] Substance-D demo
 
 ## Status ##
@@ -48,9 +48,12 @@ for the entire Angular controller.
 **This is work in progress and the early presentation of the plans and concepts.
 It is very far from being ready to production.**
 
-## Demos ##
+## Examples ##
 
-##examples/example_substanced: Substance-D based example##
+##Substance-D based example##
+
+###examples/example_substanced###
+
 
  Use the standard buildout procedure to build
 out the application.
@@ -73,10 +76,24 @@ Do **not** use --reload with paster, it does not seem to work with gevents!
 There is a README.rst file in the example buildout directory with a lot of
 more details about this procedure.
 
-###Architecture###
+###Using the app###
+
+Visit any "Document" on the retail interface (remove /manage from the url path if needed).
+
+For example:
+
+    http://127.0.0.1:6541/binder_0/document_0/
+
+Open it from multiple browsers or tabs, and and you should see what I showed
+on the screencast.
+
+
+###Demo Architecture###
 
 The demo is the clone of the "sdidemo", "sdi" stands for the
-*Substance-D Development Interface*.
+*Substance-D Development Interface* and this is the standard development environment
+for Subtance-D itself. Which makes sure that we get the newest of Substance-D and
+its dependencies.
 
 The current architecture that works with the demo:
 
@@ -93,13 +110,3 @@ an MVC can implement its own bind methods.
 Currently the database is volatile, this means it lives in the server's memory as long
 as the application is running. Once restarted, the application resets the data.
 
-###Using the app###
-
-Visit any "Document" on the retail interface (remove /manage from the url path if needed).
-
-For example:
-
-    http://127.0.0.1:6541/binder_0/document_0/
-
-Open it from multiple browsers or tabs, and and you should see what I showed
-on the screencast.
