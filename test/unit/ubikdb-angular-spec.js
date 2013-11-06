@@ -5,7 +5,7 @@ describe("Unit: Testing ubikDB for Angular", function() {
 
   //beforeEach(angular.mock.module('ubikDB'));
 
-  it('runs', function() {
+  it('runs', function() { 
     expect(true).to.equal(true);
   });
 

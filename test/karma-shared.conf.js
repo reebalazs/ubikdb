@@ -1,14 +1,20 @@
 var shared = function(config) {
   config.set({
     basePath: '../',
-    frameworks: ['mocha'],
+    frameworks: ['mocha', 'detectBrowsers'],
     reporters: ['progress'],
-    browsers: ['Firefox', 'PhantomJS'],
     autoWatch: true,
 
     // these are default values anyway
     singleRun: false,
     colors: true,
+
+    // browser detection
+    detectBrowsers: {
+      enabled: true,
+      usePhantomJS: true
+    },
+    
   });
 };
 
