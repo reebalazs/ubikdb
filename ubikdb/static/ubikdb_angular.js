@@ -33,10 +33,18 @@ angular.module('ubikDB', []).provider('ubikDB', function() {
         }
     };
 
+    // The same socket is used between all instances.
+    var ubikSocket;
+
     this.$get = function() {
-        return function(context) {
-            return new UbikDBAngular(context);
+        var ubikDBAngular = function ubikDBAngular(context) {
+            var root = new UbikDBAngular();
+            root.init(context, ubikSocket);
+            ubikSocket = root.socket;
+            return root;
         };
+        ubikDBAngular.prototype.constructor = UbikDBAngular;
+        return ubikDBAngular;
     };
 
     return this;

@@ -9,11 +9,11 @@ describe("Unit: ubikDB for Angular", function() {
     }));
 
     it('loads the provider', inject(function(ubikDB) {
-        var db = ubikDB.prototype.constructor();
+        var db = new ubikDB.prototype.constructor();
     }));
 
     it('has bind method defined', inject(function(ubikDB) {
-        var db = ubikDB.prototype.constructor();
+        var db = new ubikDB.prototype.constructor();
         expect(db.bind).to.be.a('function');
     }));
 

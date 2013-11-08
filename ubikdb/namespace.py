@@ -45,6 +45,7 @@ class UbikDBNamespace(BaseNamespace, BroadcastMixin, ContextMixin):
         }
         traverse = [self.root, trunk]
         split_context = context.split('/')
+        print "split_context", split_context
         for segment in split_context:
             last = traverse[-1]
             data = last['data']
@@ -68,6 +69,7 @@ class UbikDBNamespace(BaseNamespace, BroadcastMixin, ContextMixin):
     def on_set(self, context, value):
         traverse = self.traverse_path(context)
         last = traverse[-2]
+        print "traverse", repr(traverse)
         last['data'][last['segment']] = value
         # notify listeners
         self.emit_with_context('set', context, value, recurse=True)
