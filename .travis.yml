@@ -8,7 +8,7 @@ node_js:
 notifications:
   irc: irc.freenode.org#greenfinity
 install:
-#  - pip install -e '.[test]' --use-mirrors
+  - pip install -e '.[test]' --use-mirrors
   - npm install .
   - mkdir bower_components
   - export PATH="$PWD/node_modules/.bin:$PATH"
@@ -20,5 +20,5 @@ before_script:
   - sleep 5
   - echo 'Done.'
 script:
-#  - nosetests --with-coverage --cover-package=ubikdb --cover-min-percentage=0
+  - nosetests --with-coverage --cover-package=ubikdb --cover-min-percentage=0
   - grunt karma:unit
