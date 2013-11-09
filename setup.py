@@ -20,13 +20,16 @@ setup(name='ubikdb',
       keywords='',
       author='Balazs Ree',
       author_email='ree@greenfinity.hu',
-      url='',
+      url='https://github.com/reebalazs/ubikdb',
       license='',
       packages=find_packages(exclude=['ez_setup']),
       include_package_data=True,
       zip_safe=False,
       extras_require=dict(
           test=[
+            'nose',
+            'coverage',
+            'mock',
           ]
       ),
       install_requires=[
@@ -35,6 +38,7 @@ setup(name='ubikdb',
           'gevent-websocket',
       ],
       dependency_links=[
+          'http://github.com/abourget/gevent-socketio/tarball/master#egg=gevent-socketio-0.3.6rc3',
       ],
       entry_points="""
       """,

@@ -1,8 +1,13 @@
 
 from socketio.namespace import BaseNamespace
-from socketio.mixins import BroadcastMixin
 
 from .context import ContextMixin
+
+def monkey_patch():
+    # Monkey-patch gevent
+    from gevent import monkey
+    print monkey.patch_all()
+monkey_patch()
 
 # Database is kept in memory (volatile)
 global db_root
@@ -14,12 +19,7 @@ db_root[db_root_key] = {
 }
 
 
-class UbikDBNamespace(BaseNamespace, BroadcastMixin, ContextMixin):
-
-    def __init__(self, *args, **kwargs):
-        BaseNamespace.__init__(self, *args, **kwargs)
-        BroadcastMixin.__init__(self)
-        ContextMixin.__init__(self)
+class UbikDBNamespace(BaseNamespace, ContextMixin):
 
     #def on_message(self, context, msg):
     #    self.emit_with_context('message', context, msg, recurse=True)
