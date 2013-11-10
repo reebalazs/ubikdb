@@ -19,7 +19,7 @@ class ContextMixin(object):
         self.session[key].remove(self._get_context_id(context))
 
     def _get_context_id(self, context):
-        return self.ns_name + '_' + context
+        return self.ns_name + ':' + context
 
     def emit_with_context(self, event, context, *args, **kw):
         """Send to everyone (except me) watching this context
