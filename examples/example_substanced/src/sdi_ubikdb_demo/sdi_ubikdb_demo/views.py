@@ -5,7 +5,7 @@ import time
 import colander
 import deform
 from socketio import socketio_manage
-from ubikdb import UbikDBNamespace
+from ubikdb.namespace import UbikDBNamespace
 
 from pyramid.httpexceptions import HTTPFound
 from pyramid.renderers import get_renderer
@@ -265,6 +265,5 @@ def ctest(context, request):
 def socketio_service(request):
     socketio_manage(request.environ, {
         '/ubikdb': UbikDBNamespace,
-        '/ubiktest': UbikDBNamespace,
     }, request=request)
     return Response('')

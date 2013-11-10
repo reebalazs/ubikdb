@@ -30,6 +30,15 @@ setup(name='ubikdb',
             'nose',
             'coverage',
             'mock',
+            'sniffer',
+            #
+            # You should install a third-party library
+            # so sniffer does not eat CPU.
+            # Supported libraries are:
+            # 'pyinotify',     # (Linux)
+            # 'pywin32',       # (Windows)
+            # 'MacFSEvents',   # (OSX)
+            #
           ]
       ),
       install_requires=[

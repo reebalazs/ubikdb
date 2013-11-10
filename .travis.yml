@@ -23,4 +23,4 @@ before_script:
   - echo 'Done.'
 script:
   - nosetests --with-coverage --cover-package=ubikdb --cover-min-percentage=0
-  - grunt karma:unit
+  - grunt test

@@ -72,5 +72,7 @@ module.exports = function(grunt) {
   //development
   grunt.registerTask('dev', ['install','copy','watch']);
   grunt.registerTask('server', ['connect:server']);
+  grunt.registerTask('test', ['karma:unit']);
+  grunt.registerTask('autotest', ['karma:unit_auto']);
 
 };

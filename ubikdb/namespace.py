@@ -1,13 +1,13 @@
 
-from socketio.namespace import BaseNamespace
-
-from .context import ContextMixin
-
 def monkey_patch():
     # Monkey-patch gevent
     from gevent import monkey
     print monkey.patch_all()
 monkey_patch()
+
+from socketio.namespace import BaseNamespace
+
+from .context import ContextMixin
 
 # Database is kept in memory (volatile)
 global db_root
