@@ -50,9 +50,9 @@ It is very far from being ready to production.**
 
 ## Examples ##
 
-##Substance-D based example##
+###Substance-D based example###
 
-###examples/example_substanced###
+####examples/example_substanced####
 
 
  Use the standard buildout procedure to build
@@ -76,7 +76,7 @@ Do **not** use --reload with paster, it does not seem to work with gevents!
 There is a README.rst file in the example buildout directory with a lot of
 more details about this procedure.
 
-###Using the app###
+#####Using the app#####
 
 Visit any "Document" on the retail interface (remove /manage from the url path if needed).
 
@@ -87,7 +87,7 @@ For example:
 Open it from multiple browsers or tabs, and and you should see what I showed
 on the screencast.
 
-###Demo Architecture###
+#####Demo Architecture#####
 
 The demo is the clone of the "sdidemo", "sdi" stands for the
 *Substance-D Development Interface* and this is the standard development environment
