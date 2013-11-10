@@ -13,7 +13,7 @@ they will also make a
 [movie](http://screenrant.com/michel-gondry-ubik-movie-philip-dick-sandy-101655/)
 out of it soon.
 
-The python package manager ["ubik"](https://pypi.python.org/pypi/ubik) is
+The Python package manager ["ubik"](https://pypi.python.org/pypi/ubik) is
 unrelated with ubikDB.
 
 ## What ##
@@ -50,10 +50,9 @@ It is very far from being ready to production.**
 
 ## Examples ##
 
-###Substance-D based example###
+### Substance-D based example ###
 
-####examples/example_substanced####
-
+#### examples/example_substanced ####
 
  Use the standard buildout procedure to build
 out the application.
@@ -76,27 +75,29 @@ Do **not** use --reload with paster, it does not seem to work with gevents!
 There is a README.rst file in the example buildout directory with a lot of
 more details about this procedure.
 
-#####Using the app#####
+##### Using the app #####
 
 Visit any "Document" on the retail interface (remove /manage from the url path if needed).
 
 For example:
 
-    http://127.0.0.1:6541/binder_0/document_0/
+```
+http://127.0.0.1:6541/binder_0/document_0/
+```
 
 Open it from multiple browsers or tabs, and and you should see what I showed
 on the screencast.
 
-#####Demo Architecture#####
+##### Demo Architecture #####
 
-The demo is the clone of the "sdidemo", "sdi" stands for the
+The demo is the clone of the `sdidemo`, "sdi" stands for the
 *Substance-D Development Interface* and this is the standard development environment
 for Subtance-D itself. Which makes sure that we get the newest of Substance-D and
 its dependencies.
 
 The current architecture that works with the demo:
 
-The backend is plain python with no framework dependencies other than the database
+The backend is plain Python with no framework dependencies other than the database
 (syncing with ZODB is in the plans). For networking, gevent-socketio is used.
 
 I only found the repository trunk of gevent-socketio working, and the buildout
@@ -112,12 +113,13 @@ as the application is running. Once restarted, the application resets the data.
 ## Discussion ##
 
 ### Initial motivation ###
+
 I wanted to experiment with the creation of an open source library that synchronizes
 data between many clients and a database server. This makes certain architectures more
 interesting than the others in my eyes. I try to summarize why I took certain
 decisions for the development of this package.
 
-####Clients####
+#### Clients ####
 
 First of all, I am interested in the creation of a JavaScript client that runs 
 in a browser. This means is the main area of my interest is supporting web 
@@ -128,11 +130,11 @@ layer of the library has no dependencies, and there is an Angular specific modul
 that adds Angular support for that. It could be done similarly for other frameworks,
 or the base layer can be used directly.
 
-####Server####
+#### Server ####
 
-On the server side, I am interested to create a python server. My second interest would
+On the server side, I am interested to create a Python server. My second interest would
 be NodeJS. Python is more interesting for me than NodeJS, because it makes it possible
-to use this database directly with other python based server solutions, such as
+to use this database directly with other Python based server solutions, such as
 Django, Pyramid, Bottle, or Plone.
 
 #### Networking ####
@@ -143,7 +145,7 @@ Django, Pyramid, Bottle, or Plone.
 
 - socket.io-client on the client
 
-#### Data Persistency ####
+#### Data persistency ####
 
 - ZODB
 
@@ -151,11 +153,13 @@ Django, Pyramid, Bottle, or Plone.
 
 - data adapters to map the json-db into the ZODB content tree
 
-##Development of the package itself##
+## Development of the package itself ##
 
-###Running the tests###
+### Running the tests ###
 
-To run the python unittests, you need to perform some installation for the first time,
+#### Python ####
+
+To run the Python unittests, you need to perform some installation for the first time,
 issued from the root directory of this package (where this README is).
 
 ```sh
@@ -166,12 +170,13 @@ $ pip install -e '.[test]' --use-mirrors
 This installs the package dependencies needed to run the tests into your
 virtualenv.
 
-Then, to run the python tests, simply issue:
+Then, to run the Python tests, simply issue:
 
 ```sh
 $ nosetests --with-coverage --cover-package=ubikdb
 ```
 
+#### JavaScript ####
 
 To run the JavaScript (unit and end-to-end) tests, you need to perform some
 installation for the first time,
@@ -199,12 +204,12 @@ $ grunt test
 
 This will run the tests with all the available browsers on your machine.
 
-###Autotests###
+### Autotests ###
 
 Meaning, it will start watching the files, and re-run the tests each time
 a file has changed.
 
-You can run the Python autotests:
+You can run the Python autotests by using `sniffer`:
 
 ```sh
 $ sniffer
@@ -228,7 +233,7 @@ launched browsers, but instead launch your own browser and visit:
 http://localhost:9876/debug.html
 ```
 
-###Client resources###
+### Client resources ###
 
 Grunt by default does the installation of the resources and goes into
 watch mode, which means resources autogenerated on the fly if any
