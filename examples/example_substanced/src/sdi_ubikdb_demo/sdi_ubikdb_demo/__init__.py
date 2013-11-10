@@ -8,8 +8,10 @@ from substanced import root_factory
 from substanced.sdi.views.login import login
 from substanced.principal import groupfinder
 
+# ubikdb must be imported and initialized to have
+# gevents working
 import ubikdb
-ubikdb = ubikdb
+ubikdb.initialize()
 
 from substanced.workflow import Workflow
 

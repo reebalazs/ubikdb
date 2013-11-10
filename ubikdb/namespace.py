@@ -1,5 +1,4 @@
 
-
 from socketio.namespace import BaseNamespace
 
 from .context import ContextMixin

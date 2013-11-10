@@ -1,8 +1,9 @@
 #
 
-def monkey_patch():
+def initialize():
     # Monkey-patch gevent
     from gevent import monkey
-    print monkey.patch_all()
-monkey_patch()
+    monkey.patch_all()
+
+from .namespace import UbikDBNamespace
 

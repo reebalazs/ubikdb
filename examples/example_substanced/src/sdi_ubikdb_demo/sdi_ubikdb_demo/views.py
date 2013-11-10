@@ -1,3 +1,4 @@
+
 import random
 import string
 import time
@@ -5,7 +6,7 @@ import time
 import colander
 import deform
 from socketio import socketio_manage
-from ubikdb.namespace import UbikDBNamespace
+from ubikdb import UbikDBNamespace
 
 from pyramid.httpexceptions import HTTPFound
 from pyramid.renderers import get_renderer
