@@ -27,7 +27,6 @@
     <div tal:content="structure body">BODY</div>
     <script src="${request.static_url('ubikdb:static/dist/bower_components/socket.io-client/dist/socket.io.js')}"></script>
     <script src="${request.static_url('ubikdb:static/ubikdb.js')}"></script>
-    <!--script src="${request.static_url('sdi_ubikdb_demo:static/page_master.js')}"></script-->
     <script src="${request.static_url('sdi_ubikdb_demo:static/dist/bower_components/lodash/dist/lodash.compat.js')}"></script>
     <script src="${request.static_url('sdi_ubikdb_demo:static/dist/bower_components/angular/angular.js')}"></script>
     <script src="${request.static_url('ubikdb:static/ubikdb_angular.js')}"></script>

@@ -54,4 +54,4 @@ class StorageMixin(ContextMixin):
         last = traverse[-2]
         last['data'][last['segment']] = value
         # notify listeners
-        self.emit_with_context('set', context, value, recurse=True)
+        self.emit_in_context('set', context, value)
