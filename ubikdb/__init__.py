@@ -6,4 +6,5 @@ def initialize():
     monkey.patch_all()
 
 from .namespace import UbikDBNamespace
+UbikDBNamespace = UbikDBNamespace
 
