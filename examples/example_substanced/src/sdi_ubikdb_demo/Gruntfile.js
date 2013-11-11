@@ -6,13 +6,20 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    allThirdParty: Array.prototype.concat(
+      collect.bower('lodash').select('main.js'),
+      collect.bower('angular').select('main.js'),
+      collect.bower('angular-route').select('main.js')
+    ),
+    shell: {
+      install: {
+        command: 'node ./node_modules/bower/bin/bower install'
+      }
+    },
     copy: {
       'default': {
         files: {
-          'sdi_ubikdb_demo/static/dist/': Array.prototype.concat(
-            collect.bower('lodash').select('main.js'),
-            collect.bower('angular').select('main.js')
-          )
+          'sdi_ubikdb_demo/static/dist/': '<%= allThirdParty %>'
         }
       }
     },
@@ -21,10 +28,7 @@ module.exports = function(grunt) {
         debounceDelay: 250
       },
       'default': {
-        files:  Array.prototype.concat(
-          collect.bower('lodash').select('main.js'),
-          collect.bower('angular').select('main.js')
-        ),
+        files:  '<%= allThirdParty %>',
         tasks: ['copy:default']
       }
     }
@@ -33,8 +37,15 @@ module.exports = function(grunt) {
   // Load the task plugins.
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-shell');
 
-  // Default task(s).
-  grunt.registerTask('default', ['copy:default']);
+  //installation-related
+  grunt.registerTask('install', ['shell:install']);
+
+  //defaults
+  grunt.registerTask('default', ['dev']);
+
+  //development
+  grunt.registerTask('dev', ['install', 'copy', 'watch']);
 
 };

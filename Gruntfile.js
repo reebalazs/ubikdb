@@ -70,7 +70,7 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['dev']);
 
   //development
-  grunt.registerTask('dev', ['install','copy','watch']);
+  grunt.registerTask('dev', ['install', 'copy', 'watch']);
   grunt.registerTask('server', ['connect:server']);
   grunt.registerTask('test', ['karma:unit']);
   grunt.registerTask('autotest', ['karma:unit_auto']);

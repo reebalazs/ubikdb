@@ -18,7 +18,9 @@ angular.module('ubikDB', []).provider('ubikDB', function() {
         this.on('get', function(value, path) {
             scope.$apply(function() {
                 scope[name] = value;
-                lastReceivedValue = angular.copy(value);
+                //lastReceivedValue = angular.copy(value);
+                // XXX the following workaround gets rid of $$hashKey
+                lastReceivedValue = angular.fromJson(angular.toJson(value));
             });
         });
         if (! options.readonly) {

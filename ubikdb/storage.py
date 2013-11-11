@@ -13,8 +13,8 @@ db_root[db_root_key] = {
     'boss': 'Glen Runciter',
     'agent': 'Joe Chip',
     'salary': [
-        {'name': 'Glen Runciter', 'value': '1000'},
-        {'name': 'Joe Chip', 'value': '900'},
+        {'name': 'Glen Runciter', 'value': 1000},
+        {'name': 'Joe Chip', 'value': 900},
     ]
 }
 

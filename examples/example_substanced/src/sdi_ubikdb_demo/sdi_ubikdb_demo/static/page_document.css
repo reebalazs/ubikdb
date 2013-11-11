@@ -19,3 +19,7 @@
 .infobox .agent-label {
     display: inline-block;
 }
+.infobox.selector a.active,
+.infobox.selector span.label {
+    font-weight: bold;
+}

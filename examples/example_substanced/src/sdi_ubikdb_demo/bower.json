@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "dependencies": {
     "lodash": "*",
-    "angular": "~1.2.0"
+    "angular": "~1.2.0",
+    "angular-route": "*"
   }
 }

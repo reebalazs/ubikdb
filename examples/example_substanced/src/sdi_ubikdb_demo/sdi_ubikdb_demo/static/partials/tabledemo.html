@@ -1,0 +1,19 @@
+<div class="infobox" ng-controller="TableDemo">
+    <form name="form" novalidate>
+        <table>
+            <thead>
+                <th></th><th>Name</th><th>Salary</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="row in salary">
+                     <td><button ng-click="removeFromSalary(row);">Remove</button></td>
+                     <td><input type="text" ng-model="row.name"
+                        placeholder="Enter name..."/></td>
+                     <td><input type="number" integer ng-model="row.value"
+                        placeholder="Enter salary"/></td>
+                </tr>
+            </tbody>
+        </table>
+        <button ng-click="salary.push({});">Add</button>
+    </form>
+</div>

@@ -1,0 +1,11 @@
+<div class="infobox" ng-controller="SimpleDemo">
+    <div ng-repeat="row in lodash.range(rows)">
+        <div class="col"><b>Agent:</b>
+            <input type="text" ng-model="$parent.agent" /><span class="agent-label" ng-bind="agent"></span>
+        </div>
+        <div class="col"><b>Boss:</b>
+            <input type="text" ng-model="$parent.boss" /><span class="agent-label" ng-bind="boss"></span>
+        </div>
+    </div>
+    <button ng-click="rows = rows + 1">Add</button>
+</div>
