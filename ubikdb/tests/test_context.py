@@ -22,82 +22,78 @@ class TestContextMixin(unittest.TestCase):
 
     def test_on_watch_context(self):
         inst = self.inst()
-        self.assertEqual(inst.session['contexts'][False]['testns'],
+        self.assertEqual(inst.session['contexts']['testns'],
             set([]),
         )
-        self.assertEqual(inst.session['contexts'][True]['testns'],
+        self.assertEqual(inst.session['contexts_recurse']['testns'],
             set([]),
         )
         inst.on_watch_context('/foo/bar', recurse=False)
-        self.assertEqual(inst.session['contexts'][False]['testns'],
+        self.assertEqual(inst.session['contexts']['testns'],
             set(['/foo/bar']),
         )
-        self.assertEqual(inst.session['contexts'][True]['testns'],
+        self.assertEqual(inst.session['contexts_recurse']['testns'],
             set([]),
         )
         inst.on_watch_context('/blah', recurse=False)
-        self.assertEqual(inst.session['contexts'][False]['testns'],
+        self.assertEqual(inst.session['contexts']['testns'],
             set(['/foo/bar', '/blah']),
         )
-        self.assertEqual(inst.session['contexts'][True]['testns'],
+        self.assertEqual(inst.session['contexts_recurse']['testns'],
             set([]),
         )
         inst.on_watch_context('/foo/boo', recurse=True)
-        self.assertEqual(inst.session['contexts'][False]['testns'],
-            set(['/foo/bar', '/blah']),
+        self.assertEqual(inst.session['contexts']['testns'],
+            set(['/foo/bar', '/blah', '/foo/boo']),
         )
-        self.assertEqual(inst.session['contexts'][True]['testns'],
+        self.assertEqual(inst.session['contexts_recurse']['testns'],
             set(['/foo/boo']),
         )
         inst.on_watch_context('/foo/bar', recurse=True)
-        self.assertEqual(inst.session['contexts'][False]['testns'],
-            set(['/foo/bar', '/blah']),
+        self.assertEqual(inst.session['contexts']['testns'],
+            set(['/foo/bar', '/blah', '/foo/boo']),
         )
-        self.assertEqual(inst.session['contexts'][True]['testns'],
+        self.assertEqual(inst.session['contexts_recurse']['testns'],
             set(['/foo/boo', '/foo/bar']),
         )
 
     def test_on_unwatch_context(self):
         inst = self.inst()
-        inst.session['contexts'][False]['testns'] = \
-            set(['/foo/bar', '/blah'])
-        inst.session['contexts'][True]['testns'] = \
+        inst.session['contexts']['testns'] = \
+            set(['/foo/bar', '/blah', '/foo/boo'])
+        inst.session['contexts_recurse']['testns'] = \
             set(['/foo/boo', '/foo/bar'])
-        inst.on_unwatch_context('/foo/bar', recurse=True)
-        self.assertEqual(inst.session['contexts'][False]['testns'],
-            set(['/foo/bar', '/blah']),
+        inst.on_unwatch_context('/foo/bar')
+        self.assertEqual(inst.session['contexts']['testns'],
+            set(['/blah', '/foo/boo']),
         )
-        self.assertEqual(inst.session['contexts'][True]['testns'],
+        self.assertEqual(inst.session['contexts_recurse']['testns'],
             set(['/foo/boo']),
         )
-        inst.on_unwatch_context('/foo/boo', recurse=True)
-        self.assertEqual(inst.session['contexts'][False]['testns'],
-            set(['/foo/bar', '/blah']),
+        inst.on_unwatch_context('/foo/boo')
+        self.assertEqual(inst.session['contexts']['testns'],
+            set(['/blah']),
         )
-        self.assertEqual(inst.session['contexts'][True]['testns'],
+        self.assertEqual(inst.session['contexts_recurse']['testns'],
             set([]),
         )
-        inst.on_unwatch_context('/blah', recurse=False)
-        self.assertEqual(inst.session['contexts'][False]['testns'],
-            set(['/foo/bar']),
-        )
-        self.assertEqual(inst.session['contexts'][True]['testns'],
+        inst.on_unwatch_context('/blah')
+        self.assertEqual(inst.session['contexts']['testns'],
             set([]),
         )
-        inst.on_unwatch_context('/foo/bar', recurse=False)
-        self.assertEqual(inst.session['contexts'][False]['testns'],
-            set([]),
-        )
-        self.assertEqual(inst.session['contexts'][True]['testns'],
+        self.assertEqual(inst.session['contexts_recurse']['testns'],
             set([]),
         )
 
     def test_on_unwatch_context_miss(self):
         inst = self.inst()
-        self.assertRaisesRegexp(KeyError, "^'/NO/SUCH'$",
-            inst.on_unwatch_context, '/NO/SUCH', recurse=False)
-        self.assertRaisesRegexp(KeyError, "^'/NO/SUCH'$",
-            inst.on_unwatch_context, '/NO/SUCH', recurse=True)
+        inst.on_unwatch_context('/NO/SUCH')
+        self.assertEqual(inst.session['contexts']['testns'],
+            set([]),
+        )
+        self.assertEqual(inst.session['contexts_recurse']['testns'],
+            set([]),
+        )
 
     def test_emit_in_context(self):
         inst = self.inst()
