@@ -1,6 +1,5 @@
 
 import unittest
-import mock
 
 class TestContextMixin(unittest.TestCase):
 
@@ -95,8 +94,8 @@ class TestContextMixin(unittest.TestCase):
             set([]),
         )
 
-    def test_emit_in_context(self):
-        inst = self.inst()
+    #def test_emit_in_context(self):
+    #    inst = self.inst()
 
 
 class MockSocket(object):
