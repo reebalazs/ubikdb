@@ -25,35 +25,35 @@ class TestContextMixin(unittest.TestCase):
         self.assertEqual(inst.session['contexts']['testns'],
             set([]),
         )
-        self.assertEqual(inst.session['contexts_recurse']['testns'],
+        self.assertEqual(inst.session['contexts_parent']['testns'],
             set([]),
         )
-        inst.on_watch_context('/foo/bar', recurse=False)
+        inst.on_watch_context('/foo/bar')
         self.assertEqual(inst.session['contexts']['testns'],
             set(['/foo/bar']),
         )
-        self.assertEqual(inst.session['contexts_recurse']['testns'],
+        self.assertEqual(inst.session['contexts_parent']['testns'],
             set([]),
         )
-        inst.on_watch_context('/blah', recurse=False)
+        inst.on_watch_context('/blah')
         self.assertEqual(inst.session['contexts']['testns'],
             set(['/foo/bar', '/blah']),
         )
-        self.assertEqual(inst.session['contexts_recurse']['testns'],
+        self.assertEqual(inst.session['contexts_parent']['testns'],
             set([]),
         )
-        inst.on_watch_context('/foo/boo', recurse=True)
+        inst.on_watch_context('/foo/boo', recurse={'parent': True})
         self.assertEqual(inst.session['contexts']['testns'],
             set(['/foo/bar', '/blah', '/foo/boo']),
         )
-        self.assertEqual(inst.session['contexts_recurse']['testns'],
+        self.assertEqual(inst.session['contexts_parent']['testns'],
             set(['/foo/boo']),
         )
-        inst.on_watch_context('/foo/bar', recurse=True)
+        inst.on_watch_context('/foo/bar', recurse={'parent': True})
         self.assertEqual(inst.session['contexts']['testns'],
             set(['/foo/bar', '/blah', '/foo/boo']),
         )
-        self.assertEqual(inst.session['contexts_recurse']['testns'],
+        self.assertEqual(inst.session['contexts_parent']['testns'],
             set(['/foo/boo', '/foo/bar']),
         )
 
@@ -61,27 +61,27 @@ class TestContextMixin(unittest.TestCase):
         inst = self.inst()
         inst.session['contexts']['testns'] = \
             set(['/foo/bar', '/blah', '/foo/boo'])
-        inst.session['contexts_recurse']['testns'] = \
+        inst.session['contexts_parent']['testns'] = \
             set(['/foo/boo', '/foo/bar'])
         inst.on_unwatch_context('/foo/bar')
         self.assertEqual(inst.session['contexts']['testns'],
             set(['/blah', '/foo/boo']),
         )
-        self.assertEqual(inst.session['contexts_recurse']['testns'],
+        self.assertEqual(inst.session['contexts_parent']['testns'],
             set(['/foo/boo']),
         )
         inst.on_unwatch_context('/foo/boo')
         self.assertEqual(inst.session['contexts']['testns'],
             set(['/blah']),
         )
-        self.assertEqual(inst.session['contexts_recurse']['testns'],
+        self.assertEqual(inst.session['contexts_parent']['testns'],
             set([]),
         )
         inst.on_unwatch_context('/blah')
         self.assertEqual(inst.session['contexts']['testns'],
             set([]),
         )
-        self.assertEqual(inst.session['contexts_recurse']['testns'],
+        self.assertEqual(inst.session['contexts_parent']['testns'],
             set([]),
         )
 
@@ -91,7 +91,7 @@ class TestContextMixin(unittest.TestCase):
         self.assertEqual(inst.session['contexts']['testns'],
             set([]),
         )
-        self.assertEqual(inst.session['contexts_recurse']['testns'],
+        self.assertEqual(inst.session['contexts_parent']['testns'],
             set([]),
         )
 

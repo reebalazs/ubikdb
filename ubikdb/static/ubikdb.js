@@ -76,7 +76,7 @@
             // and it is always on the same context
             handler(value, null);
         });
-        this.socket.emit('watch_context', this.context, true);
+        this.socket.emit('watch_context', this.context, {parent: true});
         this.socket.on('set', function(context, value) {
             if (context.indexOf(self.context) === 0) {
                 // the event is in the subtree of the current context
