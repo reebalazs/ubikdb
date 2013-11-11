@@ -17,7 +17,8 @@ angular.module('ubikDB', []).provider('ubikDB', function() {
         options = options || {};
         this.on('get', function(value, path) {
             scope.$apply(function() {
-                scope[name] = lastReceivedValue = value;
+                scope[name] = value;
+                lastReceivedValue = angular.copy(value);
             });
         });
         if (! options.readonly) {
@@ -25,11 +26,11 @@ angular.module('ubikDB', []).provider('ubikDB', function() {
                 // ignore the initial trigger
                 // also, avoid circular triggering by
                 // never sending back the same value
-                if (oldValue !== undefined && value != lastReceivedValue) {
+                if (oldValue !== undefined && ! angular.equals(value, lastReceivedValue)) {
                     self.emit('set', value);
                     lastReceivedValue = null;
                 }
-            });
+            }, true);
         }
     };
 

@@ -7,11 +7,11 @@
 </head>
 <body>
  <h1 metal:fill-slot="body-title">${title}</h1>
- <div metal:fill-slot="body-content">
+ <div metal:fill-slot="body-content" ng-app="ubikdb_demo">
     <link rel="stylesheet" type="text/css" href="${request.static_url('sdi_ubikdb_demo:static/page_document.css')}" />
 
-    <!-- ubikDB demo widget -->
-    <div class="infobox" ng-app="ubikdb_demo" ng-controller="DocumentDemo">
+    <!-- ubikDB SimpleDemo -->
+    <div class="infobox" ng-controller="SimpleDemo">
         <div ng-repeat="row in _.range(rows)">
             <div class="col"><b>Agent:</b>
                 <input ng-model="$parent.agent" /><span class="agent-label" ng-bind="agent"></span>
@@ -23,6 +23,24 @@
         <button ng-click="rows = rows + 1">Add</button>
     </div>
 
+    <!-- ubikDB TableDemo -->
+    <div class="infobox" ng-controller="TableDemo">
+        <table>
+            <thead>
+                <th></th><th>Name</th><th>Salary</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="row in salary">
+                     <td><button ng-click="removeFromSalary(row);">Remove</button></td>
+                     <td><input ng-model="row.name"
+                        placeholder="Enter name..."/></td>
+                     <td><input ng-model="row.value"
+                        placeholder="Enter salary"/></td>
+                </tr>
+            </tbody>
+        </table>
+        <button ng-click="salary.push({});">Add</button>
+    </div>
 
     <div tal:content="structure body">BODY</div>
     <script src="${request.static_url('ubikdb:static/dist/bower_components/socket.io-client/dist/socket.io.js')}"></script>

@@ -11,7 +11,11 @@ db_root = {}
 db_root_key = 'ubikdb'
 db_root[db_root_key] = {
     'boss': 'Glen Runciter',
-    'agent': 'Joe Chip'
+    'agent': 'Joe Chip',
+    'salary': [
+        {'name': 'Glen Runciter', 'value': '1000'},
+        {'name': 'Joe Chip', 'value': '900'},
+    ]
 }
 
 
@@ -36,6 +40,7 @@ class StorageMixin(ContextMixin):
         return [value]
 
     def on_set(self, context, value):
+        print "on_set", context, value
         traverse = self.traverse_path(context)
         last = traverse[-2]
         last['data'][last['segment']] = value

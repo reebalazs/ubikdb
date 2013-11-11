@@ -4,7 +4,7 @@
 
 'use strict';
 
-angular.module('ubikdb_demo', ['ubikDB']).controller('DocumentDemo', function($scope, ubikDB) {
+angular.module('ubikdb_demo', ['ubikDB']).controller('SimpleDemo', function($scope, ubikDB) {
 
     // define globals for the template
     $scope._ = _;
@@ -14,5 +14,21 @@ angular.module('ubikdb_demo', ['ubikDB']).controller('DocumentDemo', function($s
     var db = ubikDB();
     db.child('boss').bind($scope, 'boss');
     db.child('agent').bind($scope, 'agent');
+
+});
+
+angular.module('ubikdb_demo').controller('TableDemo', function($scope, ubikDB) {
+
+    // define globals for the template
+    $scope._ = _;
+    $scope.rows = 1;
+
+    // connect to the ubikDB, and bind 2-way sync of variables
+    var db = ubikDB();
+    db.child('salary').bind($scope, 'salary');
+
+    $scope.removeFromSalary = function(row) {
+        $scope.salary.splice($scope.salary.indexOf(row), 1);
+    };
 
 });
