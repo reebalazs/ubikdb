@@ -35,6 +35,6 @@ class ContextMixin(object):
                 else:
                     for socket_context in self.session['contexts_recurse'][self.ns_name]:
                         # Send this to the socket if it starts with the prefix
-                        if context.startswith(context_context):
+                        if context.startswith(socket_context):
                             socket.send_packet(pkt)
                             break
