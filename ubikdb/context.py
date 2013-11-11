@@ -30,10 +30,10 @@ class ContextMixin(object):
                    endpoint=self.ns_name)
         for sessid, socket in self.socket.server.sockets.iteritems():
             if self.socket != socket:
-                if context in self.session['contexts'][self.ns_name]:
+                if context in socket.session['contexts'][self.ns_name]:
                     socket.send_packet(pkt)
                 else:
-                    for socket_context in self.session['contexts_recurse'][self.ns_name]:
+                    for socket_context in socket.session['contexts_recurse'][self.ns_name]:
                         # Send this to the socket if it starts with the prefix
                         if context.startswith(socket_context):
                             socket.send_packet(pkt)
