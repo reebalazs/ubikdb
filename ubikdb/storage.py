@@ -33,7 +33,6 @@ class StorageMixin(ContextMixin):
 
     def on_get(self, context):
         value = self.traverse(context)
-        print "XXX on_get", context, value
         return [value]
 
     def on_set(self, context, value):
