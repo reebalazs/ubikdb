@@ -35,15 +35,30 @@ Experimenting with a concept.
 
 ## Status ##
 
-This screencast was made after the first two days of development. 
-It is intended to give a peek preview into how ubikDB will work, by showing
-the simplest possible use case that can operate with the current codebase.
+
+The demo shows the current status of the library.
+
 The  real-time synchronized form widget of the demo is
 written in only **11 lines** of HTML and **3 lines** of JavaScript code is
 needed to do the data synchronization, adding up to a total of 7 lines of JS
 for the entire Angular controller.
 
-[![Play Video](https://dl.dropboxusercontent.com/u/16162405/ubikDB_0__starting_up.png)]( http://vimeo.com/reebalazs/ubikdb-0)
+[![Play Video](https://dl.dropboxusercontent.com/u/16162405/ubikDB_1.png)](https://vimeo.com/79124531)
+
+## History ##
+
+### 2013-11-11 ###
+
+- table demo added
+
+- basic working with collections
+
+- tests in progress
+
+### 2013-11-02 ###
+
+Simple working demo on top of sdidemo, capable of synchronizing
+simple string values.
 
 **This is work in progress and the early presentation of the plans and concepts.
 It is very far from being ready to production.**
