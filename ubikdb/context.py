@@ -64,6 +64,7 @@ class ContextMixin(object):
                         traversed = traverse(data, path)
                         trim_data = traversed[-1].data
                         trim_pkt = dict(type="event",
-                           name=event,
-                           args=[watch, trim_data] + args[1:],
-                           endpoint=self.ns_name)
+                            name=event,
+                            args=[watch, trim_data] + args[1:],
+                            endpoint=self.ns_name)
+                        socket.send_packet(trim_pkt)

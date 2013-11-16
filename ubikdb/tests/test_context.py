@@ -94,6 +94,23 @@ class TestContextMixin(unittest.TestCase):
             set([]),
         )
 
+    def test_on_watch_context_children(self):
+        inst = self.inst()
+        self.assertEqual(inst.session['contexts']['testns'],
+            set([]),
+        )
+        self.assertEqual(inst.session['contexts_parent']['testns'],
+            set([]),
+        )
+        self.assertEqual(inst.session['contexts_children']['testns'],
+            set([]),
+        )
+        inst.on_watch_context('/foo/bar')
+        inst.on_watch_context('/foo/burr', recurse={'parent': True})
+        self.assertEqual(inst.session['contexts_children']['testns'],
+            set([]),
+        )
+
     #def test_emit_in_context(self):
     #    inst = self.inst()
 
