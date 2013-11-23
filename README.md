@@ -82,10 +82,12 @@ Following this, run:
 
 ```sh
 $ bin/supervisord
-$ bin/pserve etc/development.ini
+$ bin/pserve --reload etc/development.ini
 ```
 
-Do **not** use --reload with paster, it does not seem to work with gevents!
+Note, if you use --reload with paster, it will give an exception during startup
+`NotImplementedError: gevent is only usable from a single thread`,
+but otherwise it appears to work correctly.
 
 There is a README.rst file in the example buildout directory with a lot of
 more details about this procedure.

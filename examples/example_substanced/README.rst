@@ -61,9 +61,7 @@ log in as ``admin`` with password ``admin`` to the management interface at
 http://127.0.0.1:6541/manage::
 
   [chrism@oops sdidev]$ bin/supervisord
-  [chrism@oops sdidev]$ bin/pserve etc/development.ini
-
-**Do not use --reload as it seems to have problems with the gevent-based server setup.**
+  [chrism@oops sdidev]$ bin/pserve --reload etc/development.ini
 
 Success looks like this::
 
