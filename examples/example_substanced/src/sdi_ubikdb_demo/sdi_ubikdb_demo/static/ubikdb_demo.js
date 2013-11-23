@@ -37,7 +37,7 @@ angular.module('ubikdb_demo').controller('TableDemo', function($scope, ubikDB) {
 angular.module('ubikdb_demo').controller('Selector', function($scope, $location) {
     $scope.isActive = function(route) {
         return route === $location.path();
-    }
+    };
 });
 
 angular.module('ubikdb_demo').config(function($routeProvider) {
