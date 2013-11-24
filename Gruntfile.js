@@ -15,24 +15,46 @@ module.exports = function(grunt) {
             'install': {
                 command: 'node ./node_modules/bower/bin/bower install'
             },
-            'demo-serve': {
+            'demo-install': {
                 command: [
-                    'cd examples/example_substanced',
-                    'bin/pserve --monitor-restart --pid-file=grunt-demo-serve.pid etc/development.ini'
-                ].join(';'),
+                    'test -f bin/buildout || (',
+                        'rm -rf bin lib;',
+                        'virtualenv -p python2.7 --no-setuptools .;',
+                        'bin/python2.7 bootstrap.py',
+                    ');',
+                    'bin/buildout'
+                ].join(''),
                 options: {
                     stdout: true,
-                    stderr: true
+                    stderr: true,
+                    execOptions: {
+                        cwd: 'examples/example_substanced'
+                    }
+                }
+            },
+            'demo-server': {
+                command: [
+                    'bin/pserve --monitor-restart --pid-file=grunt-demo-server.pid etc/development.ini'
+                ].join(''),
+                options: {
+                    stdout: true,
+                    stderr: true,
+                    execOptions: {
+                        cwd: 'examples/example_substanced'
+                    }
                 }
             },
             'demo-server-reload': {
                 command: [
-                    'cd examples/example_substanced',
                     'kill `cat grunt-demo-serve.pid`'
                 ].join(';'),
                 options: {
                     stdout: true,
-                    stderr: true
+                    stderr: true,
+                    execOptions: {
+                        cwd: 'examples/example_substanced'
+                    }
+
                 }
             }
         },
@@ -112,18 +134,18 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-shell');
 
     //installation-related
-    grunt.registerTask('install', ['shell:install']);
+    grunt.registerTask('install', ['shell:install', 'copy']);
 
     //defaults
     grunt.registerTask('default', ['dev']);
 
     //development
-    grunt.registerTask('dev', ['install', 'copy', 'watch']);
-    grunt.registerTask('server', ['connect:server']);
+    grunt.registerTask('dev', ['install', 'watch']);
     grunt.registerTask('test', ['karma:unit']);
     grunt.registerTask('autotest', ['karma:unit-auto']);
 
-    // run the demo server (pserve) in foreground
-    grunt.registerTask('demo-serve', ['shell:demo-serve']);
+    // demo related
+    grunt.registerTask('demo-install', ['shell:demo-install']);
+    grunt.registerTask('demo-server', ['shell:demo-server']);
 
 };
