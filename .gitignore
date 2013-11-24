@@ -35,4 +35,4 @@ access
 node_modules
 src/**
 .coverage
-grunt-demo-server.pid
+/examples/example_substanced/grunt-demo-server.pid

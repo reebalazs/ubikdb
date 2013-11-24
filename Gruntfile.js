@@ -1,4 +1,10 @@
 
+var PROXY_PORT = 6540;
+var PYRAMID_PORT = 6541;
+var LIVERELOAD_PORT = 36540;
+
+var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+var lrSnippet = require('connect-livereload')({port: LIVERELOAD_PORT});
 var collect = require('grunt-collection-helper');
 
 module.exports = function(grunt) {
@@ -58,6 +64,28 @@ module.exports = function(grunt) {
                 }
             }
         },
+        connect: {
+            proxies: [{
+                context: '/',
+                host: 'localhost',
+                port: PYRAMID_PORT,
+                https: false,
+                changeOrigin: false,
+                xforward: false
+            }],
+            'demo-proxy': {
+                options: {
+                    host: 'localhost',
+                    port: PROXY_PORT,
+                    middleware: function (connect, options) {
+                        return [
+                            lrSnippet,
+                            proxySnippet
+                        ];
+                    }
+                }
+            }
+        },
         copy: {
             'default': {
                 files: {
@@ -66,17 +94,6 @@ module.exports = function(grunt) {
             },
             'nothing': {
                 files: {
-                }
-            }
-        },
-        connect: {
-            options: {
-                port: 8000,
-                base: './app'
-            },
-            'server': {
-                options: {
-                    keepalive: true
                 }
             }
         },
@@ -105,7 +122,10 @@ module.exports = function(grunt) {
                     '!examples/example_substanced/src/*/demos/**',
                     '!examples/example_substanced/src/*/examples/**'
                 ],
-                tasks: ['shell:demo-server-reload']
+                tasks: ['shell:demo-server-reload'],
+                options: {
+                    livereload: LIVERELOAD_PORT
+                }
             },
             'demo-static': {
                 files:  [
@@ -120,7 +140,9 @@ module.exports = function(grunt) {
                     // watch for server reloads
                     'examples/example_substanced/grunt-demo-serve.pid'
                 ],
-                tasks: ['copy:nothing']
+                options: {
+                    livereload: LIVERELOAD_PORT
+                }
             }
 
         }
@@ -130,6 +152,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-connect-proxy');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-shell');
 
@@ -140,12 +163,13 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['dev']);
 
     //development
-    grunt.registerTask('dev', ['install', 'watch']);
+    grunt.registerTask('dev', ['install', 'demo-proxy', 'watch']);
     grunt.registerTask('test', ['karma:unit']);
     grunt.registerTask('autotest', ['karma:unit-auto']);
 
     // demo related
     grunt.registerTask('demo-install', ['shell:demo-install']);
     grunt.registerTask('demo-server', ['shell:demo-server']);
+    grunt.registerTask('demo-proxy', ['configureProxies', 'connect:demo-proxy']);
 
 };
