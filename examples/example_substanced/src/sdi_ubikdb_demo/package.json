@@ -15,5 +15,6 @@
         "grunt-contrib-watch": "*",
         "grunt-collection-helper": "*",
         "grunt-shell": "*"
+        
     }
 }

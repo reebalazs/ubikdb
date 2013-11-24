@@ -21,9 +21,6 @@ angular.module('ubikdb_demo').controller('SimpleDemo', function($scope, ubikDB) 
 
 angular.module('ubikdb_demo').controller('TableDemo', function($scope, ubikDB) {
 
-    // define globals for the template
-    $scope._ = _;
-
     // connect to the ubikDB, and bind 2-way sync of variables
     var db = ubikDB();
     db.child('salary').bind($scope, 'salary');
