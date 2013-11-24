@@ -18,18 +18,20 @@ angular.module('ubikDB', []).provider('ubikDB', function() {
         this.on('get', function(value, path) {
             scope.$apply(function() {
                 scope[name] = value;
-                //lastReceivedValue = angular.copy(value);
-                // XXX the following workaround gets rid of $$hashKey
-                lastReceivedValue = angular.fromJson(angular.toJson(value));
+                lastReceivedValue = angular.copy(value);
             });
         });
         if (! options.readonly) {
             scope.$watch(name, function(value, oldValue) {
+                // get rid of $$hashKey
+                var clearedValue = angular.copy(value);
+                delete clearedValue['$$hashKey'];
                 // ignore the initial trigger
                 // also, avoid circular triggering by
                 // never sending back the same value
-                if (oldValue !== undefined && ! angular.equals(value, lastReceivedValue)) {
-                    self.emit('set', value);
+                if (oldValue !== undefined &&
+                        ! angular.equals(clearedValue, lastReceivedValue)) {
+                    self.emit('set', clearedValue);
                     lastReceivedValue = null;
                 }
             }, true);
