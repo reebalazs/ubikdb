@@ -71,7 +71,8 @@ module.exports = function(grunt) {
                 port: PYRAMID_PORT,
                 https: false,
                 changeOrigin: false,
-                xforward: false
+                xforward: false,
+                ws: true
             }],
             'demo-proxy': {
                 options: {
@@ -109,15 +110,13 @@ module.exports = function(grunt) {
         },
 
         watch: {
-            options: {
-                debounceDelay: 250
-            },
             'thirdparty': {
                 files: '<%= allThirdParty %>',
                 tasks: ['copy']
             },
             'demo-server': {
                 files:  [
+                    'ubikdb/**/*.{py,zcml,conf}',
                     'examples/example_substanced/src/**/*.{py,zcml,conf}',
                     '!examples/example_substanced/src/*/demos/**',
                     '!examples/example_substanced/src/*/examples/**'
@@ -137,8 +136,6 @@ module.exports = function(grunt) {
                     '!examples/example_substanced/src/*/bower_components/**',
                     '!examples/example_substanced/src/*/demos/**',
                     '!examples/example_substanced/src/*/examples/**',
-                    // watch for server reloads
-                    'examples/example_substanced/grunt-demo-serve.pid'
                 ],
                 options: {
                     livereload: LIVERELOAD_PORT

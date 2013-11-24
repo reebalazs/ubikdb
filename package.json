@@ -20,7 +20,7 @@
         "grunt-collection-helper": "*",
         "grunt-contrib-connect": "*",
         "connect-livereload": "*",
-        "grunt-connect-proxy": "*",
+        "grunt-connect-proxy": "https://github.com/killfill/grunt-connect-proxy/tarball/feature-ws-support",
         "grunt-shell": "*",
         "grunt-karma": "*",
         "karma": "*",
