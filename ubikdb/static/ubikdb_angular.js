@@ -25,7 +25,9 @@ angular.module('ubikDB', []).provider('ubikDB', function() {
             scope.$watch(name, function(value, oldValue) {
                 // get rid of $$hashKey
                 var clearedValue = angular.copy(value);
-                delete clearedValue['$$hashKey'];
+                if (clearedValue) {
+                    delete clearedValue['$$hashKey'];
+                }
                 // ignore the initial trigger
                 // also, avoid circular triggering by
                 // never sending back the same value

@@ -5,6 +5,7 @@ var LIVERELOAD_PORT = 36540;
 
 var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 var lrSnippet = require('connect-livereload')({port: LIVERELOAD_PORT});
+
 var collect = require('grunt-collection-helper');
 
 module.exports = function(grunt) {
@@ -67,7 +68,7 @@ module.exports = function(grunt) {
         connect: {
             proxies: [{
                 context: '/',
-                host: 'localhost',
+                host: '127.0.0.1',
                 port: PYRAMID_PORT,
                 https: false,
                 changeOrigin: false,
@@ -76,7 +77,7 @@ module.exports = function(grunt) {
             }],
             'demo-proxy': {
                 options: {
-                    host: 'localhost',
+                    host: '127.0.0.1',
                     port: PROXY_PORT,
                     middleware: function (connect, options) {
                         return [

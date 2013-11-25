@@ -9,6 +9,7 @@
  <h1 metal:fill-slot="body-title">${title}</h1>
  <div metal:fill-slot="body-content" ng-app="ubikdb_demo">
     <link rel="stylesheet" type="text/css" href="${request.static_url('sdi_ubikdb_demo:static/page_document.css')}" />
+    <button onClick="window.document.location.reload();">Reload</button>
     <div class="infobox selector" ng-controller="Selector">
         <span class="label">Demos:</span>
         <a href="#/demos/simple"
