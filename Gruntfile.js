@@ -77,7 +77,7 @@ module.exports = function(grunt) {
             }],
             'demo-proxy': {
                 options: {
-                    host: '127.0.0.1',
+                    hostname: '0.0.0.0',
                     port: PROXY_PORT,
                     middleware: function (connect, options) {
                         return [
@@ -92,10 +92,6 @@ module.exports = function(grunt) {
             'default': {
                 files: {
                     'ubikdb/static/dist/': '<%= allThirdParty %>'
-                }
-            },
-            'nothing': {
-                files: {
                 }
             }
         },
