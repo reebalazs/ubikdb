@@ -41,8 +41,10 @@ module.exports = function(grunt) {
             },
             'demo-server': {
                 command: [
+                    'bin/supervisorctl shutdown',
+                    'bin/supervisord -c etc/supervisord.conf',
                     'bin/pserve --monitor-restart --pid-file=grunt-demo-server.pid etc/development.ini'
-                ].join(''),
+                ].join(';'),
                 options: {
                     stdout: true,
                     stderr: true,
