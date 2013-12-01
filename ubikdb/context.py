@@ -1,7 +1,7 @@
 
 from .traverse import traverse
 
-class EventRegistry:
+class EventRegistry(object):
 
     SESSION_KEY = 'context_mixin'
 
@@ -21,54 +21,54 @@ class EventRegistry:
 
 class ContextMixin(object):
 
-    def __init__(self, *args, **kwargs):
-        super(ContextMixin, self).__init__(*args, **kwargs)
+    #def __init__(self, *args, **kwargs):
+    #    super(ContextMixin, self).__init__(*args, **kwargs)
 
     @property
     def reg(self):
         return EventRegistry.reg(self.socket, self.ns_name)
 
-    def on_watch_context(self, context, recurse=None):
+    def on_watch_context(self, path, recurse=None):
         """Lets a user watch a context on a specific namespace."""
-        self.reg.target.add(context)
+        self.reg.target.add(path)
         if recurse:
             if 'parent' in recurse: 
-                self.reg.parent.add(context)
+                self.reg.parent.add(path)
             if 'children' in recurse: 
-                self.reg.children.add(context)
+                self.reg.children.add(path)
 
-    def on_unwatch_context(self, context):
+    def on_unwatch_context(self, path):
         """Lets a user unwatch a context on a specific namespace."""
-        self.reg.target.discard(context)
-        self.reg.parent.discard(context)
-        self.reg.children.discard(context)
+        self.reg.target.discard(path)
+        self.reg.parent.discard(path)
+        self.reg.children.discard(path)
 
-    def emit_in_context(self, event, context, *args):
+    def emit_in_context(self, event, path, *args):
         """Send to everyone (except me) watching this context
            (in this particular namespace)
         """
         pkt = dict(
             type="event",
             name=event,
-            args=[context, ] + list(args),
+            args=[path, ] + list(args),
             endpoint=self.ns_name,
         )
         for sessid, socket in self.socket.server.sockets.iteritems():
             if self.socket != socket:
                 reg = EventRegistry.reg(socket, self.ns_name)
-                if context in reg.target:
+                if path in reg.target:
                     socket.send_packet(pkt)
                 else:
                     for watch in reg.parent:
                         # Send this to the socket if it starts with the prefix
-                        if context.startswith(watch):
+                        if path.startswith(watch):
                             socket.send_packet(pkt)
                             break
                     # Sending individual fragments to children.
                     # Collect the interests.
                     watches = set()
                     for watch in reg.children:
-                        if watch.startswith(context):
+                        if watch.startswith(path):
                             # add this watch and shorten existing ones
                             for already in list(watches):
                                 if watch.startswith(already):
@@ -81,7 +81,7 @@ class ContextMixin(object):
                     # First arg is always the data
                     data = args[0] if args else {}
                     for watch in watches:
-                        path = watch.substring(context.length, watch.length)
+                        path = watch.substring(path.length, watch.length)
                         traversed = traverse(data, path)
                         trim_data = traversed[-1].data
                         trim_pkt = dict(

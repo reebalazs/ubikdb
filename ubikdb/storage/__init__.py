@@ -1,4 +1,4 @@
 
-from storage_mixin import StorageMixin
+from storage import StorageMixin
 
 StorageMixin = StorageMixin
