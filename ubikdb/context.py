@@ -21,8 +21,8 @@ class EventRegistry(object):
 
 class ContextMixin(object):
 
-    #def __init__(self, *args, **kwargs):
-    #    super(ContextMixin, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(ContextMixin, self).__init__()
 
     @property
     def reg(self):

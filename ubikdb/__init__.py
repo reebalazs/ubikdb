@@ -5,6 +5,6 @@ def initialize():
     from gevent import monkey
     monkey.patch_all()
 
-from .namespace import UbikDBNamespace
-UbikDBNamespace = UbikDBNamespace
+from .namespace import UbikDB
+UbikDB = UbikDB
 

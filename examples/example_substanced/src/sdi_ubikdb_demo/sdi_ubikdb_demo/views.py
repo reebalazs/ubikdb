@@ -6,7 +6,7 @@ import time
 import colander
 import deform
 from socketio import socketio_manage
-from ubikdb import UbikDBNamespace
+from ubikdb import UbikDB
 
 from pyramid.httpexceptions import HTTPFound
 from pyramid.renderers import get_renderer
@@ -265,6 +265,15 @@ def ctest(context, request):
 @view_config(route_name="ubikdbsocket")
 def socketio_service(request):
     socketio_manage(request.environ, {
-        '/ubikdb': UbikDBNamespace,
+        '/ubikdb': UbikDB.with_storage('sandbox',
+            sandbox_content={
+                'boss': 'Glen Runciter',
+                'agent': 'Joe Chip',
+                'salary': [
+                    {'name': 'Glen Runciter', 'value': 1000},
+                    {'name': 'Joe Chip', 'value': 900},
+                ]
+            }
+        ),
     }, request=request)
     return Response('')

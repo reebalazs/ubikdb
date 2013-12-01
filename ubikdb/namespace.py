@@ -3,7 +3,7 @@ from socketio.namespace import BaseNamespace
 
 from .storage import StorageMixin
 
-class UbikDBNamespace(BaseNamespace, StorageMixin):
+class UbikDB(BaseNamespace, StorageMixin):
 
     def recv_connect(self):
         pass

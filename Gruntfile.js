@@ -41,9 +41,9 @@ module.exports = function(grunt) {
             },
             'demo-server': {
                 command: [
-                    'bin/supervisorctl shutdown',
-                    'bin/supervisord -c etc/supervisord.conf',
-                    'bin/pserve --monitor-restart --pid-file=grunt-demo-server.pid etc/development.ini'
+                    //'bin/supervisorctl shutdown',
+                    //'bin/supervisord -c etc/supervisord.conf',
+                    'bin/pserve --monitor-restart --reload --pid-file=grunt-demo-server.pid etc/development.ini'
                 ].join(';'),
                 options: {
                     stdout: true,
@@ -55,7 +55,8 @@ module.exports = function(grunt) {
             },
             'demo-server-reload': {
                 command: [
-                    'kill `cat grunt-demo-serve.pid`'
+                    'kill `cat grunt-demo-serve.pid`',
+                    'sleep 2',
                 ].join(';'),
                 options: {
                     stdout: true,
