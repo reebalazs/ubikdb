@@ -1,5 +1,4 @@
 
-from collections import defaultdict
 from .traverse import traverse
 
 class EventRegistry:

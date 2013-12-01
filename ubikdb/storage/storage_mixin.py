@@ -1,6 +1,8 @@
 
-from .context import ContextMixin
-from .traverse import (
+from __future__ import print_function
+
+from ..context import ContextMixin
+from ..traverse import (
     traverse,
     traverse_path,
 )
@@ -40,7 +42,7 @@ class StorageMixin(ContextMixin):
         return [value]
 
     def on_set(self, context, value):
-        print "on_set", context, value
+        print("on_set", context, value)
         traverse = self.traverse_path(context)
         last = traverse[-2]
         last['data'][last['segment']] = value
