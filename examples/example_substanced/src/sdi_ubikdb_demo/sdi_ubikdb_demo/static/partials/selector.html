@@ -1,10 +1,8 @@
 <div class="infobox selector" ng-controller="Selector">
     <a class="demo-index" href="#/demos/demoindex"
         ng-class="{active: isActive('/demos/demoindex/')}">ubikDB demos:</a>
-    <a href="#/demos/simple"
-        ng-class="{active: isActive('/demos/simple/')}">Simple</a>
-    <a href="#/demos/table"
-        ng-class="{active: isActive('/demos/table/')}">Table</a>
-    <a href="#/demos/table-z"
-        ng-class="{active: isActive('/demos/table-z/')}">Table@ZODB</a>
+    <span ng-repeat="demo in demos" class="demo-tab">
+        <a ng-href="#/demos/{{demo.name}}"
+            ng-class="{active: isActive('/demos/' + demo.name + '/')}">{{demo.title}}</a>
+    </span>
 </div>

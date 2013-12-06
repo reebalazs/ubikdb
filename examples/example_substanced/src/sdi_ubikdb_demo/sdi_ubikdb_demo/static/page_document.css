@@ -22,6 +22,9 @@
 .infobox .demo-index {
     margin-right: 4em;
 }
+.infobox .demo-tab {
+    margin: 0 0.25em;
+}
 .infobox.selector a.active {
     color: #000000;
     font-weight: bold;
