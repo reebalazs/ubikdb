@@ -11,9 +11,14 @@ class ZODBStorage(object):
     def __init__(self):
         self.db_root = {}
         self.db_root_key = 'ubikdb'
-        self.default_content = {}
-        # initialize with static example content
-        self.root[self.root_key] = dict(self.default_content)
+        self.root[self.root_key] = {
+            'boss': 'Glen Runciter',
+            'agent': 'Joe Chip',
+            'salary': [
+                {'name': 'Glen Runciter', 'value': 1000},
+                {'name': 'Joe Chip', 'value': 900},
+            ],
+        }
 
     def connect(self):
         pass

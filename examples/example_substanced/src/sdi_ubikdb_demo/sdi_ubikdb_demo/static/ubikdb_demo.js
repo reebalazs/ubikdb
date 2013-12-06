@@ -20,7 +20,6 @@ angular.module('ubikdb_demo').controller('SimpleDemo', function($scope, ubikDB) 
 });
 
 angular.module('ubikdb_demo').controller('TableDemo', function($scope, ubikDB) {
-    console.log('t0a');
 
     var db = ubikDB();
     db.child('salary').bind($scope, 'salary');

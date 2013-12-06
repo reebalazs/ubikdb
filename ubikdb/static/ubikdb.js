@@ -14,18 +14,18 @@
     UbikDB.prototype.constructor = UbikDB;
 
     UbikDB.prototype.init = function(path, nsNameOrSocket) {
-        console.log('XXX', path, nsNameOrSocket);
         var self = this;
         if (! nsNameOrSocket) {
             // default namespace, if nothing specified
-            nsNameOrSocket = 'ubikdb';
+            // XXX by default, this is _not_ the global namespace.
+            nsNameOrSocket = '/ubikdb';
         }
         if (typeof nsNameOrSocket == 'object') {
             // socket passed in from child(), just use it
             this.socket = nsNameOrSocket;
         } else {
             // connect to the websocket
-            this.socket = io.connect('/' + nsNameOrSocket);
+            this.socket = io.connect().of(nsNameOrSocket);
         }
         //window.beforeunload = function() {
         //    self.socket.disconnect();
