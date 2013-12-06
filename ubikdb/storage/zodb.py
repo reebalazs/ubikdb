@@ -37,11 +37,14 @@ class UbikDB(Persistent):
 class Synchronizer(object):
     implements(ISynchronizer)
 
+    def __init__(self, storage):
+        self.storage = storage
+
     def beforeCompletion(self, transaction):
         pass
 
     def afterCompletion(self, transaction):
-        print("afterCompletion", transaction)
+        self.storage.after_completion(transaction)
 
     def newTransaction(self, transaction):
         pass
@@ -63,7 +66,7 @@ class ZODBStorage(object):
         self.synchronizer = None
 
     def connect(self):
-        self.synchronizer = Synchronizer()
+        self.synchronizer = Synchronizer(self)
         transaction.manager.registerSynch(self.synchronizer)
         
     def disconnect(self):
@@ -95,5 +98,8 @@ class ZODBStorage(object):
         self.db_root._p_changed = True
         transaction.commit()
 
+    def after_completion(self, transaction):
+        print("afterCompletion", transaction)
+        import ipdb; ipdb.set_trace()
 
 StorageTypeRegistry.reg('zodb', ZODBStorage)
