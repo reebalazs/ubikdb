@@ -275,5 +275,7 @@ def socketio_service(request):
                 ]
             }
         ),
+        '/ubikdb-z': UbikDB.with_storage('zodb',
+        ),
     }, request=request)
     return Response('')

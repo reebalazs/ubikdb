@@ -13,20 +13,25 @@
 
     UbikDB.prototype.constructor = UbikDB;
 
-    UbikDB.prototype.init = function(context, socket) {
+    UbikDB.prototype.init = function(path, nsNameOrSocket) {
+        console.log('XXX', path, nsNameOrSocket);
         var self = this;
-        // connect to the websocket
-        if (socket === undefined) {
-            this.socket = io.connect('/ubikdb');
-        } else {
-            // use a socket shared with an instance
-            this.socket = socket;
+        if (! nsNameOrSocket) {
+            // default namespace, if nothing specified
+            nsNameOrSocket = 'ubikdb';
         }
-        window.beforeunload = function() {
-            self.socket.disconnect();
-        };
+        if (typeof nsNameOrSocket == 'object') {
+            // socket passed in from child(), just use it
+            this.socket = nsNameOrSocket;
+        } else {
+            // connect to the websocket
+            this.socket = io.connect('/' + nsNameOrSocket);
+        }
+        //window.beforeunload = function() {
+        //    self.socket.disconnect();
+        //};
         this.eventMap = {};
-        this.context = this.canonicalPath(context || '/');
+        this.path = this.canonicalPath(path || '/');
     };
 
     UbikDB.prototype.canonicalPath = function(path) {
@@ -40,8 +45,8 @@
 
     UbikDB.prototype.child = function(path) {
         var child = new this.constructor();
-        var childContext = this.canonicalPath(this.context + '/' + path);
-        child.init(childContext, this.socket);
+        var childPath = this.canonicalPath(this.path + '/' + path);
+        child.init(childPath, this.socket);
         return child;
     };
 
@@ -70,18 +75,18 @@
 
     UbikDB.prototype.on_get = function(handler) {
         var self = this;
-        this.socket.emit('get', this.context, function(value) {
+        this.socket.emit('get', this.path, function(value) {
             // call handler with null as second parameter
             // this means this is the initial call
             // and it is always on the same context
             handler(value, null);
         });
-        this.socket.emit('watch_context', this.context, {parent: true});
-        this.socket.on('set', function(context, value) {
-            if (context.indexOf(self.context) === 0) {
+        this.socket.emit('watch_context', this.path, {parent: true});
+        this.socket.on('set', function(path, value) {
+            if (path.indexOf(self.path) === 0) {
                 // the event is in the subtree of the current context
                 // call handler with the path as second parameter
-                var path = context.substring(self.context.length);
+                var path = path.substring(self.path.length);
                 handler(value, path);
             }
         });
@@ -92,16 +97,12 @@
     };
 
     UbikDB.prototype.emit_set = function(value) {
-        this.socket.emit('set', this.context, value);
+        this.socket.emit('set', this.path, value);
     };
 
-    // The same socket is used between all instances.
-    var ubikSocket;
-
-    window.ubikDB = function(context) {
+    window.ubikDB = function(path, nsName) {
         var root = new UbikDB();
-        root.init(context, ubikSocket);
-        ubikSocket = root.socket;
+        root.init(path, nsName);
         return root;
     };
     window.ubikDB.prototype.constructor = UbikDB;

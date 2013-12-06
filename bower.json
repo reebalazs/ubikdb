@@ -2,7 +2,7 @@
   "name": "ubikdb",
   "version": "0.1.0",
   "dependencies": {
-    "socket.io-client": "~0.9.16",
+    "socket.io-client": "*",
     "angular": "*",
     "angular-mocks": "https://github.com/angular/bower-angular-mocks.git#master",
     "ngMidwayTester" : "https://github.com/yearofmoo/ngMidwayTester.git"

@@ -20,8 +20,8 @@ angular.module('ubikdb_demo').controller('SimpleDemo', function($scope, ubikDB) 
 });
 
 angular.module('ubikdb_demo').controller('TableDemo', function($scope, ubikDB) {
+    console.log('t0a');
 
-    // connect to the ubikDB, and bind 2-way sync of variables
     var db = ubikDB();
     db.child('salary').bind($scope, 'salary');
 
@@ -31,6 +31,19 @@ angular.module('ubikdb_demo').controller('TableDemo', function($scope, ubikDB) {
 
 });
 
+angular.module('ubikdb_demo').controller('TableZDemo', function($scope, ubikDB) {
+
+    var db = ubikDB('/', '/ubikdb-z');
+    console.log('a');
+    db.child('salary').bind($scope, 'salary');
+
+    $scope.removeFromSalary = function(row) {
+        $scope.salary.splice($scope.salary.indexOf(row), 1);
+    };
+
+});
+
+
 angular.module('ubikdb_demo').controller('Selector', function($scope, $location) {
     $scope.isActive = function(route) {
         return route === $location.path();
@@ -39,13 +52,17 @@ angular.module('ubikdb_demo').controller('Selector', function($scope, $location)
 
 angular.module('ubikdb_demo').config(function($routeProvider) {
     $routeProvider
-        .when('/demos/simple', {
+        .when('/demos/simple/', {
             templateUrl: '/static_sdi_ubikdb_demo/partials/simpledemo.html',
             controller: 'SimpleDemo'
         })
-        .when('/demos/table', {
+        .when('/demos/table/', {
             templateUrl: '/static_sdi_ubikdb_demo/partials/tabledemo.html',
             controller: 'TableDemo'
+        })
+        .when('/demos/table-z/', {
+            templateUrl: '/static_sdi_ubikdb_demo/partials/tabledemo.html',
+            controller: 'TableZDemo'
         });
 
 });

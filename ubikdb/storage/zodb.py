@@ -6,7 +6,7 @@ from ..traverse import (
 )
 
 
-class MemoryStorage(object):
+class ZODBStorage(object):
 
     def __init__(self):
         self.db_root = {}
@@ -14,10 +14,10 @@ class MemoryStorage(object):
         self.default_content = {}
         # initialize with static example content
         self.root[self.root_key] = dict(self.default_content)
-    
+
     def connect(self):
         pass
-
+        
     def disconnect(self):
         pass
 
@@ -37,7 +37,6 @@ class MemoryStorage(object):
 
     def get(self, path):
         value = self.traverse(path)
-        print "GET in memory"
         return [value]
 
     def set(self, path, value):
@@ -45,17 +44,4 @@ class MemoryStorage(object):
         last = traverse[-2]
         last['data'][last['segment']] = value
 
-StorageTypeRegistry.reg('memory', MemoryStorage)
-StorageTypeRegistry.DEFAULT_STORAGE_TYPE = 'memory'
-
-
-class SandboxStorage(MemoryStorage):
-
-    def __init__(self, sandbox_content=None):
-        super(SandboxStorage, self).__init__()
-        if sandbox_content is None:
-            self.default_content = {}
-        else:
-            self.default_content = sandbox_content
-
-StorageTypeRegistry.reg('sandbox', SandboxStorage)
+StorageTypeRegistry.reg('zodb', ZODBStorage)
