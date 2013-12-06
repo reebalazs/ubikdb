@@ -27,7 +27,6 @@
 }
 .infobox.selector a.active {
     color: #000000;
-    font-weight: bold;
     text-shadow: #6666ff 0 0 1em;
 }
 .infobox a {

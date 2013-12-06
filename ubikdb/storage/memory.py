@@ -1,4 +1,5 @@
 
+import copy
 from .storage import StorageTypeRegistry
 from ..traverse import (
     traverse,
@@ -49,10 +50,10 @@ StorageTypeRegistry.DEFAULT_STORAGE_TYPE = 'memory'
 
 class SandboxStorage(MemoryStorage):
 
-    def __init__(self, sandbox_content=None):
+    def __init__(self, init_content=None):
         super(SandboxStorage, self).__init__()
-        if sandbox_content is None:
-            sandbox_content = {}
-        self.root[self.root_key] = sandbox_content
+        if init_content is None:
+            init_content = {}
+        self.root[self.root_key] = copy.deepcopy(init_content)
 
 StorageTypeRegistry.reg('sandbox', SandboxStorage)

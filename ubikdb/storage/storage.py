@@ -53,11 +53,20 @@ class StorageMixin(ContextMixin):
         # a way to check if we have storage, without creating one by default
         return self._storage is not None
 
-    def set_storage(self, storage_type, storage_options):
-        if storage_type is not None:
-            assert not self.has_storage(), 'Reconnect is not implemented'
-            # create and connect the storage.
-            self.storage = StorageTypeRegistry.get(storage_type)(**storage_options)
+    def set_storage(self, storage_or_storage_type, storage_options=None):
+        # Disconnect previous storage
+        if self.has_storage():
+            self.storage.disconnect()
+            self.storage = None
+        if storage_or_storage_type is not None:
+            if isinstance(storage_or_storage_type, basestring):
+                # If first parameter is a string, create it from the registry, 
+                # with provided options.
+                self.storage = StorageTypeRegistry.get(
+                        storage_or_storage_type)(**storage_options)
+            else:
+                self.storage = storage_or_storage_type
+            # Connect the storage.
             self.storage.connect()
         else:
             if self.has_storage():
