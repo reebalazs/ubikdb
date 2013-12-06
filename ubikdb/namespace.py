@@ -6,6 +6,7 @@ from .storage import StorageMixin
 class UbikDB(BaseNamespace, StorageMixin):
 
     def recv_connect(self):
+        print "connect", self
         pass
 
     def recv_disconnect(self):

@@ -21,8 +21,9 @@ class EventRegistry(object):
 
 class ContextMixin(object):
 
-    def __init__(self, *args, **kwargs):
-        super(ContextMixin, self).__init__()
+    #def __init__(self, *args, **kwargs):
+    #    import ipdb; ipdb.set_trace()
+    #    super(ContextMixin, self).__init__()
 
     @property
     def reg(self):

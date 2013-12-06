@@ -11,9 +11,8 @@ class MemoryStorage(object):
     def __init__(self):
         self.db_root = {}
         self.db_root_key = 'ubikdb'
-        self.default_content = {}
         # initialize with static example content
-        self.root[self.root_key] = dict(self.default_content)
+        self.root[self.root_key] = {}
     
     def connect(self):
         pass
@@ -37,7 +36,6 @@ class MemoryStorage(object):
 
     def get(self, path):
         value = self.traverse(path)
-        print "GET in memory"
         return [value]
 
     def set(self, path, value):
@@ -54,8 +52,7 @@ class SandboxStorage(MemoryStorage):
     def __init__(self, sandbox_content=None):
         super(SandboxStorage, self).__init__()
         if sandbox_content is None:
-            self.default_content = {}
-        else:
-            self.default_content = sandbox_content
+            sandbox_content = {}
+        self.root[self.root_key] = sandbox_content
 
 StorageTypeRegistry.reg('sandbox', SandboxStorage)

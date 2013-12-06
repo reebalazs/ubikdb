@@ -68,7 +68,6 @@ class StorageMixin(ContextMixin):
         return self.storage.get(path)
 
     def on_set(self, path, value):
-        print("on_set", path, value)
         self.storage.set(path, value)
         # notify listeners
         self.emit_in_context('set', path, value)
