@@ -33,7 +33,6 @@ angular.module('ubikdb_demo').controller('TableDemo', function($scope, ubikDB) {
 angular.module('ubikdb_demo').controller('TableZDemo', function($scope, ubikDB) {
 
     var db = ubikDB('/', '/ubikdb-z');
-    console.log('a');
     db.child('salary').bind($scope, 'salary');
 
     $scope.removeFromSalary = function(row) {
@@ -43,14 +42,27 @@ angular.module('ubikdb_demo').controller('TableZDemo', function($scope, ubikDB) 
 });
 
 
-angular.module('ubikdb_demo').controller('Selector', function($scope, $location) {
+angular.module('ubikdb_demo').controller('Selector', function($scope, $location, demos) {
+
+    $scope.demos = demos;
+
     $scope.isActive = function(route) {
         return route === $location.path();
     };
 });
 
+
+angular.module('ubikdb_demo').controller('Index', function($scope, demos) {
+    $scope.demos = demos;
+});
+
+
 angular.module('ubikdb_demo').config(function($routeProvider) {
     $routeProvider
+        .when('/demos/demoindex/', {
+            templateUrl: '/static_sdi_ubikdb_demo/partials/demoindex.html',
+            controller: 'Index'
+        })
         .when('/demos/simple/', {
             templateUrl: '/static_sdi_ubikdb_demo/partials/simpledemo.html',
             controller: 'SimpleDemo'
@@ -63,5 +75,20 @@ angular.module('ubikdb_demo').config(function($routeProvider) {
             templateUrl: '/static_sdi_ubikdb_demo/partials/tabledemo.html',
             controller: 'TableZDemo'
         });
+});
 
+angular.module('ubikdb_demo').factory('demos', function() {
+    return [{
+        name: 'simple',
+        title: 'Simple',
+        descr: 'The hello world lf ubikDB: two fields, with memory storage'
+    }, {
+        name: 'table',
+        title: 'Table',
+        descr: 'List of records represented as a table, with memory storage'
+    }, {
+        name: 'table-z',
+        title: 'table@ZODB',
+        descr: 'List of records represented as a table, with ZODB storage as site property'
+    }];
 });

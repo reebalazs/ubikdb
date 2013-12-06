@@ -19,7 +19,18 @@
 .infobox .agent-label {
     display: inline-block;
 }
-.infobox.selector a.active,
-.infobox.selector span.label {
+.infobox .demo-index {
+    margin-right: 4em;
+}
+.infobox.selector a.active {
+    color: #000000;
     font-weight: bold;
+    text-shadow: #6666ff 0 0 1em;
+}
+.infobox a {
+    color: #6666ff;
+    text-decoration: none;
+}
+.infobox a:visited {
+    color: blue;
 }
