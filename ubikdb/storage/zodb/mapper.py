@@ -40,10 +40,10 @@ class AttributeMapper(object):
 
     def traverse_getset(self, path, value=None, set=False):
         split = [segment for segment in split_path(path) if segment]
-        if split.length > 1:
+        if len(split) > 1:
             raise RuntimeError("AttributeMapper error, tried to traverse inside a property,"
                                " not yet supported")
-        if split.length == 1:
+        if len(split) == 1:
             # a single property is get or set
             segment = split[0]
             if segment not in self.allowed_attributes:
