@@ -106,10 +106,10 @@ class ZODBStorage(object):
         return root
 
     def get(self, path):
-        value = self.traverse_getset(path)
-        return value
+        return self.traverse_getset(path)
 
     def set(self, path, value):
+        self.traverse_getset(path, value, set=True)._p_changed = True
         # Make sure we won't trigger on our own changes.
         self.commit_in_progress = True
         try:
