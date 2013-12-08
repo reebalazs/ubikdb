@@ -21,7 +21,7 @@ class TraverseBase(object):
 class TestTraversePath(unittest.TestCase, TraverseBase):
 
     def traverse_path(self, data, *path):
-        from ..traverse import traverse_path
+        from ..traverse import traverse_getset
         return traverse_path(data, *path)
 
     def test_null(self):
@@ -91,26 +91,3 @@ class TestTraversePath(unittest.TestCase, TraverseBase):
             {'data': None},
         ])
 
-
-class TestTraverse(unittest.TestCase, TraverseBase):
-
-    def traverse(self, data, *path):
-        from ..traverse import traverse
-        return traverse(data, *path)
-
-    def test_simple(self):
-        with mock.patch('ubikdb.traverse.traverse_path') as traverse_path:
-            traverse_path.return_value =  [
-                {'data': self.data, 'segment': 'a'},
-                {'data': self.data['a'], 'segment': '1'},
-                {'data': self.data['a']['1']},
-            ]
-            self.assertEqual(self.traverse(self.data, '/a/1'),
-                self.data['a']['1']
-            )
-            traverse_path.return_value =  [
-                {'data': self.data},
-            ]
-            self.assertEqual(self.traverse(self.data, '/'),
-                self.data
-            )
