@@ -7,8 +7,8 @@ from zope.interface import (
     implements,
 )
 
-from .storage import StorageTypeRegistry
-from ..traverse import (
+from ..storage import StorageTypeRegistry
+from ...traverse import (
     traverse_getset,
     split_path,
 )
