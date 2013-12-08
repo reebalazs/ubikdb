@@ -9,9 +9,8 @@ from ..traverse import (
 
 class MemoryStorage(object):
 
-    def __init__(self):
-        self.root = {}
-        self.root_key = 'ubikdb'
+    root = {}
+    root_key = 'ubikdb'
     
     def set_notify_changes(self, callback):
         pass
@@ -38,6 +37,7 @@ class SandboxStorage(MemoryStorage):
         super(SandboxStorage, self).__init__()
         if sandbox_content is None:
             sandbox_content = {}
-        self.root[self.root_key] = copy.deepcopy(sandbox_content)
+        if self.root_key not in self.root:
+            self.root[self.root_key] = copy.deepcopy(sandbox_content)
 
 StorageTypeRegistry.reg('sandbox', SandboxStorage)

@@ -30,6 +30,31 @@ class Synchronizer(object):
         pass
 
 
+class DefaultMapper(object):
+
+    def __init__(self, root, annotate_attr, annotate_key):
+        self.root = root
+        self.annotate_attr = annotate_attr
+        self.annotate_key = annotate_key
+
+    def traverse_getset(self, path, value=None, set=False):
+        if not hasattr(self.root, self.annotate_attr) and set:
+            annotation = {}
+            setattr(self.root, self.annotate_attr, annotation)
+        else:
+            annotation = getattr(self.root, self.annotate_attr, {})
+        if self.annotate_key not in annotation:
+            root = {}
+            if set:
+                annotation[self.annotate_key] = root
+        else:
+            root = annotation[self.annotate_key]
+        # Now that we have the root, let's traverse it
+        # via the normal memory traverser.
+        result = traverse_getset(root, path, value, set)
+        return result
+
+
 class ZODBStorage(object):
 
     def __init__(self, zodb_root, annotate_attr='_ubikdb'):
@@ -52,43 +77,30 @@ class ZODBStorage(object):
 
     def traverse_getset(self, path, value=None, set=False):
         root = self.zodb_root
-        base_obj = None
         split = split_path(path)
         for i, segment in enumerate(split):
             if segment:
                 if segment.startswith('@@'):
-                    base_obj = root
+                    # all catch forward traverse via specific mapper
                     annotate_key = segment[2:]
                     if annotate_key == '':
                         raise RuntimeError('/@@ properties not yet supported. Use /@@myprop')
-                    if not hasattr(root, self.annotate_attr) and set:
-                        annotation = {}
-                        setattr(root, self.annotate_attr, annotation)
+                    mapper = DefaultMapper(root, self.annotate_attr, annotate_key)
+                    result = mapper.traverse_getset(split[i+1:], value, set)
+                    if set:
+                        # return this object, instead, for setting it dirty
+                        return root
                     else:
-                        annotation = getattr(root, self.annotate_attr, {})
-                    if annotate_key not in annotation:
-                        root = {}
-                        if set:
-                            annotation[annotate_key] = root
-                    else:
-                        root = annotation[annotate_key]
+                        return result
                 else:
+                    # normal traverse through ZODB content
                     annotate_key = None
                     root = root.get(segment, None)
-                if root is not None:
-                    if annotate_key is not None:
-                        # all catch by traversing through the ubikdb annotation
-                        result = traverse_getset(root, split[i+1:], value, set)
+                    if root is None:
                         if set:
-                            # return this object, instead, for setting it dirty
-                            return base_obj
-                        else:
-                            return result
-                else:
-                    if set:
-                        raise RuntimeError('Readonly. Setting before /@@ is not implemented. 1[%s]' % (path, ))
-                    # Not found
-                    return None
+                            raise RuntimeError('Readonly. Setting before /@@ is not implemented. 1[%s]' % (path, ))
+                        # Not found
+                        return None
         if set:
             raise RuntimeError('Readonly. Setting before /@@ is not implemented. 2[%s]' % (path, ))
         return root
@@ -98,8 +110,6 @@ class ZODBStorage(object):
         return value
 
     def set(self, path, value):
-        root = self.traverse_getset(path, value, set=True)
-        root._p_changed = True
         # Make sure we won't trigger on our own changes.
         self.commit_in_progress = True
         try:
@@ -142,6 +152,7 @@ class ZODBStorage(object):
                 ubikdb_path = '%s@@%s/' % (path, key)
                 ubikdb_value = annotation[key]
                 print('CHANGED', ob, ubikdb_path, ubikdb_value)
+                import ipdb; ipdb.set_trace()
                 self.notify_changes(ubikdb_path, ubikdb_value)
 
 

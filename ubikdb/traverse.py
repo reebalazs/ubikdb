@@ -18,7 +18,6 @@ def traverse_getset(root, path, value=None, set=False):
                 next = root[segment]
             else:
                 if set:
-                    print 'getset', root, segment
                     next = root[segment] = {}
                 else:
                     return None

@@ -25,6 +25,9 @@
 .infobox .demo-tab {
     margin: 0 0.25em;
 }
+.infobox .demo-table td {
+    padding-right: 1em;
+}
 .infobox.selector a.active {
     color: #000000;
     text-shadow: #6666ff 0 0 1em;

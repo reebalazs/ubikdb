@@ -8,10 +8,6 @@ angular.module('ubikdb_demo', ['ubikDB', 'ngRoute']);
 
 angular.module('ubikdb_demo').controller('SimpleDemo', function($scope, ubikDB) {
 
-    // define globals for the template
-    $scope.lodash = _;
-    $scope.rows = 1;
-
     // connect to the ubikDB, and bind 2-way sync of variables
     var db = ubikDB();
     db.child('boss').bind($scope, 'boss');
@@ -81,7 +77,8 @@ angular.module('ubikdb_demo').factory('demos', function() {
     return [{
         name: 'simple',
         title: 'Simple',
-        descr: 'The hello world lf ubikDB: two fields, with memory storage'
+        descr: 'The hello world lf ubikDB: two fields, with memory storage. ' +
+               'Its persistence lasts only until the server gets reloaded.'
     }, {
         name: 'table',
         title: 'Table',

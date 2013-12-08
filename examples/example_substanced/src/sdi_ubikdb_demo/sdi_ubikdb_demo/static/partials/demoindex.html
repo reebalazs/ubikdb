@@ -1,6 +1,12 @@
 <div class="infobox">
-    <div ng-repeat="demo in demos">
-        <a ng-href="#/demos/{{demo.name}}">{{demo.title}}</a>
-        {{demo.descr}}
-    </div>
+    <table class="demo-table">
+        <tr ng-repeat="demo in demos">
+            <td>
+                <a ng-href="#/demos/{{demo.name}}">{{demo.title}}</a>
+            </td>
+            <td>
+                <p>{{demo.descr}}</p>
+            </td>
+        </tr>
+    </table>
 </div>
