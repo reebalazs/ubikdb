@@ -40,41 +40,24 @@ class StorageMixin(ContextMixin):
     def storage(self):
         # gets the storage
         # or will create one if none exists.
-        if not self.has_storage():
+        if self._storage is None:
             # Create the project with options set via UbikDB.with_storage(...).
-            self.set_storage(self.storage_type, self.storage_options)
+            self.__class__._storage = self.make_storage(self.storage_type, self.storage_options)
         assert self._storage is not None
         return self._storage
-    @storage.setter
-    def storage(self, value):
-        # Storage is a class method, and it will be shared
-        # between multiple sockets using the same storage.
-        self.__class__._storage = value
     
-    def has_storage(self):
-        # a way to check if we have storage, without creating one by default
-        return self._storage is not None
-
-    def set_storage(self, storage_or_storage_type, storage_options=None):
-        # Disconnect previous storage
-        if self.has_storage():
-            self.storage.disconnect(self.notify_listeners)
-            self.storage = None
-        if storage_or_storage_type is not None:
-            if isinstance(storage_or_storage_type, basestring):
-                # If first parameter is a string, create it from the registry, 
-                # with provided options.
-                self.storage = StorageTypeRegistry.get(
-                        storage_or_storage_type)(**storage_options)
-            else:
-                self.storage = storage_or_storage_type
-            # Connect the storage and set its callback.
-            self.storage.connect(self.notify_listeners)
+    def make_storage(self, storage_or_storage_type, storage_options=None):
+        if isinstance(storage_or_storage_type, basestring):
+            # If first parameter is a string, create it from the registry, 
+            # with provided options.
+            storage = StorageTypeRegistry.get(
+                    storage_or_storage_type)(**storage_options)
         else:
-            if self.has_storage():
-                self.storage.disconnect(self.notify_listeners)
-                self.storage.set_notify_changes(None)
-                self.storage = None
+            # or just use the provided object
+            storage = storage_or_storage_type
+        # Connect the storage and set its callback.
+        storage.connect(self.notify_listeners)
+        return storage
 
     def on_get(self, path):
         return [self.storage.get(path)]
