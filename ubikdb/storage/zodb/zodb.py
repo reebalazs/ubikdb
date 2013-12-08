@@ -113,7 +113,7 @@ class ZODBStorage(object):
             for key in annotation.keys():
                 ubikdb_path = '%s@@%s/' % (path, key)
                 ubikdb_value = annotation[key]
-                print('CHANGED', self, ubikdb_path, ubikdb_value)
+                #print('CHANGED', self, ubikdb_path, ubikdb_value)
                 self.notify_changes(ubikdb_path, ubikdb_value)
 
 

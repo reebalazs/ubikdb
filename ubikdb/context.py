@@ -69,6 +69,7 @@ class ContextMixin(object):
             args=[path, ] + list(args),
             endpoint=ns_name,
         )
+        #print "BROADCASTING", self.socket, event, path, args
         for sessid, socket in server.sockets.iteritems():
             if socket_filter is None or socket_filter(socket):
                 reg = EventRegistry.reg(socket, ns_name)
