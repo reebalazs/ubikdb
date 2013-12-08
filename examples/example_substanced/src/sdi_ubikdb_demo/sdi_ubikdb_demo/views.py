@@ -12,6 +12,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.renderers import get_renderer
 from pyramid.view import view_config
 from pyramid.response import Response
+from pyramid.traversal import resource_path
 
 from substanced.sdi import mgmt_view
 from substanced.form import FormView
@@ -49,6 +50,7 @@ def splash_view(request):
 def document_view(context, request):
     return {'title': context.title,
             'body': context.body,
+            'context_path': resource_path(context),
             'master': get_renderer(
                 'templates/master.pt').implementation(),
             }

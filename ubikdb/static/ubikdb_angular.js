@@ -39,7 +39,6 @@ angular.module('ubikDB', []).provider('ubikDB', function() {
                     if (clearedValue == []) {
                         clearedValue = null; // XXX XXX XXX back from temp. default
                     }
-                    console.log('set', clearedValue);
                     self.emit('set', clearedValue);
                     lastReceivedValue = null;
                 }

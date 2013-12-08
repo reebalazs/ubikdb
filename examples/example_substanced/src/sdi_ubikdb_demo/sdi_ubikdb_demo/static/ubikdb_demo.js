@@ -26,7 +26,7 @@ angular.module('ubikdb_demo').controller('TableDemo', function($scope, ubikDB) {
 
 });
 
-angular.module('ubikdb_demo').controller('TableZDemo', function($scope, ubikDB) {
+angular.module('ubikdb_demo').controller('TableZSiteDemo', function($scope, ubikDB) {
 
     var db = ubikDB('/@@tables', '/ubikdb-z');
     db.child('salary').bind($scope, 'salary');
@@ -37,6 +37,16 @@ angular.module('ubikdb_demo').controller('TableZDemo', function($scope, ubikDB) 
 
 });
 
+angular.module('ubikdb_demo').controller('TableZContextDemo', function($scope, ubikDB) {
+
+    var db = ubikDB($scope.contextPath + '/@@tables', '/ubikdb-z');
+    db.child('salary').bind($scope, 'salary');
+
+    $scope.removeFromSalary = function(row) {
+        $scope.salary.splice($scope.salary.indexOf(row), 1);
+    };
+
+});
 
 angular.module('ubikdb_demo').controller('Selector', function($scope, $location, demos) {
 
@@ -67,9 +77,13 @@ angular.module('ubikdb_demo').config(function($routeProvider) {
             templateUrl: '/static_sdi_ubikdb_demo/partials/tabledemo.html',
             controller: 'TableDemo'
         })
-        .when('/demos/table-z/', {
+        .when('/demos/table-zsite/', {
             templateUrl: '/static_sdi_ubikdb_demo/partials/tabledemo.html',
-            controller: 'TableZDemo'
+            controller: 'TableZSiteDemo'
+        })
+        .when('/demos/table-zcontext/', {
+            templateUrl: '/static_sdi_ubikdb_demo/partials/tabledemo.html',
+            controller: 'TableZContextDemo'
         });
 });
 
@@ -81,11 +95,17 @@ angular.module('ubikdb_demo').factory('demos', function() {
                'Its persistence lasts only until the server gets reloaded.'
     }, {
         name: 'table',
-        title: 'Table',
-        descr: 'List of records represented as a table, with memory storage'
+        title: 'Table (volatile)',
+        descr: 'List of records represented as a table, with memory storage.'
     }, {
-        name: 'table-z',
-        title: 'table@ZODB',
-        descr: 'List of records represented as a table, with ZODB storage as site property'
-    }];
+        name: 'table-zsite',
+        title: 'Table in ZODB site',
+        descr: 'List of records represented as a table, with ZODB storage as site property.' +
+               'This demonstrates a per-site shared storage.'
+     }, {
+        name: 'table-zcontext',
+        title: 'Table in context',
+        descr: 'List of records represented as a table, with ZODB storage as context property.' +
+               'This demonstrate a per-page storage.'
+   }];
 });
