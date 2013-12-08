@@ -28,8 +28,16 @@
 .infobox .demo-tab a {
     white-space: nowrap;
 }
-.infobox .demo-table td {
+.infobox .demo-table td:first-child {
     padding-right: 1em;
+    min-width: 100px;
+}
+.infobox .demo-table td {
+    padding-bottom: 0.25em;
+}
+.infobox.selector > div:first-child {
+    margin-bottom: 0.5em;
+    margin-left: 0.5em;
 }
 .infobox.selector a.active {
     color: #000000;
