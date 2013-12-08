@@ -54,6 +54,11 @@ angular.module('ubikdb_demo').controller('LiveTitleDemo', function($scope, ubikD
     var db = ubikDB($scope.contextPath + '/@@/', '/ubikdb-z');
     db.child('title').bind($scope, 'title');
 
+    // Update the real title manually, since it's outside the controller.
+    $scope.$watch('title', function(title) {
+        document.getElementById('document-title').innerHTML = title;
+    });
+
 });
 
 angular.module('ubikdb_demo').controller('Selector', function($scope, $location, demos) {

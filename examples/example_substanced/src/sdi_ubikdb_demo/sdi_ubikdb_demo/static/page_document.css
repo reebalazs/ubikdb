@@ -39,3 +39,7 @@
 .infobox a:visited {
     color: blue;
 }
+.infobox.edittitle input[name="title"] {
+    width: 400px;
+    margin-left: 1em;
+}

@@ -6,7 +6,7 @@
  <title metal:fill-slot="head-title">${title}</title>
 </head>
 <body>
- <h1 metal:fill-slot="body-title">${title}</h1>
+ <h1 metal:fill-slot="body-title" id="document-title">${title}</h1>
  <div metal:fill-slot="body-content" ng-app="ubikdb_demo" ng-init='contextPath="${context_path}"'>
     <link rel="stylesheet" type="text/css" href="${request.static_url('sdi_ubikdb_demo:static/page_document.css')}" />
     <ng-include src="'/static_sdi_ubikdb_demo/partials/selector.html'"></ng-include>
