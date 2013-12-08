@@ -10,7 +10,7 @@
  <div metal:fill-slot="body-content" ng-app="ubikdb_demo" ng-init='contextPath="${context_path}"'>
     <link rel="stylesheet" type="text/css" href="${request.static_url('sdi_ubikdb_demo:static/page_document.css')}" />
     <ng-include src="'/static_sdi_ubikdb_demo/partials/selector.html'"></ng-include>
-    <div ng-view ></div
+    <div ng-view></div>
     <div tal:content="structure body">BODY</div>
     <script src="${request.static_url('ubikdb:static/dist/bower_components/socket.io-client/dist/socket.io.js')}"></script>
     <script src="${request.static_url('ubikdb:static/ubikdb.js')}"></script>
