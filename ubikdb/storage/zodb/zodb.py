@@ -34,7 +34,7 @@ class ZODBStorage(object):
     def notify_changes(self, path, value):
         # The first registered handler is elected to do the job,
         # as it will broadcast to all sockets.
-        print "XX notify_changes"
+        print("XX notify_changes", path, value)
         self._notify_changes[0](path, value)
 
     def traverse_getset(self, path, value=None, set=False):
@@ -114,9 +114,9 @@ class ZODBStorage(object):
             annotation = getattr(ob, self.annotate_attr)
             # Just signal everything has changed, for now.
             for key in annotation.keys():
-                path = '%s@@%s/' % (path, key)
+                notify_path = '%s@@%s/' % (path, key)
                 value = annotation[key]
-                self.notify_changes(path, value)
+                self.notify_changes(notify_path, value)
         # signal property changes on the context itself
         value = AttributeMapper(ob).traverse_getset('')
         self.notify_changes(path + '@@/', value)
