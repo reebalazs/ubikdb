@@ -5,8 +5,6 @@
 
 ![](https://dl.dropboxusercontent.com/u/16162405/ubik-banner-1920.png)
 
-This is a working title.
-
 [Ubik](http://www.amazon.com/Ubik-Philip-K-Dick/dp/0547572298) is a book
 of [Philip K. Dick](http://en.wikipedia.org/wiki/Philip_K._Dick). Maybe
 they will also make a
@@ -27,10 +25,10 @@ Experimenting with a concept.
 - [X] Implement basic data binding events
 - [X] Simple working demo with memory storage on the server, no persistency
 - [ ] Tests
-- [ ] Implement data binding events for collections
-- [ ] Persistency in ZODB
+- [ ] Optimize handling of collections
+- [X] Persistency in ZODB
 - [ ] ACL
-<!-- - [ ] Reconnects/ -->
+- [ ] Reconnects
 - [ ] Substance-D demo
 
 ## Status ##
@@ -46,6 +44,20 @@ for the entire Angular controller.
 [![Play Video](https://dl.dropboxusercontent.com/u/16162405/ubikDB_1.png)](https://vimeo.com/79124531)
 
 ## History ##
+
+### 2013-12-08 ###
+
+A huge step forward, ZODB storage is working and two-way binding
+is demonstrated. This means that the values are updated real time
+not only from the application, but following any ZODB change.
+
+I also started to work on the concept and implementation of data mapping,
+with three main cases demonstated: data annotations on the site object,
+data annotation on the context object, and direct mapping to content
+attributes.
+
+Naturally, the features are still overly simplified and just barely capable of
+running the targeted demos.
 
 ### 2013-11-11 ###
 
