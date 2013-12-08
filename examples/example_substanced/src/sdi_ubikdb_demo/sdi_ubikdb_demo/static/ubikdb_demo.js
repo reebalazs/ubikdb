@@ -32,7 +32,7 @@ angular.module('ubikdb_demo').controller('TableDemo', function($scope, ubikDB) {
 
 angular.module('ubikdb_demo').controller('TableZDemo', function($scope, ubikDB) {
 
-    var db = ubikDB('/', '/ubikdb-z');
+    var db = ubikDB('/@@tables', '/ubikdb-z');
     db.child('salary').bind($scope, 'salary');
 
     $scope.removeFromSalary = function(row) {

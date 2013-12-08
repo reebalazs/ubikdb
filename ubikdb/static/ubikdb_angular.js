@@ -16,6 +16,9 @@ angular.module('ubikDB', []).provider('ubikDB', function() {
         var lastReceivedValue;
         options = options || {};
         this.on('get', function(value, path) {
+            if (value === undefined || value === null) {
+                value = []; // XXX XXX XXX temp. collection default
+            }
             scope.$apply(function() {
                 scope[name] = value;
                 lastReceivedValue = angular.copy(value);
@@ -33,6 +36,10 @@ angular.module('ubikDB', []).provider('ubikDB', function() {
                 // never sending back the same value
                 if (oldValue !== undefined &&
                         ! angular.equals(clearedValue, lastReceivedValue)) {
+                    if (clearedValue == []) {
+                        clearedValue = null; // XXX XXX XXX back from temp. default
+                    }
+                    console.log('set', clearedValue);
                     self.emit('set', clearedValue);
                     lastReceivedValue = null;
                 }

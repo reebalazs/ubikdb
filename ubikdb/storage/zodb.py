@@ -1,37 +1,17 @@
 
 from __future__ import print_function
 
-import copy
-
-from persistent import Persistent
 import transaction
 from transaction.interfaces import ISynchronizer
 from zope.interface import (
-    Interface,
     implements,
-    implementer,
 )
-from substanced.content import content
 
 from .storage import StorageTypeRegistry
 from ..traverse import (
-    traverse,
-    traverse_path,
+    traverse_getset,
+    split_path,
 )
-
-class IDemoContent(Interface):
-    pass
-
-@content(
-    'ubikDB',
-    icon='glyphicon glyphicon-align-left',
-    )
-@implementer(IDemoContent)
-class UbikDB(Persistent):
-    def __init__(self, root_key, init_content):
-        self.root = {}
-        self.root[root_key] = copy.deepcopy(init_content)
-        self.root_key = root_key
 
 
 class Synchronizer(object):
@@ -41,10 +21,10 @@ class Synchronizer(object):
         self.storage = storage
 
     def beforeCompletion(self, transaction):
-        pass
+        self.storage.before_completion(transaction)
 
     def afterCompletion(self, transaction):
-        self.storage.after_completion(transaction)
+        pass
 
     def newTransaction(self, transaction):
         pass
@@ -52,18 +32,15 @@ class Synchronizer(object):
 
 class ZODBStorage(object):
 
-    def __init__(self, db_root, db_id='ubikdb', init_content=None):
-        self.zodb_root = db_root
-        self.zodb_id = db_id
-        self.db_root_key = 'ubikdb'
-        if self.root_key not in self.zodb_root:
-            # create initial content
-            if init_content is None:
-                init_content = {}
-            self.zodb_root[db_id] = UbikDB(self.root_key, init_content)
-            transaction.commit()
-        self.db_root = self.zodb_root[db_id]
+    def __init__(self, zodb_root, annotate_attr='_ubikdb'):
+        self.zodb_root = zodb_root
+        self.annotate_attr = annotate_attr
         self.synchronizer = None
+        self.notify_changes = None
+        self.commit_in_progress = False
+
+    def set_notify_changes(self, callback):
+        self.notify_changes = callback
 
     def connect(self):
         self.synchronizer = Synchronizer(self)
@@ -73,33 +50,99 @@ class ZODBStorage(object):
         transaction.manager.unregisterSynch(self.synchronizer)
         self.synchronizer = None
 
-    @property
-    def root(self):
-        return self.db_root.root
-
-    @property
-    def root_key(self):
-        return self.db_root_key
-
-    def traverse_path(self, path):
-        return traverse_path(self.root, self.root_key, path)
-
-    def traverse(self, path):
-        return traverse(self.root, self.root_key, path)
+    def traverse_getset(self, path, value=None, set=False):
+        root = self.zodb_root
+        base_obj = None
+        split = split_path(path)
+        for i, segment in enumerate(split):
+            if segment:
+                if segment.startswith('@@'):
+                    base_obj = root
+                    annotate_key = segment[2:]
+                    if annotate_key == '':
+                        raise RuntimeError('/@@ properties not yet supported. Use /@@myprop')
+                    if not hasattr(root, self.annotate_attr) and set:
+                        annotation = {}
+                        setattr(root, self.annotate_attr, annotation)
+                    else:
+                        annotation = getattr(root, self.annotate_attr, {})
+                    if annotate_key not in annotation:
+                        root = {}
+                        if set:
+                            annotation[annotate_key] = root
+                    else:
+                        root = annotation[annotate_key]
+                else:
+                    annotate_key = None
+                    root = root.get(segment, None)
+                if root is not None:
+                    if annotate_key is not None:
+                        # all catch by traversing through the ubikdb annotation
+                        result = traverse_getset(root, split[i+1:], value, set)
+                        if set:
+                            # return this object, instead, for setting it dirty
+                            return base_obj
+                        else:
+                            return result
+                else:
+                    if set:
+                        raise RuntimeError('Readonly. Setting before /@@ is not implemented. 1[%s]' % (path, ))
+                    # Not found
+                    return None
+        if set:
+            raise RuntimeError('Readonly. Setting before /@@ is not implemented. 2[%s]' % (path, ))
+        return root
 
     def get(self, path):
-        value = self.traverse(path)
-        return [value]
+        value = self.traverse_getset(path)
+        return value
 
     def set(self, path, value):
-        traverse = self.traverse_path(path)
-        last = traverse[-2]
-        last['data'][last['segment']] = value
-        self.db_root._p_changed = True
-        transaction.commit()
+        root = self.traverse_getset(path, value, set=True)
+        root._p_changed = True
+        # Make sure we won't trigger on our own changes.
+        self.commit_in_progress = True
+        try:
+            transaction.commit()
+        finally:
+            self.commit_in_progress = False
 
-    def after_completion(self, transaction):
-        print("afterCompletion", transaction)
-        import ipdb; ipdb.set_trace()
+    # XXX This is terrible and just barely works.
+    # XXX Need to figure out the correct way for noticing the changes.
+
+    def before_completion(self, transaction):
+        if not self.commit_in_progress:
+            for res in transaction._resources:
+                if hasattr(res, 'connections'):
+                    conn = res.connections['']
+                    objs = conn._registered_objects
+                    self.on_zodb_transaction(objs)
+                    break
+
+    def on_zodb_transaction(self, objs):
+        for ob in objs:
+            # TODO checking interface is needed here.
+            oid = getattr(ob, '__oid__', None)
+            if oid is not None:
+                path = self.get_zodb_path(ob)
+                self.on_zodb_changed(path, ob)
+
+    def get_zodb_path(self, ob):
+        parent = ob.__parent__
+        if parent == None:
+            return '/'
+        else:
+            return self.get_zodb_path(parent) + ob.__name__ + '/'
+
+    def on_zodb_changed(self, path, ob):
+        if hasattr(ob, self.annotate_attr):
+            annotation = getattr(ob, self.annotate_attr)
+            # Just signal everything has changed, for now.
+            for key in annotation.keys():
+                ubikdb_path = '%s@@%s/' % (path, key)
+                ubikdb_value = annotation[key]
+                print('CHANGED', ob, ubikdb_path, ubikdb_value)
+                self.notify_changes(ubikdb_path, ubikdb_value)
+
 
 StorageTypeRegistry.reg('zodb', ZODBStorage)

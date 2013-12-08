@@ -261,24 +261,22 @@ def ctest(context, request):
     request.response.body = str(list(resultset))
     return request.response
 
-init_content = {
-    'boss': 'Glen Runciter',
-    'agent': 'Joe Chip',
-    'salary': [
-        {'name': 'Glen Runciter', 'value': 1000},
-        {'name': 'Joe Chip', 'value': 900},
-    ]
-}
 
 @view_config(route_name="ubikdbsocket")
 def socketio_service(context, request):
     socketio_manage(request.environ, {
         '/ubikdb': UbikDB.with_storage('sandbox',
-            init_content=init_content,
+            sandbox_content={
+                'boss': 'Glen Runciter',
+                'agent': 'Joe Chip',
+                'salary': [
+                    {'name': 'Glen Runciter', 'value': 1000},
+                    {'name': 'Joe Chip', 'value': 900},
+                ]
+            },
         ),
         '/ubikdb-z': UbikDB.with_storage('zodb',
-            db_root=context,
-            init_content=init_content,
+            zodb_root=context,
         ),
     }, request=request)
     return Response('')

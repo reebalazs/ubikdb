@@ -66,17 +66,22 @@ class StorageMixin(ContextMixin):
                         storage_or_storage_type)(**storage_options)
             else:
                 self.storage = storage_or_storage_type
-            # Connect the storage.
+            # Connect the storage and set its callback.
+            self.storage.set_notify_changes(self.notify_listeners)
             self.storage.connect()
         else:
             if self.has_storage():
                 self.storage.disconnect()
+                self.storage.set_notify_changes(None)
                 self.storage = None
 
     def on_get(self, path):
-        return self.storage.get(path)
+        return [self.storage.get(path)]
 
     def on_set(self, path, value):
         self.storage.set(path, value)
-        # notify listeners
+        self.notify_listeners(path, value)
+
+    def notify_listeners(self, path, value):
+        # the storage will call this too
         self.emit_in_context('set', path, value)

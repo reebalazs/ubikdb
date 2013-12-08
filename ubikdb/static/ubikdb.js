@@ -86,7 +86,7 @@
             if (path.indexOf(self.path) === 0) {
                 // the event is in the subtree of the current context
                 // call handler with the path as second parameter
-                var path = path.substring(self.path.length);
+                path = path.substring(self.path.length);
                 handler(value, path);
             }
         });
