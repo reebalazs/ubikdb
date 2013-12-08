@@ -40,9 +40,11 @@ class StorageMixin(ContextMixin):
     def storage(self):
         # gets the storage
         # or will create one if none exists.
+        # Make sure it is a singleton: there must be only one storage per namespace.
         if self._storage is None:
             # Create the project with options set via UbikDB.with_storage(...).
             self.__class__._storage = self.make_storage(self.storage_type, self.storage_options)
+            #StorageMixin._storage = self.make_storage(self.storage_type, self.storage_options)
         assert self._storage is not None
         return self._storage
     

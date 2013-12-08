@@ -71,8 +71,6 @@ class ContextMixin(object):
             args=[path, ] + list(args),
             endpoint=ns_name,
         )
-        #if path.endswith('@@/'):
-        #    import ipdb; ipdb.set_trace()
         for sessid, socket in server.sockets.iteritems():
             if socket_filter is None or socket_filter(socket):
                 reg = EventRegistry.reg(socket, ns_name)
@@ -101,8 +99,8 @@ class ContextMixin(object):
                     # First arg is always the data
                     data = args[0] if args else {}
                     for watch in watches:
-                        path = watch[len(path):]
-                        trim_data = traverse_get(data, path)
+                        new_path = watch[len(path):]
+                        trim_data = traverse_get(data, new_path)
                         trim_pkt = dict(
                             type="event",
                             name=event,
