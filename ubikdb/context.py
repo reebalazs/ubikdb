@@ -1,4 +1,6 @@
 
+from __future__ import print_function
+
 from .traverse import traverse_get
 
 class EventRegistry(object):
@@ -69,7 +71,8 @@ class ContextMixin(object):
             args=[path, ] + list(args),
             endpoint=ns_name,
         )
-        #print "BROADCASTING", self.socket, event, path, args
+        #if path.endswith('@@/'):
+        #    import ipdb; ipdb.set_trace()
         for sessid, socket in server.sockets.iteritems():
             if socket_filter is None or socket_filter(socket):
                 reg = EventRegistry.reg(socket, ns_name)
@@ -98,12 +101,12 @@ class ContextMixin(object):
                     # First arg is always the data
                     data = args[0] if args else {}
                     for watch in watches:
-                        path = watch.substring(path.length, watch.length)
+                        path = watch[len(path):]
                         trim_data = traverse_get(data, path)
                         trim_pkt = dict(
                             type="event",
                             name=event,
-                            args=[watch, trim_data] + args[1:],
+                            args=(watch, trim_data) + args[1:],
                             endpoint=ns_name,
                         )
                         socket.send_packet(trim_pkt)

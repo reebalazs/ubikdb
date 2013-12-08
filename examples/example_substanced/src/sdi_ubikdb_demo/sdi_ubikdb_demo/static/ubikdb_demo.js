@@ -48,6 +48,14 @@ angular.module('ubikdb_demo').controller('TableZContextDemo', function($scope, u
 
 });
 
+angular.module('ubikdb_demo').controller('LiveTitleDemo', function($scope, ubikDB) {
+
+    // connect to the ubikDB, and bind 2-way sync of variables
+    var db = ubikDB($scope.contextPath + '/@@/', '/ubikdb-z');
+    db.child('title').bind($scope, 'title');
+
+});
+
 angular.module('ubikdb_demo').controller('Selector', function($scope, $location, demos) {
 
     $scope.demos = demos;
@@ -69,7 +77,7 @@ angular.module('ubikdb_demo').config(function($routeProvider) {
             templateUrl: '/static_sdi_ubikdb_demo/partials/demoindex.html',
             controller: 'Index'
         })
-        .when('/demos/simple/', {
+        .when('/demos/hello/', {
             templateUrl: '/static_sdi_ubikdb_demo/partials/simpledemo.html',
             controller: 'SimpleDemo'
         })
@@ -84,13 +92,17 @@ angular.module('ubikdb_demo').config(function($routeProvider) {
         .when('/demos/table-zcontext/', {
             templateUrl: '/static_sdi_ubikdb_demo/partials/tabledemo.html',
             controller: 'TableZContextDemo'
+        })
+        .when('/demos/live-title/', {
+            templateUrl: '/static_sdi_ubikdb_demo/partials/livetitledemo.html',
+            controller: 'LiveTitleDemo'
         });
 });
 
 angular.module('ubikdb_demo').factory('demos', function() {
     return [{
-        name: 'simple',
-        title: 'Simple',
+        name: 'hello',
+        title: 'Hello',
         descr: 'The hello world lf ubikDB: two fields, with memory storage. ' +
                'Its persistence lasts only until the server gets reloaded.'
     }, {
@@ -107,5 +119,10 @@ angular.module('ubikdb_demo').factory('demos', function() {
         title: 'Table in context',
         descr: 'List of records represented as a table, with ZODB storage as context property.' +
                'This demonstrate a per-page storage.'
+     }, {
+        name: 'live-title',
+        title: 'Live title',
+        descr: 'Title is directly linked to the document title in the ZODB.'
    }];
+
 });
