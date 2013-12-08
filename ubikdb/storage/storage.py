@@ -40,14 +40,16 @@ class StorageMixin(ContextMixin):
     def storage(self):
         # gets the storage
         # or will create one if none exists.
-        if self._storage is None:
+        if not self.has_storage():
             # Create the project with options set via UbikDB.with_storage(...).
             self.set_storage(self.storage_type, self.storage_options)
         assert self._storage is not None
         return self._storage
     @storage.setter
     def storage(self, value):
-        self._storage = value
+        # Storage is a class method, and it will be shared
+        # between multiple sockets using the same storage.
+        self.__class__._storage = value
     
     def has_storage(self):
         # a way to check if we have storage, without creating one by default
@@ -56,7 +58,7 @@ class StorageMixin(ContextMixin):
     def set_storage(self, storage_or_storage_type, storage_options=None):
         # Disconnect previous storage
         if self.has_storage():
-            self.storage.disconnect()
+            self.storage.disconnect(self.notify_listeners)
             self.storage = None
         if storage_or_storage_type is not None:
             if isinstance(storage_or_storage_type, basestring):
@@ -67,11 +69,10 @@ class StorageMixin(ContextMixin):
             else:
                 self.storage = storage_or_storage_type
             # Connect the storage and set its callback.
-            self.storage.set_notify_changes(self.notify_listeners)
-            self.storage.connect()
+            self.storage.connect(self.notify_listeners)
         else:
             if self.has_storage():
-                self.storage.disconnect()
+                self.storage.disconnect(self.notify_listeners)
                 self.storage.set_notify_changes(None)
                 self.storage = None
 
@@ -80,8 +81,11 @@ class StorageMixin(ContextMixin):
 
     def on_set(self, path, value):
         self.storage.set(path, value)
-        self.notify_listeners(path, value)
+        self.emit_in_context('set', path, value)
 
     def notify_listeners(self, path, value):
-        # the storage will call this too
-        self.emit_in_context('set', path, value)
+        # the storage will call this
+        # but only on the first socket.
+        # We broadcast to self too, since we were not
+        # the originators.
+        self.broadcast_in_context('set', path, value)

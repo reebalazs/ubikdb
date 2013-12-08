@@ -15,10 +15,10 @@ class MemoryStorage(object):
     def set_notify_changes(self, callback):
         pass
 
-    def connect(self):
+    def connect(self, callback):
         pass
 
-    def disconnect(self):
+    def disconnect(self, callback):
         pass
 
     def get(self, path):

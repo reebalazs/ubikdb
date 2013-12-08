@@ -55,25 +55,70 @@ class DefaultMapper(object):
         return result
 
 
+class AttributeMapper(object):
+
+    allowed_attributes = ('title', );
+
+    def __init__(self, root, allowed_attributes=None):
+        self.root = root
+        if allowed_attributes is not None:
+            self.allowed_attributes = allowed_attributes
+
+    def traverse_getset(self, path, value=None, set=False):
+        split = [segment for segment in split_path(path) if segment]
+        if split.length > 1:
+            raise RuntimeError("AttributeMapper error, tried to traverse inside a property,"
+                               " not yet supported")
+        if split.length == 1:
+            # a single property is get or set
+            segment = split[0]
+            if segment not in self.allowed_attributes:
+                raise RuntimeError("AttributeMapper error, property not allowed [%s]" %
+                    (segment, ))
+            if set:
+                setattr(self.root, segment, value)
+                return
+            else:
+                return getattr(self.root, segment, None)
+        else:
+            # get/set all allowed attributes in a dict
+            assert not split
+            if set:
+                for segment in self.allowed_attributes:
+                    # right now, we set even if the value None or missing.
+                    val = value.get(segment, None)
+                    setattr(self.root, segment, val)
+                return
+            else:
+                result = {}
+                for segment in self.allowed_attributes:
+                    if hasattr(self.root, segment):
+                        result[segment] = getattr(self.root, segment)
+                return result
+
 class ZODBStorage(object):
 
     def __init__(self, zodb_root, annotate_attr='_ubikdb'):
         self.zodb_root = zodb_root
         self.annotate_attr = annotate_attr
         self.synchronizer = None
-        self.notify_changes = None
+        self._notify_changes = []
         self.commit_in_progress = False
 
-    def set_notify_changes(self, callback):
-        self.notify_changes = callback
-
-    def connect(self):
+    def connect(self, callback):
         self.synchronizer = Synchronizer(self)
         transaction.manager.registerSynch(self.synchronizer)
+        self._notify_changes.append(callback)
         
-    def disconnect(self):
+    def disconnect(self, callback):
         transaction.manager.unregisterSynch(self.synchronizer)
         self.synchronizer = None
+        self._notify_changes.remove(callback)
+
+    def notify_changes(self, path, value):
+        # The first registered handler is elected to do the job,
+        # as it will broadcast to all sockets.
+        self._notify_changes[0](path, value)
 
     def traverse_getset(self, path, value=None, set=False):
         root = self.zodb_root
@@ -84,8 +129,9 @@ class ZODBStorage(object):
                     # all catch forward traverse via specific mapper
                     annotate_key = segment[2:]
                     if annotate_key == '':
-                        raise RuntimeError('/@@ properties not yet supported. Use /@@myprop')
-                    mapper = DefaultMapper(root, self.annotate_attr, annotate_key)
+                        mapper = AttributeMapper(root)
+                    else:
+                        mapper = DefaultMapper(root, self.annotate_attr, annotate_key)
                     result = mapper.traverse_getset(split[i+1:], value, set)
                     if set:
                         # return this object, instead, for setting it dirty
@@ -152,7 +198,6 @@ class ZODBStorage(object):
                 ubikdb_path = '%s@@%s/' % (path, key)
                 ubikdb_value = annotation[key]
                 print('CHANGED', ob, ubikdb_path, ubikdb_value)
-                import ipdb; ipdb.set_trace()
                 self.notify_changes(ubikdb_path, ubikdb_value)
 
 

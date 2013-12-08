@@ -21,10 +21,6 @@ class EventRegistry(object):
 
 class ContextMixin(object):
 
-    #def __init__(self, *args, **kwargs):
-    #    import ipdb; ipdb.set_trace()
-    #    super(ContextMixin, self).__init__()
-
     @property
     def reg(self):
         return EventRegistry.reg(self.socket, self.ns_name)
@@ -45,18 +41,37 @@ class ContextMixin(object):
         self.reg.children.discard(path)
 
     def emit_in_context(self, event, path, *args):
-        """Send to everyone (except me) watching this context
+        """Send to everyone, except me, watching this context
            (in this particular namespace)
         """
+        def socket_filter(socket):
+            return socket != self.socket
+        self._broadcast_in_context(socket_filter, event, path, *args)
+
+    def broadcast_in_context(self, event, path, *args):
+        """Send to everyone, including me, watching this context
+           (in this particular namespace).
+        """
+        def socket_filter(socket):
+            return True
+        self._broadcast_in_context(socket_filter, event, path, *args)
+
+    def _broadcast_in_context(self, socket_filter, event, path, *args):
+        """
+           Implements filtered sending to all sockets
+           on this server, satisfying some condition.
+        """
+        server = self.socket.server
+        ns_name = self.ns_name
         pkt = dict(
             type="event",
             name=event,
             args=[path, ] + list(args),
-            endpoint=self.ns_name,
+            endpoint=ns_name,
         )
-        for sessid, socket in self.socket.server.sockets.iteritems():
-            if self.socket != socket:
-                reg = EventRegistry.reg(socket, self.ns_name)
+        for sessid, socket in server.sockets.iteritems():
+            if socket_filter is None or socket_filter(socket):
+                reg = EventRegistry.reg(socket, ns_name)
                 if path in reg.target:
                     socket.send_packet(pkt)
                 else:
@@ -88,6 +103,6 @@ class ContextMixin(object):
                             type="event",
                             name=event,
                             args=[watch, trim_data] + args[1:],
-                            endpoint=self.ns_name,
+                            endpoint=ns_name,
                         )
                         socket.send_packet(trim_pkt)
