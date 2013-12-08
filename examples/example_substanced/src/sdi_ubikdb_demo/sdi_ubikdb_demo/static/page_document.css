@@ -20,10 +20,13 @@
     display: inline-block;
 }
 .infobox .demo-index {
-    margin-right: 4em;
+    margin-right: 2em;
 }
 .infobox .demo-tab {
     margin: 0 0.5em;
+}
+.infobox .demo-tab a {
+    white-space: nowrap;
 }
 .infobox .demo-table td {
     padding-right: 1em;

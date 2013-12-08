@@ -32,6 +32,7 @@ angular.module('ubikdb_demo').controller('TableZSiteDemo', function($scope, ubik
 
     var db = ubikDB('/@@tables', '/ubikdb-z');
     db.child('salary').bind($scope, 'salary');
+    //$scope.salary = [];
 
     $scope.removeFromSalary = function(row) {
         $scope.salary.splice($scope.salary.indexOf(row), 1);
@@ -97,7 +98,7 @@ angular.module('ubikdb_demo').constant('demos', function() {
     return [{
         name: 'hello',
         title: 'Hello',
-        descr: 'The hello world lf ubikDB: two fields, with memory storage. ' +
+        descr: 'The hello world of ubikDB: two fields, with memory storage. ' +
                'Its persistence lasts only until the server gets reloaded.',
         templateUrl: partials + 'simpledemo.html',
         controller: 'SimpleDemo'
