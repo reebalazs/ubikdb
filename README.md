@@ -41,7 +41,7 @@ written in only **11 lines** of HTML and **3 lines** of JavaScript code is
 needed to do the data synchronization, adding up to a total of 7 lines of JS
 for the entire Angular controller.
 
-[![Play Video](https://dl.dropboxusercontent.com/u/16162405/ubikDB_1.png)](https://vimeo.com/79124531)
+[![Play Video](https://dl.dropboxusercontent.com/u/16162405/ubikDB_video_thumb.png)](https://vimeo.com/81383830)
 
 ## History ##
 
