@@ -28,7 +28,6 @@ class MemoryStorage(object):
         traverse_set(self.root, (self.root_key, path), value)
 
 StorageTypeRegistry.reg('memory', MemoryStorage)
-StorageTypeRegistry.DEFAULT_STORAGE_TYPE = 'memory'
 
 
 class SandboxStorage(MemoryStorage):

@@ -18,23 +18,26 @@ class ZODBStorage(object):
         self.zodb_root = zodb_root
         self.annotate_attr = annotate_attr
         self.synchronizer = None
-        self._notify_changes = []
         self.commit_in_progress = False
+        self._notify_changes = None
+        # Create the synchronizer in a singleton global to this class.
+        #if not hasattr(ZODBStorage, 'synchronizer'):
+        #    ZODBStorage.synchronizer = Synchronizer()
+        self.synchronizer = Synchronizer()
 
     def connect(self, callback):
-        self.synchronizer = Synchronizer(self)
-        transaction.manager.registerSynch(self.synchronizer)
-        self._notify_changes.append(callback)
+        self._notify_changes = callback
+        #ZODBStorage.synchronizer.on(self.before_completion)
+        self.synchronizer.on(self.before_completion)
         
     def disconnect(self, callback):
-        transaction.manager.unregisterSynch(self.synchronizer)
-        self.synchronizer = None
-        self._notify_changes.remove(callback)
+        self._notify_changes = None
+        #ZODBStorage.synchronizer.off(self.before_completion)
+        self.synchronizer.off(self.before_completion)
 
     def notify_changes(self, path, value):
-        # The first registered handler is elected to do the job,
-        # as it will broadcast to all sockets.
-        self._notify_changes[0](path, value)
+        if self._notify_changes is not None:
+            self._notify_changes(path, value)
 
     def traverse_getset(self, path, value=None, set=False):
         root = self.zodb_root
