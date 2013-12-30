@@ -1,4 +1,5 @@
 
+
 def split_path(path):
     # path can be an iterable or a single string.
     # If it's an iterable, all segments will be connected.
@@ -22,6 +23,7 @@ def traverse_getset(root, path, value=None, set=False):
                 else:
                     return None
     if set:
+        print('xxx', segment, value)
         root[segment] = value
     else:
         return next

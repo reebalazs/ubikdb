@@ -50,6 +50,7 @@ class AttributeMapper(object):
                 raise RuntimeError("AttributeMapper error, property not allowed [%s]" %
                     (segment, ))
             if set:
+                print('SET', segment, value)
                 setattr(self.root, segment, value)
                 return
             else:

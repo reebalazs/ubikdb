@@ -15,6 +15,7 @@ from .mapper import (
 class ZODBStorage(object):
 
     def __init__(self, zodb_root, annotate_attr='_ubikdb'):
+        print('INIT storage')
         self.zodb_root = zodb_root
         self.annotate_attr = annotate_attr
         self.synchronizer = None
@@ -26,6 +27,7 @@ class ZODBStorage(object):
         self.synchronizer = Synchronizer()
 
     def connect(self, callback):
+        print('CONNECT storage')
         self._notify_changes = callback
         #ZODBStorage.synchronizer.on(self.before_completion)
         self.synchronizer.on(self.before_completion)
@@ -95,6 +97,7 @@ class ZODBStorage(object):
                     break
 
     def on_zodb_transaction(self, objs):
+        print('on_zodb_transaction', objs)
         for ob in objs:
             # TODO checking interface is needed here.
             oid = getattr(ob, '__oid__', None)

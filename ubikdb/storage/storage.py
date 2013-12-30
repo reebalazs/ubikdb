@@ -22,21 +22,11 @@ class StorageTypeRegistry(object):
 class StorageMixin(ContextMixin):
 
     @classmethod
-    def with_storage(cls, storage_or_storage_type, **storage_options):
+    def with_storage(cls, storage_type, **storage_options):
         # Create the storage.
-        if isinstance(storage_or_storage_type, basestring):
-            # If first parameter is a string, create it from the registry, 
-            # with provided options.
-            storage_type = storage_or_storage_type
-            storage = StorageTypeRegistry.get(
-                    storage_or_storage_type)(**storage_options)
-        else:
-            # or just use the provided object
-            storage = storage_or_storage_type
-            storage_type = storage.__class__.__name__
+        storage = StorageTypeRegistry.get(storage_type)(**storage_options)
         # Clone a StorageMixin class that contains the
-        # storage class as a class attribute. This makes it sure that
-        # the same storage is shared between all instances.
+        # storage class as a class attribute.
         return type('_' + storage_type + '_' + cls.__name__, (cls, ), dict(
             storage=storage,
         ))
@@ -44,6 +34,7 @@ class StorageMixin(ContextMixin):
     storage = None
 
     def recv_connect(self):
+        assert self.storage is not None, 'UbikDB ought to be applied with_storage'
         self.storage.connect(self.notify_listeners)
 
     def recv_disconnect(self):
@@ -58,7 +49,4 @@ class StorageMixin(ContextMixin):
 
     def notify_listeners(self, path, value):
         # the storage will call this
-        # but only on the first socket.
-        # We broadcast to self too, since we were not
-        # the originators.
         self.broadcast_in_context('set', path, value)
