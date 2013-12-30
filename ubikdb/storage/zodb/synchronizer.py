@@ -42,6 +42,6 @@ class Synchronizer(object):
     
     def off(self, f):
         self.handlers.remove(f)
-        if not self.handlers:
+        if not self.handlers and self.connected:
             self.disconnect_synchronizer()
             self.connected = False

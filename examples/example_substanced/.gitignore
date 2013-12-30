@@ -4,6 +4,7 @@ bin/
 eggs/
 include/
 lib/
+share/
 parts/
 downloads/
 var/
