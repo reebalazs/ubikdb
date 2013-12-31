@@ -1,7 +1,7 @@
 
 from __future__ import print_function
 
-from .traverse import traverse_get
+from .traverse import traverse_getset
 
 class EventRegistry(object):
 
@@ -100,7 +100,7 @@ class ContextMixin(object):
                     data = args[0] if args else {}
                     for watch in watches:
                         new_path = watch[len(path):]
-                        trim_data = traverse_get(data, new_path)
+                        trim_data = traverse_getset(data, new_path)
                         trim_pkt = dict(
                             type="event",
                             name=event,

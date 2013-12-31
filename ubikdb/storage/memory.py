@@ -1,10 +1,7 @@
 
 import copy
 from .storage import StorageTypeRegistry
-from ..traverse import (
-    traverse_get,
-    traverse_set,
-)
+from ..traverse import traverse_getset
 
 
 class MemoryStorage(object):
@@ -22,10 +19,10 @@ class MemoryStorage(object):
         pass
 
     def get(self, path):
-        return traverse_get(self.root, (self.root_key, path))
+        return traverse_getset(self.root, (self.root_key, path))
 
     def set(self, path, value):
-        traverse_set(self.root, (self.root_key, path), value)
+        traverse_getset(self.root, (self.root_key, path), value, set=True)
 
 StorageTypeRegistry.reg('memory', MemoryStorage)
 

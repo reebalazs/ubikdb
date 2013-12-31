@@ -34,9 +34,3 @@ def traverse_getset(root, path, value=None, set=False):
         root[last_segment] = value
     else:
         return next
-
-def traverse_get(root, path):
-    return traverse_getset(root, path)
-
-def traverse_set(root, path, value):
-    traverse_getset(root, path, value, set=True)
