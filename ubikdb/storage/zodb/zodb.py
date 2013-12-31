@@ -14,27 +14,23 @@ from .mapper import (
 
 class ZODBStorage(object):
 
+    # primitive semaphore
+    commit_in_progress = 0
+
     def __init__(self, zodb_root, annotate_attr='_ubikdb'):
         print('INIT storage')
         self.zodb_root = zodb_root
         self.annotate_attr = annotate_attr
-        self.synchronizer = None
-        self.commit_in_progress = False
         self._notify_changes = None
-        # Create the synchronizer in a singleton global to this class.
-        #if not hasattr(ZODBStorage, 'synchronizer'):
-        #    ZODBStorage.synchronizer = Synchronizer()
         self.synchronizer = Synchronizer()
 
     def connect(self, callback):
         print('CONNECT storage')
         self._notify_changes = callback
-        #ZODBStorage.synchronizer.on(self.before_completion)
         self.synchronizer.on(self.before_completion)
         
     def disconnect(self, callback):
         self._notify_changes = None
-        #ZODBStorage.synchronizer.off(self.before_completion)
         self.synchronizer.off(self.before_completion)
 
     def notify_changes(self, path, value):
@@ -73,22 +69,27 @@ class ZODBStorage(object):
         return root
 
     def get(self, path):
-        return self.traverse_getset(path)
+        transaction.abort()
+        try:
+            return self.traverse_getset(path)
+        finally:
+            transaction.abort()
 
     def set(self, path, value):
+        transaction.abort()
         self.traverse_getset(path, value, set=True)._p_changed = True
         # Make sure we won't trigger on our own changes.
-        self.commit_in_progress = True
+        ZODBStorage.commit_in_progress += 1
         try:
             transaction.commit()
         finally:
-            self.commit_in_progress = False
+            ZODBStorage.commit_in_progress -= 1
 
     # XXX This is terrible and just barely works.
     # XXX Need to figure out the correct way for noticing the changes.
 
     def before_completion(self, transaction):
-        if not self.commit_in_progress:
+        if ZODBStorage.commit_in_progress == 0:
             for res in transaction._resources:
                 if hasattr(res, 'connections'):
                     conn = res.connections['']
