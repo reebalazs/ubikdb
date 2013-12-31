@@ -1,6 +1,5 @@
 
 import unittest
-import mock
 
 class TraverseBase(object):
 
@@ -19,7 +18,7 @@ class TraverseBase(object):
         }
 
 
-class TestTraverseGetsetGet(unittest.TestCase, TraverseBase):
+class TestTraverseGet(unittest.TestCase, TraverseBase):
 
     def traverse_get(self, data, path):
         from ..traverse import traverse_getset
@@ -48,7 +47,7 @@ class TestTraverseGetsetGet(unittest.TestCase, TraverseBase):
         self.assertEqual(self.traverse_get(self.data, '/NO'), None)
 
 
-class TestTraverseGetsetSet(unittest.TestCase, TraverseBase):
+class TestTraverseSet(unittest.TestCase, TraverseBase):
 
     def traverse_set(self, data, path, value):
         from ..traverse import traverse_getset

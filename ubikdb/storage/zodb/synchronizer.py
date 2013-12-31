@@ -10,14 +10,19 @@ from zope.interface import implements
 class Synchronizer(object):
     implements(ISynchronizer)
 
+    # all connected instances
+    instances = []
+
     def __init__(self):
         self.handlers = []
         self.connected = False
 
     def beforeCompletion(self, transaction):
-        # Elect the first handler to run, as it will
-        # distribute the changes to all other clients too.
-        if self.handlers:
+        # Only run if we are the first connected sychronizer.
+        # This means we are elected to propagate tha change
+        # to all client.
+        if self.instances.index(self) == 0:
+            # First handler is enough to run.
             self.handlers[0](transaction)
 
     def afterCompletion(self, transaction):
@@ -27,11 +32,11 @@ class Synchronizer(object):
         pass
 
     def connect_synchronizer(self):
-        print('ZODB synchronizer starts listening.')
         transaction.manager.registerSynch(self)
+        self.instances.append(self)
     
     def disconnect_synchronizer(self):
-        print('ZODB synchronizer stops listening.')
+        self.instances.remove(self)
         transaction.manager.unregisterSynch(self)
 
     def on(self, f):

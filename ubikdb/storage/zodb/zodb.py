@@ -18,14 +18,12 @@ class ZODBStorage(object):
     commit_in_progress = 0
 
     def __init__(self, zodb_root, annotate_attr='_ubikdb'):
-        print('INIT storage')
         self.zodb_root = zodb_root
         self.annotate_attr = annotate_attr
         self._notify_changes = None
         self.synchronizer = Synchronizer()
 
     def connect(self, callback):
-        print('CONNECT storage')
         self._notify_changes = callback
         self.synchronizer.on(self.before_completion)
         
@@ -98,7 +96,6 @@ class ZODBStorage(object):
                     break
 
     def on_zodb_transaction(self, objs):
-        print('on_zodb_transaction', objs)
         for ob in objs:
             # TODO checking interface is needed here.
             oid = getattr(ob, '__oid__', None)
