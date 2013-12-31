@@ -18,76 +18,30 @@ class TraverseBase(object):
 
         }
 
-class TestTraversePath(unittest.TestCase, TraverseBase):
+class TestTraverseGetset(unittest.TestCase, TraverseBase):
 
-    def traverse_path(self, data, *path):
+    def traverse_getset(self, data, *path):
         from ..traverse import traverse_getset
-        return traverse_path(data, *path)
+        return traverse_getset(data, *path)
 
     def test_null(self):
-        self.assertEqual(self.traverse_path(self.data), [
-            {'data': self.data},
-        ])
-        self.assertEqual(self.traverse_path(self.data, ''), [
-            {'data': self.data},
-        ])
-        self.assertEqual(self.traverse_path(self.data, '/'), [
-            {'data': self.data},
-        ])
+        self.assertEqual(self.traverse_getset(self.data, []), self.data)
+        self.assertEqual(self.traverse_getset(self.data, ''), self.data)
+        self.assertEqual(self.traverse_getset(self.data, '/'), self.data)
 
     def test_simple(self):
-        self.assertEqual(self.traverse_path(self.data, 'a'), [
-            {'data': self.data, 'segment': 'a'},
-            {'data': self.data['a']},
-        ])
-        self.assertEqual(self.traverse_path(self.data, '/a/'), [
-            {'data': self.data, 'segment': 'a'},
-            {'data': self.data['a']},
-        ])
-        self.assertEqual(self.traverse_path(self.data, 'b'), [
-            {'data': self.data, 'segment': 'b'},
-            {'data': self.data['b']},
-        ])
-        self.assertEqual(self.traverse_path(self.data, '/a/1'), [
-            {'data': self.data, 'segment': 'a'},
-            {'data': self.data['a'], 'segment': '1'},
-            {'data': self.data['a']['1']},
-        ])
+        self.assertEqual(self.traverse_getset(self.data, 'a'), self.data['a'])
+        self.assertEqual(self.traverse_getset(self.data, '/a/'), self.data['a'])
+        self.assertEqual(self.traverse_getset(self.data, 'b'), self.data['b'])
+        self.assertEqual(self.traverse_getset(self.data, '/a/1'), self.data['a']['1'])
 
     def test_ignores_dashes(self):
-        self.assertEqual(self.traverse_path(self.data, '///'), [
-            {'data': self.data},
-        ])
-        self.assertEqual(self.traverse_path(self.data, 'a/1'), [
-            {'data': self.data, 'segment': 'a'},
-            {'data': self.data['a'], 'segment': '1'},
-            {'data': self.data['a']['1']},
-        ])
-        self.assertEqual(self.traverse_path(self.data, '/a/1/'), [
-            {'data': self.data, 'segment': 'a'},
-            {'data': self.data['a'], 'segment': '1'},
-            {'data': self.data['a']['1']},
-        ])
-        self.assertEqual(self.traverse_path(self.data, '///a///1///'), [
-            {'data': self.data, 'segment': 'a'},
-            {'data': self.data['a'], 'segment': '1'},
-            {'data': self.data['a']['1']},
-        ])
+        self.assertEqual(self.traverse_getset(self.data, '///'), self.data)
+        self.assertEqual(self.traverse_getset(self.data, 'a/1'), self.data['a']['1'])
+        self.assertEqual(self.traverse_getset(self.data, '/a/1/'), self.data['a']['1'])
+        self.assertEqual(self.traverse_getset(self.data, '///a///1///'), self.data['a']['1'])
 
     def test_undefined(self):
-        self.assertEqual(self.traverse_path(self.data, '/a/1/NO'), [
-            {'data': self.data, 'segment': 'a'},
-            {'data': self.data['a'], 'segment': '1'},
-            {'data': self.data['a']['1'], 'segment': 'NO'},
-            {'data': None},
-        ])
-        self.assertEqual(self.traverse_path(self.data, '/a/NO'), [
-            {'data': self.data, 'segment': 'a'},
-            {'data': self.data['a'], 'segment': 'NO'},
-            {'data': None},
-        ])
-        self.assertEqual(self.traverse_path(self.data, '/NO'), [
-            {'data': self.data, 'segment': 'NO'},
-            {'data': None},
-        ])
-
+        self.assertEqual(self.traverse_getset(self.data, '/a/1/NO'), None)
+        self.assertEqual(self.traverse_getset(self.data, '/a/NO'), None)
+        self.assertEqual(self.traverse_getset(self.data, '/NO'), None)
