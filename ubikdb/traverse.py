@@ -12,19 +12,26 @@ def split_path(path):
 
 def traverse_getset(root, path, value=None, set=False):
     next = root
+    last_segment = None
     for segment in split_path(path):
         if segment:
+            last_segment = segment
             root = next
             if segment in root:
                 next = root[segment]
+                if set and not isinstance(next, dict):
+                    # force this value to a dict, as we will
+                    # want to set a value somewhere on a leaf.
+                    next = root[segment] = {}
             else:
                 if set:
                     next = root[segment] = {}
                 else:
                     return None
     if set:
-        print('xxx', segment, value)
-        root[segment] = value
+        if last_segment is None:
+            raise RuntimeError('Cannot set the root of the database.')
+        root[last_segment] = value
     else:
         return next
 
