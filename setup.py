@@ -46,11 +46,9 @@ setup(name='ubikdb',
           'gevent-socketio > 0.3.6rc2',
           'gevent-websocket',
           'ZODB3',
-          'substanced', # XXX XXX REMOVE ME!!!
      ],
       dependency_links=[
           'http://github.com/abourget/gevent-socketio/tarball/master#egg=gevent-socketio-0.3.6rc3',
-          'http://github.com/Pylons/substanced/tarball/master#egg=substanced', # XXX XXX Remove me!
       ],
       entry_points="""
       """,
