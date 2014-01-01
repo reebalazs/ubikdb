@@ -73,21 +73,25 @@
         return method.apply(this, args.slice(1));
     };
 
-    UbikDB.prototype.on_get = function(handler) {
+    UbikDB.prototype.emit_watch_context = function(handler) {
+        this._emit_watch_context(handler, false);
+    };
+
+    UbikDB.prototype._emit_watch_context = function(handler, isReconnect) {
         var self = this;
-        this.socket.emit('get', this.path, function(value) {
-            // call handler with null as second parameter
-            // this means this is the initial call
-            // and it is always on the same context
-            handler(value, null);
-        });
-        this.socket.emit('watch_context', this.path, {parent: true, children: true});
+        this.socket.emit('watch_context_and_get', this.path,
+            {parent: true, children: true},
+            function(value) {
+                var options = isReconnect ? {isReconnect: true} : {isFirst: true};
+                handler(value, '', options);
+            }
+        );
         this.socket.on('set', function(path, value) {
             if (path.indexOf(self.path) === 0) {
                 // the event is in the subtree of the current context
                 // call handler with the path as second parameter
-                path = path.substring(self.path.length);
-                handler(value, path);
+                var subPath = path.substring(self.path.length);
+                handler(value, subPath, {});
             }
         });
     };

@@ -15,13 +15,24 @@ angular.module('ubikDB', []).provider('ubikDB', function() {
         var self = this;
         var lastReceivedValue;
         options = options || {};
-        this.on('get', function(value, path) {
+        this.emit('watch_context', function(value, path, options) {
             if (value === undefined || value === null) {
                 value = []; // XXX XXX XXX temp. collection default
             }
             scope.$apply(function() {
-                scope[name] = value;
-                lastReceivedValue = angular.copy(value);
+                // Traverse down in memory, in case we got a partial.
+                var extraSplit = path.split('/');
+                var next = scope;
+                var segment = name;
+                _.each(extraSplit, function(nextSegment) {
+                    if (nextSegment !== '') {
+                        next = next[segment];
+                        segment = nextSegment;
+                    }
+                });
+                // Set the value
+                next[segment] = value;
+                lastReceivedValue = angular.copy(scope[name]);
             });
         });
         if (! options.readonly) {

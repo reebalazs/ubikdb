@@ -33,6 +33,16 @@ class StorageMixin(ContextMixin):
 
     storage = None
 
+    def on_watch_context_and_get(self, path, recurse=None):
+        """Lets a user watch a context on a specific namespace.
+
+        It also returns the content of the path at this moment
+        that can be used as an initial content for later updates.
+        This is the same as the result from on_get.
+        """
+        self.on_watch_context(path, recurse=recurse)
+        return self.on_get(path)
+
     def recv_connect(self):
         assert self.storage is not None, 'UbikDB ought to be applied with_storage'
         self.storage.connect(self.notify_listeners)
