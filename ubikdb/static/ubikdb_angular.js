@@ -11,11 +11,11 @@ angular.module('ubikDB', []).provider('ubikDB', function() {
     UbikDBAngular.prototype = new ubikDB.prototype.constructor();
     UbikDBAngular.prototype.constructor = UbikDBAngular;
 
-    UbikDBAngular.prototype.bind = function(scope, name, options) {
+    UbikDBAngular.prototype.bind_readonly = function(scope, name, options) {
         var self = this;
-        var lastReceivedValue;
         options = options || {};
-        this.emit('watch_context', function(value, path, options) {
+        var eBindReadonly = {};
+        this.on('watch_context', function(value, path, options) {
             if (value === undefined || value === null) {
                 value = []; // XXX XXX XXX temp. collection default
             }
@@ -32,29 +32,34 @@ angular.module('ubikDB', []).provider('ubikDB', function() {
                 });
                 // Set the value
                 next[segment] = value;
-                lastReceivedValue = angular.copy(scope[name]);
+                eBindReadonly.lastReceivedValue = angular.copy(scope[name]);
             });
         });
-        if (! options.readonly) {
-            scope.$watch(name, function(value, oldValue) {
-                // get rid of $$hashKey
-                var clearedValue = angular.copy(value);
-                if (clearedValue) {
-                    delete clearedValue['$$hashKey'];
+        return eBindReadonly;
+    };
+
+    UbikDBAngular.prototype.bind_default = function(scope, name, options) {
+        var self = this;
+        var eBindReadonly = this.bind_readonly(scope, name, options);
+        eBindReadonly.lastReceivedValue = null;
+        scope.$watch(name, function(value, oldValue) {
+            // get rid of $$hashKey
+            var clearedValue = angular.copy(value);
+            if (clearedValue) {
+                delete clearedValue['$$hashKey'];
+            }
+            // ignore the initial trigger
+            // also, avoid circular triggering by
+            // never sending back the same value
+            if (oldValue !== undefined &&
+                    ! angular.equals(clearedValue, eBindReadonly.lastReceivedValue)) {
+                if (clearedValue == []) {
+                    clearedValue = null; // XXX XXX XXX back from temp. default
                 }
-                // ignore the initial trigger
-                // also, avoid circular triggering by
-                // never sending back the same value
-                if (oldValue !== undefined &&
-                        ! angular.equals(clearedValue, lastReceivedValue)) {
-                    if (clearedValue == []) {
-                        clearedValue = null; // XXX XXX XXX back from temp. default
-                    }
-                    self.emit('set', clearedValue);
-                    lastReceivedValue = null;
-                }
-            }, true);
-        }
+                self.emit('set', clearedValue);
+                eBindReadonly.lastReceivedValue = null;
+            }
+        }, true);
     };
 
     this.$get = function() {

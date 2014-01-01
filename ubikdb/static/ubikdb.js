@@ -51,7 +51,10 @@
     };
 
     UbikDB.prototype.bind = function(scope, name, options) {
-        throw new Error('Not implemented. Perhaps you wanted to inject ubikDB into Angular?');
+        // dispatch to respective method, options.model specifies the type.
+        options = options || {};
+        options.model = options.model || 'default';
+        return this._dispatch('bind', [options.model, scope, name, options]);
     };
 
     UbikDB.prototype.emit = function(/* type, ... */) {
@@ -73,11 +76,11 @@
         return method.apply(this, args.slice(1));
     };
 
-    UbikDB.prototype.emit_watch_context = function(handler) {
-        this._emit_watch_context(handler, false);
+    UbikDB.prototype.on_watch_context = function(handler) {
+        return this._on_watch_context(handler, false);
     };
 
-    UbikDB.prototype._emit_watch_context = function(handler, isReconnect) {
+    UbikDB.prototype._on_watch_context = function(handler, isReconnect) {
         var self = this;
         this.socket.emit('watch_context_and_get', this.path,
             {parent: true, children: true},
@@ -86,7 +89,7 @@
                 handler(value, '', options);
             }
         );
-        this.socket.on('set', function(path, value) {
+        var eSet = this.socket.on('set', function(path, value) {
             if (path.indexOf(self.path) === 0) {
                 // the event is in the subtree of the current context
                 // call handler with the path as second parameter
@@ -94,10 +97,16 @@
                 handler(value, subPath, {});
             }
         });
+        return {
+            destroy: function(){
+                eSet.destroy();
+                self.socket.emit('unwatch_context', self.path);
+            }
+        };
     };
 
     UbikDB.prototype.on_set = function(handler) {
-        this.socket.on('set', handler);
+        return this.socket.on('set', handler);
     };
 
     UbikDB.prototype.emit_set = function(value) {
