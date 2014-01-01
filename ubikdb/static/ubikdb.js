@@ -9,6 +9,37 @@
     //window.WEB_SOCKET_SWF_LOCATION = "/static/WebSocketMain.swf";
     window.WEB_SOCKET_DEBUG = true;
 
+    function Events() {}
+
+    Events.prototype.constructor = Events;
+
+    Events.prototype.init = function() {
+        this.events = [];
+    };
+
+    Events.prototype.add = function(event) {
+        this.events.push(event);
+    };
+
+    Events.prototype.remove = function(event) {
+        for (var i=0; i<this.events.length; i++) {
+            if (this.events[i] == event) {
+                this.events.splice(i, 1);
+                return;
+            }
+        }
+    };
+
+    Events.prototype.reconnect = function() {
+        var events = this.events;
+        this.events = [];
+        for (var i=0; i<events.length; i++) {
+            console.log('reconnect:', i);
+            events[i].reconnect();
+        }
+    };
+
+
     function UbikDB() {}
 
     UbikDB.prototype.constructor = UbikDB;
@@ -30,8 +61,22 @@
         //window.beforeunload = function() {
         //    self.socket.disconnect();
         //};
-        this.eventMap = {};
         this.path = this.canonicalPath(path || '/');
+        this.socket.on('reconnect', function() {
+            self.emit('reconnect');
+        });
+        this.events = new Events();
+        this.events.init();
+    };
+
+    UbikDB.prototype.socketOn = function(type, handler) {
+        var self = this;
+        this.socket.on(type, handler);
+        return {
+            destroy: function() {
+                self.socket.removeListener(type, handler);
+            }
+        };
     };
 
     UbikDB.prototype.canonicalPath = function(path) {
@@ -89,7 +134,7 @@
                 handler(value, '', options);
             }
         );
-        var eSet = this.socket.on('set', function(path, value) {
+        var eSet = this.socketOn('set', function(path, value) {
             if (path.indexOf(self.path) === 0) {
                 // the event is in the subtree of the current context
                 // call handler with the path as second parameter
@@ -97,20 +142,30 @@
                 handler(value, subPath, {});
             }
         });
-        return {
+        var eWatchContext = {
             destroy: function(){
                 eSet.destroy();
                 self.socket.emit('unwatch_context', self.path);
+            },
+            reconnect: function(){
+                eSet.destroy();
+                self._on_watch_context(handler, true);
             }
         };
+        this.events.add(eWatchContext);
+        return eWatchContext;
     };
 
     UbikDB.prototype.on_set = function(handler) {
-        return this.socket.on('set', handler);
+        return this.socketOn('set', handler);
     };
 
     UbikDB.prototype.emit_set = function(value) {
         this.socket.emit('set', this.path, value);
+    };
+
+    UbikDB.prototype.emit_reconnect = function() {
+        this.events.reconnect();
     };
 
     window.ubikDB = function(path, nsName) {

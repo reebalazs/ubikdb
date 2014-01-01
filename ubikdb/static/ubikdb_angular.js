@@ -1,5 +1,5 @@
 
-/* global angular: true, ubikDB: true, _: true */
+/* global angular: true, ubikDB: true */
 /* jshint globalstrict: true */
 
 'use strict';
@@ -24,12 +24,13 @@ angular.module('ubikDB', []).provider('ubikDB', function() {
                 var extraSplit = path.split('/');
                 var next = scope;
                 var segment = name;
-                _.each(extraSplit, function(nextSegment) {
+                for (var i=0; i<extraSplit.length; i++) {
+                    var nextSegment = extraSplit[i];
                     if (nextSegment !== '') {
                         next = next[segment];
                         segment = nextSegment;
                     }
-                });
+                }
                 // Set the value
                 next[segment] = value;
                 eBindReadonly.lastReceivedValue = angular.copy(scope[name]);
