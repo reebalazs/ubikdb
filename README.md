@@ -14,7 +14,7 @@ The Python package manager ["ubik"](https://pypi.python.org/pypi/ubik) is
 unrelated with ubikDB.
 
 
-## What ##
+## Introduction ##
 
 `ubikDB` provides an API for real-time shared and synchronized data
 in web applications.
