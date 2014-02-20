@@ -1,4 +1,3 @@
-
 [![Build Status](https://travis-ci.org/reebalazs/ubikdb.png?branch=master)](https://travis-ci.org/reebalazs/ubikdb)
 
 # ubikDB #
@@ -14,9 +13,22 @@ out of it soon.
 The Python package manager ["ubik"](https://pypi.python.org/pypi/ubik) is
 unrelated with ubikDB.
 
+
 ## What ##
 
-Experimenting with a concept.
+`ubikDB` provides an API to provide real-time shared and synchronized data for web applications.
+
+The first implementation targets a front-end JavaScript client API and connects to python
+based web applications with 'ZODB' (Zope Object DataBase) instances to store the data in.
+
+The JavaScript code can bind to specified database locations and offers two-way real-time
+synchronization between the DB and the data residing in the client. Together with MVC
+frameworks this offers two-way binding all the way between the client DOM and the database. 
+
+`ubikDB` is at the beginning of its development cycle, and is not yet usable in production
+environments.
+
+
 
 ## Roadmap ##
 
