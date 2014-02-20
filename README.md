@@ -16,18 +16,23 @@ unrelated with ubikDB.
 
 ## What ##
 
-`ubikDB` provides an API to provide real-time shared and synchronized data for web applications.
+`ubikDB` provides an API for real-time shared and synchronized data
+in web applications.
 
-The first implementation targets a front-end JavaScript client API and connects to python
-based web applications with 'ZODB' (Zope Object DataBase) instances to store the data in.
+The first implementation targets a front-end JavaScript client API and
+connects to Python based web applications with `ZODB` (Zope Object
+DataBase) instances to store the data in. Alternate storage adapters
+with other noSQL or SQL databases will be possible later.
 
-The JavaScript code can bind to specified database locations and offers two-way real-time
-synchronization between the DB and the data residing in the client. Together with MVC
-frameworks this offers two-way binding all the way between the client DOM and the database. 
+The JavaScript code can bind to specified database locations and offers
+two-way real-time synchronization between the DB and the data residing
+in the client. Using it together with MVC frameworks this offers two-way
+binding all the way between the client DOM and the database.
+The first implementation supports AngularJS and other MVC can
+be similarly supported.
 
-`ubikDB` is at the beginning of its development cycle, and is not yet usable in production
-environments.
-
+`ubikDB` is at the beginning of its development cycle, and is not yet
+usable in production environments.
 
 
 ## Roadmap ##
