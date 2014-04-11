@@ -62,3 +62,5 @@
 
   - name: evolve data
     action: "shell chdir={{working_dir}} bin/sd_evolve --latest etc/production.ini"
+    when: "database_exists.stdout == 'True'"
+
