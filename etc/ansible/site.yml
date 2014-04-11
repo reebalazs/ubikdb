@@ -60,7 +60,7 @@
     action: "shell chdir={{working_dir}} bin/supervisorctl restart all"
     when: "supervisor_running.stdout == 'True'"
 
-  - name: evolve data
-    action: "shell chdir={{working_dir}} bin/sd_evolve --latest etc/production.ini"
-    when: "database_exists.stdout == 'True'"
+#  - name: evolve data
+#    action: "shell chdir={{working_dir}} bin/sd_evolve --latest etc/production.ini"
+#    when: "database_exists.stdout == 'True'"
 
