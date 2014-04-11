@@ -1,0 +1,12 @@
+
+[webserver]
+mekkmester.greenfinity.hu
+
+[webserver:vars]
+site = ubikdbdemo
+branch = production
+repo = git@github.com:reebalazs/ubikdb.git
+checkout_dir = "~/sites/{{site}}/{{branch}}"
+working_dir = "{{checkout_dir}}/examples/example_substanced"
+buildout_cfg = buildout.cfg
+python_bin = python2.7

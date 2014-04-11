@@ -1,0 +1,64 @@
+
+---
+
+- hosts: webserver
+  user: demos
+  tasks:
+
+  - name: get a timestamp
+    action: "shell echo $(date +%Y-%m-%d-%H:%M:%S)"
+    register: timestamp
+
+  - name: check if the dir exists
+    action: "shell [ -d {{checkout_dir}} ] && echo True || echo False"
+    register: working_exists
+
+  - name: check if the database exists
+    action: "shell [ -f {{working_dir}}/var/Data.fs ] && echo True || echo False"
+    register: database_exists
+
+  - name: full data backup
+    action: >
+      shell chdir={{working_dir}} 
+      mkdir -p var/backup;
+      FN=var/backup/BACKUP-{{site}}-{{branch}}-{{timestamp.stdout}}.tgz;
+      tar czvf $FN var/Data.fs var/blobs;
+      LATEST_DIR=var/backup/latest-{{site}}-{{branch}};
+      [ -d $LATEST_DIR ] || mkdir $LATEST_DIR;
+      rm -rf $LATEST_DIR/*.tgz;
+      cp $FN $LATEST_DIR/;
+    when: "database_exists.stdout == 'True'"
+
+  - name: checkout or update the repo
+    action: "git repo={{repo}} version={{branch}} dest={{checkout_dir}}"
+    register: checkout_result
+
+  - name: check if the buildout exists
+    action: "shell [ -f {{working_dir}}/bin/buildout ] && echo True || echo False"
+    register: buildout_exists
+
+  - name: "virtualenv"
+    action: "shell virtualenv --no-setuptools -p {{python_bin}} {{working_dir}}"
+    when: "buildout_exists.stdout == 'False'"
+
+  - name: bootstrap
+    action: "shell chdir={{working_dir}} bin/python bootstrap.py"
+    when: "buildout_exists.stdout == 'False'"
+
+  - name: buildout
+    action: "shell chdir={{working_dir}} bin/buildout -c {{buildout_cfg}}"
+
+  - name: check if supervisor is running
+    action: "shell chdir={{working_dir}} bin/supervisorctl status 2>/dev/null | grep 'refused connection' 1>/dev/null && echo False || echo True"
+    register: supervisor_running
+
+  - name: start supervisor daemon
+    action: "shell chdir={{working_dir}} bin/supervisord -c etc/supervisord.conf"
+    when: "supervisor_running.stdout == 'False'"
+
+  - name: supervisor restart
+    action: "shell chdir={{working_dir}} bin/supervisorctl restart all"
+    when: "supervisor_running.stdout == 'True'"
+
+  - name: evolve data
+    action: "shell chdir={{working_dir}} bin/sd_evolve --latest etc/production.ini"
