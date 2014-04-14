@@ -45,9 +45,12 @@
     action: "shell chdir={{working_dir}} bin/python bootstrap.py"
     when: "buildout_exists.stdout == 'False'"
 
+  - name: grunt for ubikdb package
+    action: "shell chdir={{checkout_dir}} mkdir bower_modules; npm install; grunt install"
+
   - name: buildout
     action: "shell chdir={{working_dir}} bin/buildout -c {{buildout_cfg}}"
-
+  
   - name: check if supervisor is running
     action: "shell chdir={{working_dir}} bin/supervisorctl status 2>/dev/null | grep 'refused connection' 1>/dev/null && echo False || echo True"
     register: supervisor_running
