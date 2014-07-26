@@ -12,15 +12,8 @@ before_install:
 install:
   - pip install -e '.[test]' --use-mirrors
   - npm install .
-  - mkdir bower_components
-  - export PATH="$PWD/node_modules/.bin:$PATH"
-  - export DISPLAY=:99.0
-  - grunt install
 before_script:
-  - echo 'Starting xvfb for FF...'
-  - sh -e /etc/init.d/xvfb start
-  - sleep 5
-  - echo 'Done.'
+  - grunt bgShell:xfb
 script:
   - nosetests --with-coverage --cover-package=ubikdb --cover-min-percentage=0
   - grunt test

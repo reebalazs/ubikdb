@@ -1,6 +1,8 @@
 
 var path = require('path');
 var collect = require('grunt-collection-helper');
+var phantomjs = require('phantomjs');
+
 
 // simple helper for locating resources
 var _path = function(prefix) {
@@ -65,6 +67,14 @@ module.exports = function(grunt) {
         bg: false,
         fail: true,
       }
+    },
+    env: {
+      display: {
+        DISPLAY: opt.karmaServerDisplay,
+      },
+      phantomjs: {
+        PHANTOMJS_BIN: phantomjs.path,
+      },
     },
     copy: {
       'default': {
@@ -155,11 +165,16 @@ module.exports = function(grunt) {
   grunt.registerTask('default', [
     'bgShell:karma-server', // needs a few sec to start up, so put this upfront.
     'browserSync',
+    'env:phantomjs',
     'watch',
   ]);
 
   //development
-  grunt.registerTask('test', ['karma:unit']);
+  grunt.registerTask('test', [
+    'bgShell:xvfb',
+    'env:phantomjs',
+    'karma:unit',
+  ]);
 
   // demo related
   grunt.registerTask('demo-install', ['shell:demo-install']);

@@ -26,6 +26,7 @@
     "grunt-browser-sync": "*",
     "grunt-touch": "*",
     "grunt-bg-shell": "*",
+    "grunt-env": "*",
     "connect-browser-sync": "*",
     "grunt-shell": "*",
     "grunt-karma": "*",
