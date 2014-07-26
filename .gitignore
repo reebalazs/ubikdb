@@ -36,3 +36,4 @@ node_modules
 src/**
 .coverage
 /examples/example_substanced/grunt-demo-server.pid
+/npm-debug.log

@@ -1,6 +1,5 @@
 
 var path = require('path');
-var collect = require('grunt-collection-helper');
 var phantomjs = require('phantomjs');
 
 
@@ -32,10 +31,18 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     allThirdParty: [
-      collect.bower('socket.io-client').path('dist/socket.io.js'),
-      collect.bower('socket.io-client').path('dist/WebSocketMainInsecure.swf'),
-      collect.bower('socket.io-client').path('dist/WebSocketMain.swf')
+      loc.bower('socket.io-client').path('dist/socket.io.js'),
+      loc.bower('socket.io-client').path('dist/WebSocketMainInsecure.swf'),
+      loc.bower('socket.io-client').path('dist/WebSocketMain.swf')
     ],
+    mkdir: {
+      skeleton: {
+        options: {
+          mode: 0700,
+          create: ['bower_components'],
+        },
+      },
+    },
     bower: {
       install: {
         options: {
@@ -108,6 +115,8 @@ module.exports = function(grunt) {
             location: true,
             forms: true,
             scroll: true,
+            // links currently coincide with websockets
+            links: false,
           },
           port: opt.proxyPort,
           proxy: '127.0.0.1:' + opt.pyramidPort,
@@ -168,6 +177,7 @@ module.exports = function(grunt) {
 
   //installation-related
   grunt.registerTask('install', [
+    'mkdir:skeleton',
     'copy',
     'bower:install',
   ]);
