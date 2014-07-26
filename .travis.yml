@@ -13,8 +13,6 @@ install:
   - pip install -e '.[test]' --use-mirrors
   - mkdir bower_components
   - npm install .
-before_script:
-  - grunt bgShell:xfb
 script:
   - nosetests --with-coverage --cover-package=ubikdb --cover-min-percentage=0
   - grunt test
