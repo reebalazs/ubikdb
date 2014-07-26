@@ -36,6 +36,14 @@ module.exports = function(grunt) {
       collect.bower('socket.io-client').path('dist/WebSocketMainInsecure.swf'),
       collect.bower('socket.io-client').path('dist/WebSocketMain.swf')
     ],
+    bower: {
+      install: {
+        options: {
+          copy: false,
+          verbose: true,
+        },
+      },
+    },
     bgShell: {
       'xvfb': {
         cmd: 'Xvfb ' + opt.karmaServerDisplay + ' -ac',
@@ -159,7 +167,10 @@ module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
 
   //installation-related
-  grunt.registerTask('install', ['copy']);
+  grunt.registerTask('install', [
+    'copy',
+    'bower:install',
+  ]);
 
   //defaults
   grunt.registerTask('default', [

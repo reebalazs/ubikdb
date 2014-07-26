@@ -27,6 +27,7 @@
     "grunt-touch": "*",
     "grunt-bg-shell": "*",
     "grunt-env": "*",
+    "grunt-bower-task": "*",
     "connect-browser-sync": "*",
     "grunt-shell": "*",
     "grunt-karma": "*",
