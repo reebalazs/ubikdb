@@ -11,6 +11,7 @@ before_install:
   - sudo apt-get install libevent-dev
 install:
   - pip install -e '.[test]' --use-mirrors
+  - mkdir bower_components
   - npm install .
 before_script:
   - grunt bgShell:xfb
