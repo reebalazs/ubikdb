@@ -1,14 +1,30 @@
 
-var PROXY_PORT = 6540;
-var PYRAMID_PORT = 6541;
-var LIVERELOAD_PORT = 36540;
-
-var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
-var lrSnippet = require('connect-livereload')({port: LIVERELOAD_PORT});
-
+var path = require('path');
 var collect = require('grunt-collection-helper');
 
+// simple helper for locating resources
+var _path = function(prefix) {
+  return {
+    path: function(p) {
+      return prefix + '/' + p;
+    },
+  };
+};
+var loc = {
+  static: _path('ubikdb/static'),
+  dist:  _path('ubikdb/static/dist'),
+  npm: function(pkg) {
+    return _path('node_modules/' + pkg);
+  },
+  bower: function(pkg) {
+    return _path('bower_components/' + pkg);
+  },
+};
+
 module.exports = function(grunt) {
+
+  var opt = grunt.file.readJSON('etc/development.json');
+  var karmaConfig = path.resolve('./frontend-test/karma.conf.js');
 
   // Project configuration.
   grunt.initConfig({
@@ -18,78 +34,36 @@ module.exports = function(grunt) {
       collect.bower('socket.io-client').path('dist/WebSocketMainInsecure.swf'),
       collect.bower('socket.io-client').path('dist/WebSocketMain.swf')
     ],
-    shell: {
-      'install': {
-        command: 'node ./node_modules/bower/bin/bower install'
+    bgShell: {
+      'xvfb': {
+        cmd: 'Xvfb ' + opt.karmaServerDisplay + ' -ac',
+        execOpts: {
+        },
+        stdout: true,
+        stderr: true,
+        bg: true,
+        fail: false,
       },
-      'demo-install': {
-        command: [
-          'test -f bin/buildout || (',
-            'rm -rf bin lib;',
-            'virtualenv -p python2.7 --no-setuptools .;',
-            'bin/python2.7 bootstrap.py',
-          ');',
-          'bin/buildout'
-        ].join(''),
-        options: {
-          stdout: true,
-          stderr: true,
-          execOptions: {
-            cwd: 'examples/example_substanced'
-          }
-        }
+      'karma-server': {
+        cmd: 'node_modules/karma/bin/karma start ' + karmaConfig + ' --no-single-run',
+        execOpts: {
+        },
+        stdout: true,
+        stderr: true,
+        bg: true,
+        fail: false,
       },
-      'demo-server': {
-        command: [
-          //'bin/supervisorctl shutdown',
-          //'bin/supervisord -c etc/supervisord.conf',
-          'bin/pserve --monitor-restart --pid-file=grunt-demo-server.pid etc/development.ini'
+      'deploy-production': {
+        cmd: [
+          'echo "\nPushing to production..."',
+          'git push origin HEAD:production',
         ].join(';'),
-        options: {
-          stdin: true,
-          stdout: true,
-          stderr: true,
-          execOptions: {
-            cwd: 'examples/example_substanced'
-          }
-        }
-      },
-      'demo-server-reload': {
-        command: [
-          'kill `cat grunt-demo-server.pid`',
-          'sleep 2',
-        ].join(';'),
-        options: {
-          stdout: true,
-          stderr: true,
-          execOptions: {
-            cwd: 'examples/example_substanced'
-          }
-
-        }
-      }
-    },
-    connect: {
-      proxies: [{
-        context: '/',
-        host: '127.0.0.1',
-        port: PYRAMID_PORT,
-        https: false,
-        changeOrigin: false,
-        xforward: false,
-        ws: true
-      }],
-      'demo-proxy': {
-        options: {
-          hostname: '0.0.0.0',
-          port: PROXY_PORT,
-          middleware: function (connect, options) {
-            return [
-              lrSnippet,
-              proxySnippet
-            ];
-          }
-        }
+        execOpts: {
+        },
+        stdout: true,
+        stderr: true,
+        bg: false,
+        fail: true,
       }
     },
     copy: {
@@ -99,76 +73,95 @@ module.exports = function(grunt) {
         }
       }
     },
-
-    karma: {
-      'unit': {
-        configFile: './test/karma-unit.conf.js',
-        autoWatch: false,
-        singleRun: true
+    browserSync: {
+      server: {
+        bsFiles: {
+          src: [
+            // watch for browser files and templates
+            'ubikdb/static/**/*.{pt,js,html,css,png,jpg,gif,tiff}',
+            'ubikdb/static/dist/force-reload.stamp',
+          ],
+        },
+        options: {
+          open: false,
+          watchTask: true,
+          ghostMode: {
+            clicks: true,
+            location: true,
+            forms: true,
+            scroll: true,
+          },
+          port: opt.proxyPort,
+          proxy: '127.0.0.1:' + opt.pyramidPort,
+          xip: true,
+        }
       },
-      'unit-auto': {
-        configFile: './test/karma-unit.conf.js'
-      }
     },
-
+    touch: {
+      options: {
+        force: true,
+        mtime: true
+      },
+      // force a browser reload
+      'force-reload': 'ubikdb/static/dist/force-reload.stamp',
+    },
+    jshint: {
+      options: {
+        reporter: require('jshint-stylish'),
+      },
+      'all': {
+        src: 'ubikdb/static/*.js',
+      },
+    },
+    karma: {
+      options: {
+        configFile: karmaConfig,
+      },
+      'unit': {
+        detectBrowsers: {
+          enabled: true,
+          usePhantomJS: true
+        },
+      },
+      'unit-phantomjs': {
+        browsers: ['PhantomJS'],
+      },
+      'autounit-phantomjs': {
+        autoWatch: true,
+        singleRun: false,
+        browsers: ['PhantomJS'],
+      },
+    },
     watch: {
+      options: {
+        debounceDelay: 50,
+        spawn: false,
+        atBegin: true,
+      },
       'thirdparty': {
         files: '<%= allThirdParty %>',
         tasks: ['copy']
       },
-      'demo-server': {
-        files:  [
-          'ubikdb/**/*.{py,zcml,conf}',
-          'examples/example_substanced/src/**/*.{py,zcml,conf}',
-          '!examples/example_substanced/src/*/demos/**',
-          '!examples/example_substanced/src/*/examples/**'
-        ],
-        tasks: ['shell:demo-server-reload'],
-        options: {
-          livereload: LIVERELOAD_PORT
-        }
-      },
-      'demo-static': {
-        files:  [
-          // watch for browser files
-          'examples/example_substanced/src/**/*.{js,pt,html,css,png,jpg}',
-          'ubikdb/**/*.{js,pt,html,css,png,jpg}',
-          // exclusions to decrease number of files to watch unnecessarily
-          '!examples/example_substanced/src/*/node_modules/**',
-          '!examples/example_substanced/src/*/bower_components/**',
-          '!examples/example_substanced/src/*/demos/**',
-          '!examples/example_substanced/src/*/examples/**',
-        ],
-        options: {
-          livereload: LIVERELOAD_PORT
-        }
-      }
-
     }
   });
 
   // Load the task plugins.
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks('grunt-connect-proxy');
-  grunt.loadNpmTasks('grunt-karma');
-  grunt.loadNpmTasks('grunt-shell');
+  require('load-grunt-tasks')(grunt);
 
   //installation-related
-  grunt.registerTask('install', ['shell:install', 'copy']);
+  grunt.registerTask('install', ['copy']);
 
   //defaults
-  grunt.registerTask('default', ['dev']);
+  grunt.registerTask('default', [
+    'bgShell:karma-server', // needs a few sec to start up, so put this upfront.
+    'browserSync',
+    'watch',
+  ]);
 
   //development
-  grunt.registerTask('dev', ['install', 'demo-proxy', 'watch']);
   grunt.registerTask('test', ['karma:unit']);
-  grunt.registerTask('autotest', ['karma:unit-auto']);
 
   // demo related
   grunt.registerTask('demo-install', ['shell:demo-install']);
-  grunt.registerTask('demo-server', ['shell:demo-server']);
-  grunt.registerTask('demo-proxy', ['configureProxies', 'connect:demo-proxy']);
 
 };
